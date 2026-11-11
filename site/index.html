@@ -1,0 +1,1521 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Compostable Packaging Atlas · internal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: sticky icon tab bar over a cool ground; each section is a white card with an icon, a heading and its evidence badge. */
+:root{
+  --ground:#eef0ea; --paper:#f6f7f2; --panel:#ffffff; --ink:#17201b; --muted:#56615b; --line:#d8ddd2; --soft:#f1f3ec;
+  --deep:#1432b4; --deep-ink:#ffffff; --deep-tint:#eef1fd;
+  --kelp:#2e6b45; --kelp-bg:#e3efe6;
+  --ochre:#94570c; --ochre-bg:#f8eedc;
+  --ogo:#7c131b; --ogo-bg:#f6e0e1;
+  --spec:#5d2f80; --spec-bg:#f1e4fb;
+  --review:#1432b4; --review-bg:#e4e9fb;
+  --band1:#3f7a4a; --band2:#d9c3a0; --band3:#7a5232;
+  --t-statute:#1432b4; --t-statute-ink:#ffffff; --t-prog:#8fa3ef; --t-prog-ink:#0e1430; --t-ftc:#ffffff; --t-ftc-ink:#56615b;
+  --shadow:0 1px 2px rgba(23,32,27,.05),0 4px 14px rgba(23,32,27,.05);
+  --display:"Playfair Display",Georgia,"Times New Roman",serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0e110f; --paper:#121613; --panel:#1a201c; --ink:#e7ebe5; --muted:#a2ada5; --line:#2e3730; --soft:#202722;
+    --deep:#8fa3ff; --deep-ink:#0e1430; --deep-tint:#1c2340;
+    --kelp:#7fd19c; --kelp-bg:#1d3324;
+    --ochre:#e8ac55; --ochre-bg:#352812;
+    --ogo:#ff9a9a; --ogo-bg:#3d1c1e;
+    --spec:#d6a8f5; --spec-bg:#2f2240;
+    --review:#9fb1ff; --review-bg:#1f2747;
+    --band1:#5f9a69; --band2:#bba27d; --band3:#a77b55;
+    --t-statute:#8fa3ff; --t-statute-ink:#0e1430; --t-prog:#33407a; --t-prog-ink:#dfe5ff; --t-ftc:#1a201c; --t-ftc-ink:#a2ada5;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0e110f; --paper:#121613; --panel:#1a201c; --ink:#e7ebe5; --muted:#a2ada5; --line:#2e3730; --soft:#202722;
+  --deep:#8fa3ff; --deep-ink:#0e1430; --deep-tint:#1c2340;
+  --kelp:#7fd19c; --kelp-bg:#1d3324;
+  --ochre:#e8ac55; --ochre-bg:#352812;
+  --ogo:#ff9a9a; --ogo-bg:#3d1c1e;
+  --spec:#d6a8f5; --spec-bg:#2f2240;
+  --review:#9fb1ff; --review-bg:#1f2747;
+  --band1:#5f9a69; --band2:#bba27d; --band3:#a77b55;
+  --t-statute:#8fa3ff; --t-statute-ink:#0e1430; --t-prog:#33407a; --t-prog-ink:#dfe5ff; --t-ftc:#1a201c; --t-ftc-ink:#a2ada5;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+  color-scheme: dark;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--panel)}
+a{color:var(--deep);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,abbr:focus-visible{outline:2px solid var(--deep);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(2rem,4.4vw,3rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.35rem,2.4vw,1.7rem)}
+h3{font-size:1.15rem}
+p{margin:.4rem 0 .9rem;max-width:72ch}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+
+/* icons */
+.ic{display:inline-grid;place-items:center;width:20px;height:20px;flex:0 0 auto;color:currentColor}
+.ic svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* header */
+.stripe{height:6px;background:linear-gradient(90deg,var(--band1) 0 33.4%,var(--band2) 33.4% 66.7%,var(--band3) 66.7% 100%)}
+header.top{background:var(--panel);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:16px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.mark{width:42px;height:42px;border-radius:50%;background:var(--deep);color:var(--deep-ink);display:grid;place-items:center;flex:0 0 auto}
+.mark .ic{width:24px;height:24px}
+.brand .t{font-family:var(--display);font-size:1.3rem;font-weight:700;line-height:1.1}
+.brand .t small{font-family:var(--body);font-size:.72rem;font-weight:600;color:var(--muted);margin-left:8px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;vertical-align:middle;white-space:nowrap}
+.brand .eyebrow{margin-top:3px}
+.hactions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:.9rem;font-weight:600;background:var(--deep);color:var(--deep-ink);border:1px solid var(--deep);border-radius:8px;padding:9px 16px;text-decoration:none;cursor:pointer;line-height:1.2}
+.btn.ghost{background:transparent;color:var(--deep)}
+.btn.quiet{background:transparent;color:var(--muted);border-color:var(--line);font-weight:500}
+.btn .ic{width:17px;height:17px}
+
+/* tabs */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--panel);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs .wrap::-webkit-scrollbar{display:none}
+nav.tabs a{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--muted);font-weight:600;font-size:.82rem;padding:10px 14px 9px;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a .ic{width:20px;height:20px}
+nav.tabs a:hover{color:var(--ink)}
+nav.tabs a[aria-current="page"]{color:var(--deep);border-bottom-color:var(--deep)}
+
+main.wrap{padding-block:28px 70px}
+.view{display:none;flex-direction:column;gap:22px}
+.view.on{display:flex}
+
+/* cards */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:24px 26px;min-width:0}
+.card.tint{background:var(--deep-tint);border-color:transparent;box-shadow:none}
+.card.flat{background:var(--soft);box-shadow:none}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.ch .ic{color:var(--muted)}
+.ch h2,.ch h3{margin:0}
+.ch .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.card > p:last-child{margin-bottom:0}
+.lede{font-size:1.08rem;max-width:68ch}
+.updated{color:var(--muted);font-size:.85rem}
+.more{font-size:.78rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;text-decoration:none}
+.more:hover{text-decoration:underline}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+
+/* evidence chips */
+.ev{display:inline-block;font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;vertical-align:middle;letter-spacing:.07em;text-transform:uppercase;line-height:1.4}
+.ev.C{background:var(--kelp-bg);color:var(--kelp)}
+.ev.S{background:var(--ochre-bg);color:var(--ochre)}
+.ev.P{background:var(--spec-bg);color:var(--spec)}
+.ev.R{background:var(--review-bg);color:var(--review)}
+.ev.G{background:var(--soft);color:var(--muted)}
+
+/* verdict pills */
+.vd{display:inline-block;font-weight:700;font-size:.8rem;padding:3px 10px;border-radius:6px}
+.vd.allowed{background:var(--kelp-bg);color:var(--kelp)}
+.vd.conditional{background:var(--ochre-bg);color:var(--ochre)}
+.vd.not{background:var(--ogo-bg);color:var(--ogo)}
+
+/* hero */
+.hero h1{margin-bottom:6px}
+.asof{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.9rem;margin:6px 0 0}
+.asof .ic{width:16px;height:16px}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.qa{margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.qa details{border-bottom:1px solid var(--line)}
+.qa summary{cursor:pointer;list-style:none;padding:10px 0;font-weight:600;color:var(--deep);font-size:.95rem}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+ "}
+.qa details[open] summary::before{content:"– "}
+.qa .a{padding:0 0 12px;font-size:.94rem;max-width:76ch}
+.qa .all{display:inline-block;margin-top:10px;font-size:.9rem}
+
+/* stat cards */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.stat{display:flex;flex-direction:column;gap:8px;padding:20px 20px 18px}
+.stat .top{display:flex;justify-content:space-between;align-items:flex-start}
+.stat .top .ic{color:var(--muted)}
+.stat .n{font-family:var(--display);font-size:2.6rem;font-weight:700;line-height:1;font-variant-numeric:lining-nums tabular-nums}
+.stat .d{font-size:.92rem;flex:1}
+.strips{display:flex;flex-direction:column;gap:10px}
+.strip{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:.94rem}
+.strip .ic{color:var(--muted);margin-top:2px}
+
+/* stage chooser */
+.stages{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px}
+.stages button{font:inherit;font-size:.9rem;font-weight:500;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:8px 15px;cursor:pointer}
+.stages button[aria-pressed="true"]{background:var(--deep);color:var(--deep-ink);border-color:var(--deep)}
+.steps{counter-reset:s;list-style:none;margin:0;padding:0;max-width:80ch}
+.steps li{counter-increment:s;position:relative;padding:10px 0 10px 42px}
+.steps li + li{border-top:1px solid var(--line)}
+.steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:28px;height:28px;border-radius:50%;background:var(--panel);border:1.5px solid var(--deep);color:var(--deep);display:grid;place-items:center;font-size:.8rem;font-weight:700}
+
+/* key tiles */
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0 4px}
+.key > div{background:var(--soft);border-radius:10px;padding:14px 16px;font-size:.9rem;color:var(--ink)}
+.key .ev{margin-bottom:8px}
+
+/* tool spec rows */
+.spec{display:grid;grid-template-columns:9rem 1fr;gap:6px 16px;margin:10px 0 4px;font-size:.92rem}
+.spec dt{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.spec dd{margin:0}
+
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.card .tw{border:0;border-radius:0;background:transparent;margin:0 -6px}
+table{width:100%;border-collapse:collapse;font-size:.92rem;line-height:1.45}
+th,td{text-align:left;vertical-align:top;padding:11px 10px;border-bottom:1px solid var(--line)}
+th{font-weight:700;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+td.nowrap{white-space:nowrap}
+td.r,th.r{text-align:right}
+td .cite{display:block;color:var(--muted);font-size:.8rem;margin-top:4px}
+td .ev{margin-top:4px}
+.cell-ok{color:var(--kelp);font-weight:700}
+.cell-no{color:var(--ogo);font-weight:700}
+.cell-mid{color:var(--ochre);font-weight:700}
+.cell-na{color:var(--muted)}
+.cap{padding:10px 4px 0;font-size:.84rem;color:var(--muted);max-width:none}
+
+/* action pills */
+.act{display:inline-block;font-size:.74rem;font-weight:700;padding:2px 9px;border-radius:6px;white-space:nowrap}
+.act.now{background:var(--ogo-bg);color:var(--ogo)}
+.act.prep{background:var(--ochre-bg);color:var(--ochre)}
+.act.watch{background:var(--review-bg);color:var(--review)}
+.act.mon{background:var(--soft);color:var(--muted)}
+
+/* callouts */
+.note{color:var(--muted);font-size:.9rem;max-width:84ch;margin:12px 0 0}
+.callout{display:grid;grid-template-columns:20px 1fr;gap:10px;background:var(--ochre-bg);color:var(--ink);border-radius:10px;padding:12px 16px;font-size:.92rem;margin:14px 0 0}
+.callout .ic{color:var(--ochre);margin-top:1px}
+.callout p{margin:0}
+
+/* screener */
+.scr{display:grid;grid-template-columns:minmax(280px,380px) minmax(0,1fr);gap:22px;align-items:start}
+.form{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+fieldset{border:0;margin:0 0 16px;padding:0}
+legend{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0}
+.hint{color:var(--muted);font-size:.8rem;margin:-2px 0 6px}
+select{width:100%;font:inherit;font-size:.93rem;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.opts{display:flex;flex-direction:column;gap:5px}
+.opts.row{flex-direction:row;flex-wrap:wrap;gap:6px 14px}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-size:.9rem;cursor:pointer}
+.opts input{margin-top:4px;accent-color:var(--deep)}
+.results{display:flex;flex-direction:column;gap:14px;min-width:0}
+.vcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-columns:8px 1fr}
+.vcard .edge{background:linear-gradient(180deg,var(--band1) 0 33.4%,var(--band2) 33.4% 66.7%,var(--band3) 66.7% 100%)}
+.vcard.not .edge{background:var(--ogo)}
+.vcard.conditional .edge{background:linear-gradient(180deg,var(--band2),var(--ochre))}
+.vcard .body{padding:16px 18px;min-width:0}
+.vhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:8px}
+.vhead h3{margin:0}
+.vhead .law{color:var(--muted);font-size:.85rem}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:8px;padding:7px 0;border-top:1px dashed var(--line);font-size:.92rem}
+.checks li:first-child{border-top:0}
+.checks .m{font-weight:700;text-align:center}
+.checks .m.ok{color:var(--kelp)} .checks .m.no{color:var(--ogo)} .checks .m.mid{color:var(--ochre)}
+.checks .c{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.vnotes{margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted)}
+.vnotes p{margin:.2rem 0}
+.empty{color:var(--muted);padding:20px;border:1px dashed var(--line);border-radius:12px;background:var(--panel)}
+
+/* tile map */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.84rem;color:var(--muted);margin:6px 0 16px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:14px;height:14px;border-radius:4px;border:1px solid var(--line)}
+.sw.statute{background:var(--t-statute);border-color:var(--t-statute)}
+.sw.prog{background:var(--t-prog);border-color:var(--t-prog)}
+.sw.ftc{background:var(--t-ftc)}
+.dotk{width:9px;height:9px;border-radius:50%;background:var(--ochre)}
+.tiles{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;max-width:660px}
+.tile{position:relative;aspect-ratio:1;border-radius:7px;border:1px solid var(--line);background:var(--t-ftc);color:var(--t-ftc-ink);font:inherit;font-size:clamp(.55rem,1.6vw,.74rem);font-weight:700;letter-spacing:.03em;cursor:pointer;padding:0;display:grid;place-items:center}
+.tile.statute{background:var(--t-statute);border-color:var(--t-statute);color:var(--t-statute-ink)}
+.tile.prog{background:var(--t-prog);border-color:var(--t-prog);color:var(--t-prog-ink)}
+.tile[aria-pressed="true"]{outline:2.5px solid var(--ink);outline-offset:2px}
+.tile .dot{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--ochre);box-shadow:0 0 0 1.5px var(--panel)}
+.mapgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;align-items:start}
+.spanel{background:var(--soft);border-radius:12px;padding:18px 20px;min-height:180px;font-size:.92rem}
+.spanel h3{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.spanel .dl{margin-top:10px;grid-template-columns:8.5rem 1fr}
+.spanel h3 .type{font-family:var(--body);font-weight:600}
+
+/* state detail */
+details.st{border-top:1px solid var(--line)}
+details.st:first-child{border-top:0}
+details.st summary{cursor:pointer;padding:14px 0;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;list-style:none}
+details.st summary::-webkit-details-marker{display:none}
+details.st summary h3{margin:0}
+details.st summary .law{color:var(--muted);font-size:.88rem;flex:1 1 20rem}
+details.st summary::after{content:"+";margin-left:auto;font-weight:700;color:var(--muted)}
+details.st[open] summary::after{content:"–"}
+details.st .inner{padding:0 0 18px}
+.dl{display:grid;grid-template-columns:11rem 1fr;gap:6px 18px;margin:0;font-size:.93rem}
+.dl dt{color:var(--muted);font-weight:500}
+.dl dd{margin:0;min-width:0}
+
+/* dates */
+.daycount{font-variant-numeric:tabular-nums;white-space:nowrap}
+.type{font-size:.74rem;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.type.deadline{background:var(--ogo-bg);color:var(--ogo)}
+.type.signpost{background:var(--spec-bg);color:var(--spec)}
+.type.court{background:var(--review-bg);color:var(--review)}
+.type.comment{background:var(--kelp-bg);color:var(--kelp)}
+details.past summary,details.more summary{cursor:pointer;font-weight:600;color:var(--deep);padding:12px 0 0;list-style:none}
+details.past summary::-webkit-details-marker,details.more summary::-webkit-details-marker{display:none}
+details.past summary::before,details.more summary::before{content:"+ "}
+details.past[open] summary::before,details.more[open] summary::before{content:"– "}
+.ifthen{color:var(--muted);font-size:.84rem;display:block;margin-top:3px}
+
+/* composters */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.cbox h3{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.cbox ul{margin:6px 0 0;padding-left:18px;font-size:.92rem}
+.cbox li{margin:6px 0}
+
+/* faq */
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:last-child{border-bottom:0}
+.faq summary{cursor:pointer;font-weight:600;padding:12px 0;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"+";display:inline-block;width:1.2em;color:var(--deep)}
+.faq details[open] summary::before{content:"–"}
+.faq .a{padding:0 0 14px 1.2em;max-width:76ch;font-size:.95rem}
+
+/* ask */
+.ask textarea{width:100%;min-height:90px;font:inherit;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical}
+.ask .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.ask .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.ask .chips button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:5px 11px;cursor:pointer}
+.answer{white-space:pre-wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:.95rem;max-width:76ch}
+.answer:empty{display:none}
+.status{color:var(--muted);font-size:.88rem}
+.card ul.plain{margin:4px 0 0;padding-left:20px}
+.card ul.plain li{margin:6px 0}
+
+/* glossary */
+abbr.g{text-decoration:underline dotted;text-decoration-color:var(--muted);text-underline-offset:3px;cursor:help}
+#tip{position:fixed;z-index:50;max-width:min(320px,calc(100vw - 32px));background:var(--ink);color:var(--panel);font-size:.82rem;line-height:1.45;padding:9px 12px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);pointer-events:none}
+#tip b{display:block;margin-bottom:2px}
+
+footer{border-top:1px solid var(--line);background:var(--panel);padding-block:22px 40px;color:var(--muted);font-size:.86rem}
+footer p{max-width:90ch}
+
+@media (max-width:860px){
+  .scr,.mapgrid{grid-template-columns:minmax(0,1fr)}
+  .dl,.spec{grid-template-columns:1fr}
+  .dl dt,.spec dt{margin-top:6px}
+  .card{padding:20px 18px}
+  .ch .right{margin-left:0}
+  .tile .dot{top:2px;right:2px;width:5px;height:5px}
+  .spanel .dl{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .vcard{animation:rise .28s ease-out}
+  @keyframes rise{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+</style>
+
+<div class="stripe" aria-hidden="true"></div>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark"><span class="ic" data-i="frond" aria-hidden="true"></span></div>
+      <div>
+        <div class="t">Compostable Packaging Atlas <small>Internal · v2.1</small></div>
+        <div class="eyebrow">Labeling, EPR and composter access by state</div>
+      </div>
+    </div>
+    <div class="hactions">
+      <button class="btn ghost" id="briefBtn" type="button" hidden><span class="ic" data-i="download" aria-hidden="true"></span>One-page brief</button>
+      <a class="btn" href="#screener">Run the screener</a>
+      <button class="btn quiet" id="themeBtn" type="button">Theme</button>
+    </div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Atlas sections">
+  <div class="wrap" id="tabs">
+    <a href="#overview"><span class="ic" data-i="compass" aria-hidden="true"></span>Overview</a>
+    <a href="#screener"><span class="ic" data-i="check" aria-hidden="true"></span>Screener</a>
+    <a href="#labeling"><span class="ic" data-i="map" aria-hidden="true"></span>Labeling</a>
+    <a href="#epr"><span class="ic" data-i="coin" aria-hidden="true"></span>EPR fees</a>
+    <a href="#certification"><span class="ic" data-i="award" aria-hidden="true"></span>Certification</a>
+    <a href="#composters"><span class="ic" data-i="leaf" aria-hidden="true"></span>Composters</a>
+    <a href="#dates"><span class="ic" data-i="calendar" aria-hidden="true"></span>Dates</a>
+    <a href="#litigation"><span class="ic" data-i="gavel" aria-hidden="true"></span>Litigation</a>
+    <a href="#ask"><span class="ic" data-i="chat" aria-hidden="true"></span>Ask the Atlas</a>
+    <a href="#method"><span class="ic" data-i="book" aria-hidden="true"></span>Method</a>
+  </div>
+</nav>
+<p class="status wrap" id="briefStatus" role="status"></p>
+
+<main class="wrap">
+
+<!-- OVERVIEW -->
+<section class="view" id="v-overview" aria-labelledby="h-ov">
+  <div class="card hero">
+    <h1 id="h-ov">Can this be labeled “compostable” here?</h1>
+    <p class="lede">A state-by-state, sourced reference for compostable packaging: the labeling statutes, how each EPR program prices compostables, which certifications satisfy which law, where composters actually take it, and the dates and lawsuits that could change the answer. Every rule carries an evidence label and a citation.</p>
+    <p class="asof"><span class="ic" data-i="target" aria-hidden="true"></span><span>Last updated <strong class="num" data-updated>November 10, 2026</strong>. <a href="#method">How to read the evidence labels</a></span></p>
+    <div class="ctas">
+      <a class="btn" href="#screener">Run the screener</a>
+      <a class="btn ghost" href="#dates">Key dates in the next 90 days</a>
+      <a class="btn ghost" href="#labeling">See the state map</a>
+    </div>
+    <div class="qa">
+      <div class="eyebrow">Quick answers</div>
+      <div id="qaList"></div>
+      <a class="all" href="#faq-card" id="qaAll">See all questions</a>
+    </div>
+  </div>
+
+  <div class="stats" aria-label="Key figures">
+    <div class="card stat"><div class="top"><span class="n">5</span><span class="ic" data-i="map" aria-hidden="true"></span></div><div class="d">States with a compostable-labeling statute located: CA, WA, CO, MN and MD. Everywhere else the FTC Green Guides set the bar.</div><a class="more" href="#labeling">Compare the states</a></div>
+    <div class="card stat"><div class="top"><span class="n num" id="daysNop">232</span><span class="ic" data-i="calendar" aria-hidden="true"></span></div><div class="d" id="daysNopText">Days until California’s organic-input extension ends on June 30, 2027. After that, a compostable item with synthetic content can’t be labeled compostable there unless CalRecycle renews.</div><a class="more" href="#dates">See the signposts</a></div>
+    <div class="card stat"><div class="top"><span class="n">2</span><span class="ic" data-i="coin" aria-hidden="true"></span></div><div class="d">EPR programs price compostable film below conventional film for 2027: Colorado ($0.27 against $0.62 per lb) and Washington’s early fees. California is at parity; Oregon charges 4.7× LDPE.</div><a class="more" href="#epr">See the rates</a></div>
+    <div class="card stat"><div class="top"><span class="n">1</span><span class="ic" data-i="gavel" aria-hidden="true"></span></div><div class="d">Hearing, January 15, 2027, on pausing all of SB 54. It wouldn’t touch California’s labeling law.</div><a class="more" href="#litigation">What it changes</a></div>
+  </div>
+
+  <div class="strips" id="strips"></div>
+
+  <div class="card tint">
+    <div class="ch"><span class="ic" data-i="target" aria-hidden="true"></span><h2>What are you working on?</h2></div>
+    <p>Pick the closest one to see the next three steps.</p>
+    <div class="stages" id="stages" role="group" aria-label="Choose a task"></div>
+    <ol class="steps" id="stageSteps"></ol>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="info" aria-hidden="true"></span><h2>How to read the evidence labels</h2></div>
+    <p><strong>Compostable packaging is part settled law, part pending rule and part operational reality.</strong> Every figure carries one of four labels.</p>
+    <div class="key" aria-label="Evidence labels">
+      <div><span class="ev C">Confirmed</span><br>Stated in a statute, adopted rule, agency letter, approved plan or published schedule.</div>
+      <div><span class="ev S">Signaled</span><br>Official but not final, or our reading of a rule where its text leaves room.</div>
+      <div><span class="ev P">Speculative</span><br>A projection to plan around, not to rely on.</div>
+      <div><span class="ev R">Under counsel review</span><br>A Sway interpretation that counsel hasn’t cleared. Don’t use externally.</div>
+    </div>
+    <p class="note">Last updated <strong data-updated>November 10, 2026</strong>.</p>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="layers" aria-hidden="true"></span><h2>Three layers, three different answers</h2><span class="right"><span class="ev C">Confirmed</span></span></div>
+    <p>A package can pass one layer and fail the next. Keep them separate in every conversation with a buyer.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Layer</th><th>Question it answers</th><th>Who decides</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Technical</strong></td><td>Does it disintegrate and biodegrade under defined lab conditions?</td><td>ASTM D6400, D6868, D8410; EN 13432; OK compost HOME. Proven by a certifier (BPI, TÜV Austria, DIN CERTCO).</td></tr>
+        <tr><td><strong>Legal</strong></td><td>May the word “compostable” go on the pack in this state?</td><td>State labeling statutes (CA, WA, CO, MN, MD); FTC Green Guides elsewhere. California adds organic-input, PFAS and food-waste tests.</td></tr>
+        <tr><td><strong>Operational</strong></td><td>Will the local composter accept it and break it down?</td><td>Facility operators and local programs. Most decline compostable plastics today; field testing (CMA, CFTP) is how that changes.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout"><span class="ic" data-i="alert" aria-hidden="true"></span><p><strong>A claim attaches to the finished item.</strong> A compostable film with a conventional label, ink, adhesive, zipper or laminate layer fails as a unit, so confirm what the component is combined with before quoting any verdict here.</p></div>
+  </div>
+
+  <div class="card" id="faq-card">
+    <div class="ch"><span class="ic" data-i="list" aria-hidden="true"></span><h2>Questions brands ask first</h2></div>
+    <div class="faq" id="faq"></div>
+  </div>
+</section>
+
+<!-- SCREENER -->
+<section class="view" id="v-screener" aria-labelledby="h-scr">
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="check" aria-hidden="true"></span><h2 id="h-scr">Labeling screener</h2></div>
+    <div class="eyebrow">Can this be labeled compostable here?</div>
+    <p>Describe the finished item and the claim. The screener returns allowed, conditional or not allowed for each state, with the rule behind each check.</p>
+    <dl class="spec">
+      <dt>You give it</dt><dd>States, format, claim, certifications, composition, on-pack marking, sale date</dd>
+      <dt>You get back</dt><dd>A verdict per state, each check with its citation and evidence label</dd>
+      <dt>Doesn’t cover</dt><dd>FDA food-contact clearance or whether a composter will accept it (see Composters)</dd>
+    </dl>
+  </div>
+  <div class="scr">
+    <form class="form" id="scrForm" onsubmit="return false">
+      <fieldset>
+        <legend>States</legend>
+        <div class="opts row" id="fStates"></div>
+      </fieldset>
+      <fieldset>
+        <legend><label for="fFormat">Format</label></legend>
+        <select id="fFormat">
+          <option value="produce_bag">Produce or other pre-checkout bag</option>
+          <option value="liner">Food-scrap or compost bin liner</option>
+          <option value="food_film">Food-contact film, wrap or pouch</option>
+          <option value="foodservice">Food serviceware (cup, clamshell, cutlery)</option>
+          <option value="coated_fiber">Fiber with a compostable coating</option>
+          <option value="nonfood_film">Non-food film (apparel polybag, mailer, overwrap)</option>
+        </select>
+      </fieldset>
+      <fieldset>
+        <legend><label for="fClaim">Claim on pack</label></legend>
+        <select id="fClaim">
+          <option value="compostable">“Compostable” (industrial)</option>
+          <option value="home">“Home compostable” alongside industrial</option>
+          <option value="homeonly">“Home compostable only”</option>
+          <option value="biodeg">“Biodegradable”</option>
+        </select>
+      </fieldset>
+      <fieldset>
+        <legend>Certifications held</legend>
+        <div class="opts" id="fCerts">
+          <label><input type="checkbox" value="bpi" checked> BPI (ASTM D6400 / D6868)</label>
+          <label><input type="checkbox" value="tuvastm"> TÜV OK compost INDUSTRIAL that lists ASTM D6400 / D6868</label>
+          <label><input type="checkbox" value="tuven"> Industrial certificate to EN 13432 only (TÜV, DIN CERTCO)</label>
+          <label><input type="checkbox" value="home"> TÜV OK compost HOME</label>
+          <label><input type="checkbox" value="cma"> CMA field-test approval</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend><label for="fSynth">Composition</label></legend>
+        <p class="hint">Under USDA organic rules, “synthetic” turns on processing, not just source.</p>
+        <select id="fSynth">
+          <option value="yes">Contains a synthetic or chemically modified polymer</option>
+          <option value="no">All plant or animal material, believed non-synthetic</option>
+          <option value="unsure">Not sure</option>
+        </select>
+      </fieldset>
+      <fieldset>
+        <legend>On-pack marking</legend>
+        <div class="opts" id="fMarks">
+          <label><input type="checkbox" value="word" checked> The word “compostable”</label>
+          <label><input type="checkbox" value="logo" checked> Certifier’s logo</label>
+          <label><input type="checkbox" value="color" checked> Green tint, stripe or lettering</label>
+          <label><input type="checkbox" value="earth"> Beige or brown tint, stripe or lettering</label>
+          <label><input type="checkbox" value="industrial" checked> “For industrial or commercial composting facilities”</label>
+          <label><input type="checkbox" value="noarrows" checked> No chasing arrows or resin code</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Chemistry</legend>
+        <div class="opts"><label><input type="checkbox" id="fPfas" checked> No intentionally added PFAS; total organic fluorine under 100 ppm</label></div>
+      </fieldset>
+      <fieldset>
+        <legend><label for="fWhen">When it’s sold</label></legend>
+        <select id="fWhen">
+          <option value="before">Through June 30, 2027</option>
+          <option value="after">From July 1, 2027</option>
+        </select>
+      </fieldset>
+    </form>
+    <div style="min-width:0">
+      <div class="results" id="results" aria-live="polite"></div>
+      <p class="note">Verdicts in FTC-only states mean “defensible” or “not defensible” under 16 CFR Part 260, which is guidance on Section 5 rather than a statute. Not legal advice; confirm consequential calls with counsel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LABELING -->
+<section class="view" id="v-labeling" aria-labelledby="h-lab">
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="map" aria-hidden="true"></span><h2 id="h-lab">Where the word is regulated</h2><span class="right"><span class="ev C">Confirmed</span></span></div>
+    <p>Pick a state for its rules in one panel. Shading shows how the claim is governed; a dot marks a state with a date in the next 90 days.</p>
+    <div class="legend">
+      <span><i class="sw statute"></i>Labeling statute (5)</span>
+      <span><i class="sw prog"></i>Program rules only (1)</span>
+      <span><i class="sw ftc"></i>FTC Green Guides; not fully checked</span>
+      <span><i class="dotk"></i>Date in next 90 days</span>
+    </div>
+    <div class="mapgrid">
+      <div class="tiles" id="tiles" role="group" aria-label="United States, compostable-labeling regime by state"></div>
+      <div class="spanel" id="spanel" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="list" aria-hidden="true"></span><h2>Compare the states</h2><span class="right"><span class="ev C">Confirmed</span></span></div>
+    <p>Five states regulate the word itself. Each names a standard, a marking cue or a certifier in its text, so a better test under a different name can still fail on paper. Pick one rule to compare it across every state.</p>
+    <div class="stages" id="cmpPick" role="group" aria-label="Compare one rule"></div>
+    <div class="tw"><table id="labTable">
+      <thead></thead>
+      <tbody></tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="book" aria-hidden="true"></span><h2>State detail</h2></div>
+    <div id="labDetail"></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="alert" aria-hidden="true"></span><h2>PFAS in food packaging</h2><span class="right"><span class="ev S">Signaled</span></span></div>
+    <p>A separate layer from the labeling statutes. Most state bans reach only plant-fiber packaging; a smaller group reaches food packaging of any material, which includes film. Every compostable claim in California also requires total organic fluorine under 100 ppm, and BPI certification requires no intentionally added fluorinated chemicals.</p>
+    <div class="tw"><table id="pfasTable">
+      <thead><tr><th>State</th><th>Effective</th><th>Scope</th><th>Note</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p class="cap">Compiled from law-firm and trade trackers (BCLP; Packaura, Oct 2026; Packaged Sustainable, Apr 2026), which disagree on some scope details. Confirm against each statute before relying on it. Whether a seaweed-based film counts as “plant-based” or “plant fiber” under each definition is unverified.</p>
+  </div>
+</section>
+
+<!-- EPR -->
+<section class="view" id="v-epr" aria-labelledby="h-epr">
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="coin" aria-hidden="true"></span><h2 id="h-epr">How EPR programs treat compostables</h2><span class="right"><span class="ev S">Signaled</span></span></div>
+    <p>EPR prices packaging by reporting category. Whether compostable film costs more or less than the film it replaces differs by state, and only Colorado ties the lower rate to a named certification edition.</p>
+    <div class="tw"><table id="eprTable">
+      <thead><tr><th>State</th><th>Compostable category</th><th>2027 rate, compostable film</th><th>Conventional film</th><th>Ratio per lb</th><th>Bonuses and maluses</th><th>Liners and store bags</th><th>Evidence</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p class="cap">Per-pound ratios only. Per-unit cost also depends on film thickness and density, so a heavier compostable film narrows or reverses an advantage. California figures are preliminary until CalRecycle approves CAA’s plan.</p>
+    <div class="callout"><span class="ic" data-i="alert" aria-hidden="true"></span><p id="caMalusNote"></p></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="target" aria-hidden="true"></span><h2>Program status for compostables</h2></div>
+    <div class="tw"><table id="eprStatus">
+      <thead><tr><th>State</th><th>Where compostables stand</th><th>Next decision</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- CERTIFICATION -->
+<section class="view" id="v-certification" aria-labelledby="h-cert">
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="award" aria-hidden="true"></span><h2 id="h-cert">Which marks satisfy which state</h2></div>
+    <p>Certification proves disintegration and biodegradation under defined conditions. It doesn’t prove a facility will accept the item or that it qualifies as an organic input.</p>
+    <div class="tw"><table id="certTable">
+      <thead></thead><tbody></tbody>
+    </table></div>
+    <p class="cap"><span class="cell-ok">✓</span> satisfies the text · <span class="cell-mid">◐</span> depends on details or interpretation · <span class="cell-no">✗</span> doesn’t satisfy · <span class="cell-na">–</span> not applicable</p>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="list" aria-hidden="true"></span><h2>Notes on each mark</h2></div>
+    <div id="certNotes"></div>
+  </div>
+</section>
+
+<!-- COMPOSTERS -->
+<section class="view" id="v-composters" aria-labelledby="h-comp">
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="leaf" aria-hidden="true"></span><h2 id="h-comp">Where composters accept compostable packaging</h2></div>
+    <p>This is the layer that decides whether a claim has a real end-of-life pathway. It starts from what’s documented and grows as field tests come in.</p>
+    <div class="tw"><table id="compTable">
+      <thead><tr><th>Facility or program</th><th>State</th><th>What it accepts</th><th>Conditions</th><th>Source</th><th>Evidence</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </div>
+  <div class="cgrid" id="compStates"></div>
+</section>
+
+<!-- DATES -->
+<section class="view" id="v-dates" aria-labelledby="h-dates">
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="calendar" aria-hidden="true"></span><h2 id="h-dates">Key dates in the next 90 days</h2><span class="right"><span class="updated" id="d90label"></span></span></div>
+    <p>Filing deadlines sit alongside comment windows, court dates and decisions that move the odds, because each one changes what a brand can plan on. Signposts carry the if-then that matters.</p>
+    <div class="tw"><table id="d90"><thead><tr><th>Date</th><th>Where</th><th>What happens</th><th class="r">Days</th><th>Status</th><th>Type</th><th>Evidence</th></tr></thead><tbody></tbody></table></div>
+    <details class="past"><summary>Show dates that have passed</summary>
+      <div class="tw"><table id="dPast"><thead><tr><th>Date</th><th>Where</th><th>What happened</th><th>Type</th><th>Evidence</th></tr></thead><tbody></tbody></table></div>
+    </details>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="target" aria-hidden="true"></span><h2>Further out</h2></div>
+    <div class="tw"><table id="dLater"><thead><tr><th>Date</th><th>Where</th><th>What happens</th><th class="r">Days</th><th>Type</th><th>Evidence</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</section>
+
+<!-- LITIGATION -->
+<section class="view" id="v-litigation" aria-labelledby="h-lit">
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="gavel" aria-hidden="true"></span><h2 id="h-lit">Litigation watch</h2><span class="right"><span class="ev C">Confirmed</span></span></div>
+    <p><strong>No case located challenges a compostable-labeling statute directly.</strong> The live cases target EPR programs and California’s recyclability-label law. They can pause fees or reshape what counts as recyclable, but none suspends a state’s compostable-labeling rules.</p>
+    <div class="tw"><table id="litTable">
+      <thead><tr><th>Case</th><th>State</th><th>What’s challenged</th><th>What it changes for compostables</th><th>Status</th><th>Evidence</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p class="cap">Sources: court-docket summaries via EPR Atlas litigation tracker, National Law Review (Aug 2026), Holland &amp; Knight (Aug 2026), Nelson Mullins (Sep 2026). Searches for AB 1201, RCW 70A.455, SB23-253 and Minn. Stat. 325E.046 challenges found none as of November 10, 2026.</p>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="target" aria-hidden="true"></span><h2>Policy watch</h2></div>
+    <div class="tw"><table id="polTable">
+      <thead><tr><th>Measure</th><th>Where</th><th>What it would do</th><th>Status</th><th>Evidence</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ASK -->
+<section class="view" id="v-ask" aria-labelledby="h-ask">
+  <div class="card ask">
+    <div class="ch"><span class="ic" data-i="chat" aria-hidden="true"></span><h2 id="h-ask">Ask the Atlas</h2></div>
+    <p>Answers come only from the reference on this page, with the rule cited. Where a rule isn’t settled or isn’t covered here, it says so instead of estimating. It doesn’t see your formulations or customer data, and you shouldn’t paste them in.</p>
+    <label for="askQ" class="eyebrow" style="display:block;margin:14px 0 6px">Your question</label>
+    <textarea id="askQ" placeholder="Can a produce bag certified by TÜV, not BPI, say “compostable” in Minnesota?"></textarea>
+    <div class="eyebrow" style="margin-top:12px">Things people ask</div>
+    <div class="chips" id="askChips"></div>
+    <div class="row">
+      <button class="btn" id="askBtn" type="button">Ask</button>
+      <button class="btn ghost" id="stopBtn" type="button" hidden>Stop</button>
+      <span class="status" id="askStatus" role="status"></span>
+    </div>
+    <div class="answer" id="askOut" aria-live="polite"></div>
+  </div>
+  <p class="note" id="askUnavailable" hidden>Ask the Atlas isn’t available in this view. The tabs above answer the same questions.</p>
+</section>
+
+<!-- METHOD -->
+<section class="view" id="v-method" aria-labelledby="h-meth">
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="book" aria-hidden="true"></span><h2 id="h-meth">How to read the Atlas</h2></div>
+    <p>Compostable packaging is part settled law, part pending rule and part operational reality. Each figure carries one of four labels, and each page shows the date the Atlas was last checked.</p>
+    <div class="key">
+      <div><span class="ev C">Confirmed</span><br>Quotable from the statute, rule, agency letter, approved plan or published schedule cited.</div>
+      <div><span class="ev S">Signaled</span><br>Official but movable (a filed plan, a preliminary rate, an announced consultation), or our reading where the text leaves room.</div>
+      <div><span class="ev P">Speculative</span><br>A projection or placeholder. Plan around it; don’t budget from it.</div>
+      <div><span class="ev R">Under counsel review</span><br>An interpretation Sway relies on internally that counsel hasn’t cleared.</div>
+    </div>
+  </div>
+  <div class="split">
+    <div class="card"><div class="ch"><span class="ic" data-i="alert" aria-hidden="true"></span><h3>Open questions under counsel review</h3></div><ul class="plain" id="reviewList"></ul></div>
+    <div class="card"><div class="ch"><span class="ic" data-i="info" aria-hidden="true"></span><h3>Known gaps</h3></div><ul class="plain" id="gapList"></ul></div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="calendar" aria-hidden="true"></span><h3>Maintenance</h3></div>
+    <p>Weekly review pass: CalRecycle (AB 1201, SB 54 list), USDA AMS and NOSB, Oregon DEQ, Washington Ecology, CDPHE, MPCA, CAA schedules and the dockets in the litigation table. Any changed figure gets a new evidence label and the page’s date moves. An entry not rechecked in 30 days should be treated as Signaled.</p>
+    <div class="ch" style="margin-top:18px"><span class="ic" data-i="target" aria-hidden="true"></span><h3>Neutrality rules for any public version</h3></div>
+    <p>A public Atlas only works if it reads as a reference rather than a pitch: verdicts follow the cited text even where that cuts against compostables, competitor materials get the same treatment as Sway’s, no product names appear in verdicts, and corrections are logged. Publishing it, and every interpretation it would make public, is a company-positioning decision that sits with the CEO.</p>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ic" data-i="list" aria-hidden="true"></span><h3>Sources</h3></div>
+    <ul class="plain" id="srcList"></ul>
+    <p class="note"><strong>Not legal, regulatory or compliance advice.</strong> Verify anything consequential with the relevant agency, certifier or qualified counsel before acting on it.</p>
+  </div>
+</section>
+
+</main>
+
+<div id="tip" role="tooltip" hidden></div>
+
+<footer>
+  <div class="wrap">
+    <p>Compostable Packaging Atlas, internal edition maintained by Sway Innovation Co. Sourced from statutes, agency publications, CAA schedules and program plans, and court-docket summaries. Last updated <span class="num" data-updated>November 10, 2026</span>.</p>
+    <p>Built for internal sales and policy use. Don’t forward externally without review.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var UPDATED_ISO = "2026-11-10";
+var UPDATED = "November 10, 2026";
+document.querySelectorAll("[data-updated]").forEach(function(el){ el.textContent = UPDATED; });
+
+/* ---------- theme ---------- */
+var themeBtn = document.getElementById("themeBtn");
+function curTheme(){ var t = document.documentElement.getAttribute("data-theme"); if (t) return t; return (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light"; }
+function setThemeLabel(){ themeBtn.textContent = curTheme() === "dark" ? "Light theme" : "Dark theme"; }
+try { var saved = localStorage.getItem("ca-theme"); if (saved) document.documentElement.setAttribute("data-theme", saved); } catch(e){}
+setThemeLabel();
+try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", setThemeLabel); } catch(e){}
+themeBtn.addEventListener("click", function(){
+  var next = curTheme() === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  try { localStorage.setItem("ca-theme", next); } catch(e){}
+  setThemeLabel();
+});
+
+/* ---------- helpers ---------- */
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+var EVN = {C:"Confirmed", S:"Signaled", P:"Speculative", R:"Under counsel review", G:"Not verified"};
+function ev(code){ return '<span class="ev '+code+'">'+EVN[code]+'</span>'; }
+function link(label, url){ return url ? '<a href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>' : label; }
+function parseISO(d){ var p = d.split("-"); return new Date(Date.UTC(+p[0], +p[1]-1, +p[2])); }
+function todayUTC(){ var n = new Date(); return new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate())); }
+function daysTo(d){ return Math.round((parseISO(d) - todayUTC())/86400000); }
+var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function fmtDate(d, approx){ var x = parseISO(d); return (approx ? "≈ " : "") + MONTHS[x.getUTCMonth()] + " " + x.getUTCDate() + ", " + x.getUTCFullYear(); }
+
+/* ---------- sources ---------- */
+var SRC = {
+  caaPlan: {t:"CAA California Program Plan, final draft submitted Oct 13, 2026 (Chapter 4; Chapter 9 fee schedule; Chapter 10 eco-modulation)", u:null},
+  calrecycleExt: {t:"Packaging Dive: CalRecycle extends AB 1201 NOP date to June 30, 2027 (June 2025)", u:"https://www.packagingdive.com/news/ab1201-extension-calrecycle-compostable-packaging-usda-bpi/750654/"},
+  khlaw: {t:"Keller and Heckman: California delays NOP requirements for compostable products", u:"https://www.khlaw.com/insights/california-delays-nop-requirements-compostable-products"},
+  calBags: {t:"CalRecycle: Bag requirements at grocery and retail stores (SB 1046, SB 1053)", u:"https://calrecycle.ca.gov/plastics/bagrequirements/"},
+  waRcw: {t:"RCW 70A.455, Plastic product degradability (combined chapter)", u:"https://lawfilesext.leg.wa.gov/Law/RCWPDF/RCW%20%2070A%20TITLE/RCW%20%2070A.455%20%20CHAPTER/RCW%20%2070A.455%20%20COMBINEDCHAPTER.pdf"},
+  waPub: {t:"Washington Ecology Pub. 23-07-022, Compostable products labeling by product type (rev. Dec 2024)", u:"https://apps.ecology.wa.gov/publications/documents/2307022.pdf"},
+  waBlog: {t:"Washington Ecology: Changes to compostable product labeling (June 2024)", u:"https://ecology.wa.gov/blog/june-2024/organics-management-in-washington-changes-to-compostable-product-labeling"},
+  coCdphe: {t:"CDPHE: The Compostables Labeling Act (SB23-253)", u:"https://cdphe.colorado.gov/hm/standards-compostable-products"},
+  coBill: {t:"Colorado SB23-253, enrolled text", u:"https://legiscan.com/CO/text/SB253/id/2801567/Colorado-2023-SB253-Enrolled.pdf"},
+  coDues: {t:"CAA 2027 Colorado Producer Dues Schedule (Oct 1, 2026)", u:"https://circularactionalliance.org/co-2027-producer-dues"},
+  coWebinar: {t:"CAA webinar 301, Colorado program plan update (Feb 11, 2025)", u:"https://circularactionalliance.org/producer-webinars/301-feb-11"},
+  orFees: {t:"CAA 2027 Oregon Producer Fees Schedule (Oct 1, 2026)", u:"https://circularactionalliance.org/s/OR-2027FeeSchedule_100126.pdf"},
+  orPre: {t:"Oregon DEQ / Cascadia: Compostability study interview pre-read", u:"https://www.oregon.gov/deq/recycling/Documents/CAACompStudyInterviewPre-read.pdf"},
+  orFs: {t:"Oregon DEQ organics fact sheet (Truth in Composting, ORS 459A.965)", u:"https://oregon.gov/deq/mm/Documents/organicsfs.pdf"},
+  mnStat: {t:"Minn. Stat. 325E.046, Standards for labeling bags, food or beverage products, and packaging", u:"https://www.revisor.mn.gov/statutes/?id=325E.046"},
+  mnBill: {t:"Minnesota HF 3649 (2026), amending 325E.046 subd. 2a", u:"https://www.revisor.mn.gov/bills/94/2026/0/HF/3649/"},
+  nosbJan: {t:"BioCycle: NOSB blocks broad inclusion of compostable plastics in organic compost (Feb 2026)", u:"https://www.biocycle.net/nosb-vote-syntehtic-compostable-products-organic-compost-standards/"},
+  nosbFall: {t:"Acres U.S.A.: Highlights of the Fall 2026 NOSB meeting", u:"https://members.acresusa.com/nosb-fall-2026-organic-standards-update/"},
+  nosbPacket: {t:"USDA AMS: NOSB Fall 2026 proposals and discussion documents", u:"https://www.ams.usda.gov/sites/default/files/media/NOSBMeetingPacketFall2026.pdf"},
+  eprLit: {t:"EPR Atlas: U.S. packaging EPR litigation tracker", u:"https://epratlas.com/epr-litigation/"},
+  nlrSb54: {t:"National Law Review: 17 state AGs ask court to suspend SB 54", u:"https://natlawreview.com/article/17-state-attorneys-general-ask-court-suspend-californias-entire-epr-law-what"},
+  hkOr: {t:"Holland & Knight: Federal court upholds Oregon’s EPR law", u:"https://www.hklaw.com/en/insights/publications/2026/08/federal-court-upholds-oregons-epr-law-in-full-after-constitutional"},
+  eprCa: {t:"EPR Atlas: California SB 54 dates and plan approval timing", u:"https://epratlas.com/california/"},
+  eprOr: {t:"EPR Atlas: Oregon 2027 fee schedule notes", u:"https://epratlas.com/oregon/"},
+  hunton: {t:"Hunton: California’s “compostable” labeling standard, what to expect in 2027", u:"https://www.hunton.com/hunton-retail-law-resource/enacted-californias-compostable-labeling-standard-what-to-expect-in-2027"},
+  ftc: {t:"FTC Green Guides, 16 CFR Part 260 (2012; revision pending)", u:null},
+  pack: {t:"Rep. Weber: PACK Act passes House Energy and Commerce 25–18 (Sept 16, 2026)", u:"https://weber.house.gov/news/documentsingle.aspx?DocumentID=3882"},
+  packCsac: {t:"CSAC: PACK Act would preempt SB 343 and AB 1201 (Sept 2026)", u:"https://www.counties.org/news-and-media-article/csac-opposes-federal-preemption-of-packaging-labeling-standards/"},
+  til: {t:"EPR Atlas: Truth in Labeling Act would not preempt state law (Aug 2026)", u:"https://epratlas.com/updates/2026-08-16-a-second-federal-labeling-bill-lands-and-this-one/"},
+  sb1031: {t:"BioCycle: Compostable product bills held back in California (Aug 2026)", u:"https://www.biocycle.net/california-compostable-products-bills-die/"},
+  waFees: {t:"EPR Group Consulting: CAA 2027 fee schedules, incl. Washington compostable category (Oct 2026)", u:"https://www.eprgroupconsulting.com/post/caa-s-california-oregon-colorado-and-washington-2027-epr-producer-fee-and-due-schedules-released"},
+  pfasBclp: {t:"BCLP: PFAS in food packaging, state-by-state", u:"https://www.bclplaw.com/en-US/events-insights-news/pfas-in-food-packaging-state-by-state-regulations.html"},
+  pfasPack: {t:"Packaura: PFAS food packaging bans by state, 2026 timeline", u:"https://packaura.com/pfas-food-packaging-state-bans-timeline/"},
+  nop: {t:"USDA NOP: 7 CFR 205.2 (“synthetic”), 205.203 (compost feedstocks), 205.601(c)", u:null},
+  mdStat: {t:"Maryland Env’t § 9-2102 (degradable and compostable claims)", u:null}
+};
+
+/* ---------- labeling data ---------- */
+var LAB = [
+  {code:"CA", name:"California", law:"AB 1201 (PRC 42355–42358.5); SB 1046 bags (PRC 42281.2); SB 54", agency:"CalRecycle; enforcement by AG and local prosecutors",
+   std:"ASTM D6400 / D6868", cert:"Meets the standard; CAA reads it as third-party certified. No CalRecycle-approved certifier list yet.", mark:"Bags: PRC 42357.5 color and labeling standards", home:"Requires OK compost HOME by name, plus every “compostable” test", biod:"Barred on plastic products (PRC 42357(a)(1))",
+   extra:"USDA NOP allowable input (extended to June 30, 2027 for items with synthetics); TOF under 100 ppm; associated with food or yard-waste recovery", ev:"C",
+   detail:[
+     ["Four tests for “compostable”","Third-party certification to ASTM D6400 or D6868 (fiber-only items without plastic are exempt from certification); total organic fluorine under 100 ppm; designed for the recovery of food scraps or green waste collected for composting; and an allowable input under the USDA National Organic Program. CAA plan Table 1, p. 183. "+ev("C")],
+     ["Organic-input deadline","CalRecycle extended the NOP test to June 30, 2027 for products containing synthetic substances that otherwise qualify. It may renew while USDA regulations remain under consideration, but not past January 1, 2031. "+ev("C")],
+     ["What CalRecycle checks","For its annual list of covered material categories eligible to be labeled compostable, CalRecycle evaluates only NOP compliance; the other three tests are the producer’s to meet. 21 categories were eligible on the Dec 31, 2025 list. "+ev("C")],
+     ["Non-food packaging","CAA’s plan says packaging for products that aren’t food or green waste (its example is cosmetics) doesn’t meet the food-waste test. How that applies to apparel polybags and mailers is under counsel review. "+ev("R")],
+     ["Pre-checkout bags","Since Jan 1, 2025, stores may supply pre-checkout bags only if recycled paper or compostable: compliant with PRC 42357.5, eligible to be labeled compostable or home compostable, and at least 15 inches across the mouth. "+ev("C")],
+     ["If the extension lapses","CAA expects compostable plastics to lose their compostable status under SB 54, and would shift to a phase-out exemption and stop reimbursing composters for them (plan pp. 186, 192–193, 197). "+ev("S")]
+   ], src:["caaPlan","calrecycleExt","khlaw","calBags","hunton"]},
+  {code:"WA", name:"Washington", law:"RCW 70A.455 (Organics Management Law, amended 2024)", agency:"Ecology and local governments",
+   std:"ASTM D6400 / D6868 as of Jan 1, 2019; EN 13432 and others accepted for non-film products", cert:"Third-party certifier logo required", mark:"Film bags: green, beige or brown tint, stripe or lettering plus “compostable”; other film and food service: green or brown cues", home:"Only alongside industrial certification; “home compostable only” barred (RCW 70A.455.130)", biod:"Barred (RCW 70A.455.030)",
+   extra:"Declaration of compliance to Ecology before sale; no chasing arrows on D6400 film bags", ev:"C",
+   detail:[
+     ["Standard","A product labeled “compostable” must meet ASTM D6400 or D6868, meet FTC Green Guides labeling, and carry a third-party certification logo and the word “compostable” where possible (RCW 70A.455.040). "+ev("C")],
+     ["Film bags","D6400 film bags need a certifier logo and one of three color-and-wording options: uniform green, beige or brown tint with “compostable” at least 1 inch high, or green, beige or brown lettering or a band (RCW 70A.455.050). They may not carry a chasing-arrows or resin code symbol (.050(4)). "+ev("C")],
+     ["Other film and food service","Must be readily distinguishable, using green or brown labeling, a stripe at least 0.25 inch wide, or tinting, plus the word “compostable” (RCW 70A.455.060). "+ev("C")],
+     ["Which standards","Ecology accepts EN 13432, ISO 17088 and similar standards only for products other than film bags, film products and food serviceware (Pub. 23-07-022). "+ev("C")],
+     ["Home compostable","Allowed only if the item is also certified for industrial composting, has reproducible evidence for the home claim, and isn’t labeled “home compostable only” (RCW 70A.455.130). "+ev("C")],
+     ["Uncolored films","A film whose natural tone is cream may or may not read as “beige.” Get Ecology’s view before relying on the film’s own color. "+ev("S")]
+   ], src:["waRcw","waPub","waBlog"]},
+  {code:"CO", name:"Colorado", law:"SB23-253, Compostables Labeling Act (C.R.S. 25-17-801 et seq.), effective July 1, 2024", agency:"CDPHE (online complaint process)",
+   std:"ASTM D6400 / D6868 (as of Jan 1, 2019)", cert:"Certified by a recognized independent third party; logo required", mark:"Green only (symbols, colors, tint, marks or patterns); certifier logo; “compostable” where possible; no chasing arrows or resin code", home:"Not separately addressed; the industrial certification still applies", biod:"Barred for plastic products, with “natural,” “degradable,” “decomposable,” “oxo-degradable” and similar terms",
+   extra:"Non-compostable products may not use the colors or tints reserved for compostables; small items (½ inch or less of printable width) need only one of three cues", ev:"C",
+   detail:[
+     ["Requirements","Food service products and plastic products represented as compostable must be certified compostable to ASTM D6400 or D6868 and be distinguishable on quick inspection: a certification logo, the word “compostable” where possible, green symbols, colors, tinting, marks or design patterns, and no chasing-arrows resin code or recycling symbol (CDPHE guidance). Beige and brown, which Washington accepts, aren’t listed. "+ev("C")],
+     ["Lookalikes","A product that isn’t compostable may not use the tinting, color schemes, labeling or words required for compostables, or anything that could mislead consumers into thinking it is. Brand colors not clearly meant to signal compostability are excepted. "+ev("C")],
+     ["Exemptions","Products made entirely of untreated wood, including fiber-based substrates, are exempt from the marking requirements. "+ev("C")],
+     ["Prohibited terms","A producer of a plastic product may not market it using “natural,” “biodegradable,” “degradable,” “decomposable,” “oxo-degradable,” “bioassimilable,” “omnidegradable” or similar forms, or anything implying it will break down in a landfill or other environment. Biodegradable mulch film is exempt. “Natural” matters for any film that contains plastic. "+ev("C")],
+     ["EPR link","Colorado’s lower EPR dues category for compostables requires certification to the 2023 edition of ASTM D6400 (or D6868-21, D8410-22). Check the edition on the certificate. "+ev("C")]
+   ], src:["coCdphe","coBill","coDues"]},
+  {code:"MN", name:"Minnesota", law:"Minn. Stat. 325E.046", agency:"MPCA",
+   std:"ASTM D6400 / D6868 or successor", cert:"From Jan 1, 2026, certified by a nonprofit whose focus is compostable materials (subd. 2a); in practice BPI", mark:"Must state it’s intended for an industrial or commercial compost facility (subd. 2(b))", home:"Conflicts with the industrial-facility label", biod:"Barred absent a legislature-approved ASTM standard (subd. 1)",
+   extra:"Wood or paper with no coatings or additives may be labeled compostable without certification", ev:"C",
+   detail:[
+     ["Standard and label","A covered product labeled “compostable” must meet D6400 or D6868 (or successors) and be clearly labeled, on the product or smallest unit of sale, as intended for an industrial or commercial compost facility. "+ev("C")],
+     ["Certifier","From January 1, 2026, certification must come from an entity that is a nonprofit, focuses on materials designed to biodegrade in specific environments such as industrial composting, and can perform the analysis. Reading this as BPI-only is our interpretation; TÜV Austria is a commercial certifier. "+ev("S")],
+     ["Pending change","HF 3649 / SF 3838 (introduced February 2026) would amend subd. 2a. No enactment located. "+ev("S")]
+   ], src:["mnStat","mnBill"]},
+  {code:"MD", name:"Maryland", law:"Env’t § 9-2102 (since Oct 1, 2018)", agency:"MDE",
+   std:"ASTM D6400 / D6868", cert:"Meets the standard; no certifier named in our review", mark:"FTC Green Guides qualification", home:"Not separately addressed", biod:"Barred (“degradable,” “biodegradable”)",
+   extra:"None located", ev:"C",
+   detail:[
+     ["Rule","Bans degradable and biodegradable claims on plastic products and requires that “compostable” items meet ASTM D6400 or D6868 and FTC Green Guides labeling. Summarized from Sway’s November 2026 statute review; re-read the text before relying on it. "+ev("C")],
+     ["EPR link","Under SB 901, a statewide list of covered materials recyclable or compostable through curbside programs is due July 1, 2027. "+ev("C")]
+   ], src:["mdStat"]},
+  {code:"OR", name:"Oregon", law:"No compostable-labeling statute located; Truth in Composting (ORS 459A.965) governs promotion by programs and composters", agency:"FTC (claims); Oregon DEQ (programs)",
+   std:"None named in state law", cert:"FTC substantiation", mark:"FTC qualification for limited facility access", home:"FTC substantiation", biod:"FTC 16 CFR 260.8: unqualified claims on items customarily landfilled are deceptive",
+   extra:"Local programs and composters may not promote acceptance of material that isn’t “effectively composted”", ev:"S",
+   detail:[
+     ["Labeling","No state statute on the word “compostable” located as of November 2026, so the FTC Green Guides govern the claim. "+ev("S")],
+     ["Truth in Composting","ORS 459A.965 bars cities, counties, Metro and composting facilities from promoting for acceptance any material that can’t be effectively composted. DEQ owes the Legislature a compostability report by December 15, 2026. "+ev("C")]
+   ], src:["orFs","orPre","ftc"]}
+];
+
+/* ---------- screener ---------- */
+var STATE_OPTS = [["CA","California"],["WA","Washington"],["CO","Colorado"],["MN","Minnesota"],["MD","Maryland"],["OR","Oregon"],["XX","Other states"]];
+var DEFAULT_STATES = {CA:1, WA:1, CO:1, MN:1};
+var fStates = document.getElementById("fStates");
+STATE_OPTS.forEach(function(s){
+  var l = document.createElement("label");
+  l.innerHTML = '<input type="checkbox" value="'+s[0]+'"'+(DEFAULT_STATES[s[0]]?" checked":"")+'> '+s[1];
+  fStates.appendChild(l);
+});
+var FOOD = {produce_bag:true, liner:true, food_film:true, foodservice:true, coated_fiber:true, nonfood_film:false};
+var FILM = {produce_bag:true, liner:true, food_film:true, nonfood_film:true};
+var BAG = {produce_bag:true, liner:true};
+
+function readForm(){
+  function checked(id){ var out = {}; document.querySelectorAll("#"+id+" input:checked").forEach(function(i){ out[i.value]=true; }); return out; }
+  var c = checked("fCerts");
+  return {
+    states: Object.keys(checked("fStates")),
+    format: document.getElementById("fFormat").value,
+    claim: document.getElementById("fClaim").value,
+    certs: c, d6400: !!(c.bpi || c.tuvastm), enOnly: !!(c.tuven && !c.bpi && !c.tuvastm), anyInd: !!(c.bpi || c.tuvastm || c.tuven), home: !!c.home,
+    synth: document.getElementById("fSynth").value,
+    marks: checked("fMarks"),
+    pfas: document.getElementById("fPfas").checked,
+    when: document.getElementById("fWhen").value
+  };
+}
+function K(ok, text, cite, evc){ return {ok:ok, text:text, cite:cite||"", ev:evc||"C"}; }
+function verdictOf(checks){ var v = "allowed"; checks.forEach(function(c){ if (c.ok === false) v = "not"; else if (c.ok === null && v !== "not") v = "conditional"; }); return v; }
+
+function evalCA(f){
+  var r = {checks:[], notes:[]};
+  if (f.claim === "biodeg"){ r.checks.push(K(false, "“Biodegradable,” “degradable” and “decomposable” are barred on plastic products in California, as are claims implying breakdown in a landfill or other environment.", "PRC 42357(a)(1)")); return r; }
+  if (f.d6400) r.checks.push(K(true, "Certified to ASTM D6400 / D6868.", "PRC 42357 (AB 1201); CAA plan Table 1"));
+  else if (f.enOnly) r.checks.push(K(null, "EN 13432 certificate only. AB 1201 asks that the item meet ASTM D6400 / D6868; whether EN 13432 test data substantiates that is a reading, not a settled rule.", "PRC 42357 (AB 1201)", "R"));
+  else r.checks.push(K(false, "No industrial compostability certification selected.", "PRC 42357 (AB 1201); CAA plan Table 1"));
+  if (f.claim === "home" || f.claim === "homeonly"){
+    r.checks.push(f.home ? K(true, "OK compost HOME held, the certification AB 1201 names for “home compostable.”", "PRC 42357 (AB 1201)") : K(false, "AB 1201 ties “home compostable” to OK compost HOME certification.", "PRC 42357 (AB 1201)"));
+  }
+  if (f.claim === "homeonly") r.checks.push(K(null, "California’s text, as reviewed here, doesn’t bar “home compostable only,” but the FTC expects the claim to be qualified and substantiated, and Washington bars it. Avoid on national SKUs.", "16 CFR 260.7; RCW 70A.455.130(4)", "S"));
+  r.checks.push(f.pfas ? K(true, "Total organic fluorine under 100 ppm.", "AB 1201; CAA plan Table 1") : K(false, "Total organic fluorine must be under 100 ppm.", "AB 1201; CAA plan Table 1"));
+  r.checks.push(FOOD[f.format] ? K(true, "Associated with food scraps or yard waste collected for composting.", "AB 1201; CAA plan pp. 183–184") : K(false, "Packaging for products that aren’t food or green waste doesn’t meet this test in CAA’s reading (its example is cosmetics). Application to apparel and mailer formats is under counsel review.", "AB 1201; CAA plan pp. 183–184", "R"));
+  if (f.when === "before") r.checks.push(K(true, "Organic-input test: items with synthetic content remain eligible under CalRecycle’s extension through June 30, 2027.", "CalRecycle letter to BPI, June 11, 2025; PRC 42357(g)(1)(B)"));
+  else if (f.synth === "yes") r.checks.push(K(false, "From July 1, 2027 the item must be an allowed organic input under USDA NOP. Synthetic compostable polymers aren’t, and the NOSB declined to list them in January 2026. Only a CalRecycle renewal (no later than Jan 1, 2031) or a USDA rule change reopens this.", "PRC 42357(g)(1)(B); 7 CFR 205.203, 205.601(c)"));
+  else if (f.synth === "no") r.checks.push(K(null, "Eligible only if every substance is non-synthetic under 7 CFR 205.2, which turns on processing: alkali or acid extraction can make a seaweed extract synthetic (the NOSB reclassified carrageenan on that basis in October 2026). Needs organic-regulatory counsel.", "7 CFR 205.2, 205.203", "R"));
+  else r.checks.push(K(null, "Composition unknown, so the organic-input test can’t be run for sales after June 30, 2027.", "PRC 42357(g)(1)(B)", "S"));
+  if (BAG[f.format]){
+    var bagOk = (f.marks.color || f.marks.earth) && f.marks.word && f.marks.logo;
+    r.checks.push(bagOk ? K(true, "Bag carries color and labeling cues; confirm they match PRC 42357.5 exactly.", "PRC 42357.5", "S") : K(false, "Compostable plastic bags must meet PRC 42357.5 color and labeling standards (color cue, the word and certification marking).", "PRC 42357.5; CalRecycle bag requirements"));
+  }
+  if (f.format === "produce_bag") r.notes.push("Pre-checkout bags must also be eligible to be labeled compostable and be at least 15 inches across the mouth (PRC 42281.2, SB 1046). If label eligibility lapses, the bag loses this market too.");
+  if (f.format === "produce_bag" || f.format === "liner") r.notes.push("Store-provided bags and compostable liners sold for food-waste collection are excluded from SB 54 covered material (CAA plan p. 187). The labeling rules still apply.");
+  r.notes.push("SB 54 requires covered material to be recyclable or compostable by 2032 (PRC 42050(b)).");
+  return r;
+}
+function evalWA(f){
+  var r = {checks:[], notes:[]};
+  if (f.claim === "biodeg"){ r.checks.push(K(false, "Washington bars “biodegradable,” “degradable,” “decomposable” and similar terms on labels.", "RCW 70A.455.030")); return r; }
+  if (f.claim === "homeonly"){ r.checks.push(K(false, "A product may not be labeled “home compostable only” or in a way implying it can’t be industrially composted.", "RCW 70A.455.130(4)")); return r; }
+  if (FILM[f.format]){
+    if (f.d6400) r.checks.push(K(true, "Certified by a third party to ASTM D6400.", "RCW 70A.455.040, .050"));
+    else if (f.enOnly) r.checks.push(K(false, "For film, Washington names ASTM D6400; Ecology accepts EN 13432 only for products other than film and food serviceware.", "RCW 70A.455.040; Ecology Pub. 23-07-022"));
+    else r.checks.push(K(false, "No industrial compostability certification selected.", "RCW 70A.455.040"));
+  } else {
+    if (f.format === "foodservice"){
+      r.checks.push(f.d6400 ? K(true, "Certified to ASTM D6400 / D6868.", "RCW 70A.455.040, .060") : K(false, "Food serviceware must be certified to ASTM D6400 or D6868.", "RCW 70A.455.040; Ecology Pub. 23-07-022"));
+    } else {
+      r.checks.push(f.anyInd ? K(true, "Certified to an accepted industrial standard (D6868, or EN 13432 and similar for non-film products).", "RCW 70A.455.040; Ecology Pub. 23-07-022") : K(false, "No industrial compostability certification selected.", "RCW 70A.455.040"));
+    }
+  }
+  r.checks.push(f.marks.logo ? K(true, "Certifier’s logo on pack.", "RCW 70A.455.040(1)(b)(ii)") : K(false, "A third-party certification logo is required.", "RCW 70A.455.040"));
+  r.checks.push(f.marks.word ? K(true, "“Compostable” appears on pack.", "RCW 70A.455.040") : K(false, "The word “compostable” must appear where possible.", "RCW 70A.455.040"));
+  if (BAG[f.format] && (f.marks.color || f.marks.earth)) r.checks.push(K(true, "Green, beige or brown cue present, which Washington accepts for film bags.", "RCW 70A.455.050"));
+  else if (!BAG[f.format] && (FILM[f.format] || f.format === "foodservice") && f.marks.color) r.checks.push(K(true, "Green cue present.", "RCW 70A.455.060"));
+  else if (!BAG[f.format] && (FILM[f.format] || f.format === "foodservice") && f.marks.earth) r.checks.push(K(null, "For film other than bags and for food service, the statute names green or brown; brown works, beige may not. Confirm with Ecology.", "RCW 70A.455.060", "S"));
+  else if (FILM[f.format] || f.format === "foodservice") r.checks.push(K(false, "A color cue is required: green, beige or brown tint, band or lettering for film bags; green or brown labeling, a stripe of at least 0.25 inch, or tint for other film and food service.", BAG[f.format] ? "RCW 70A.455.050" : "RCW 70A.455.060"));
+  if (BAG[f.format]) r.checks.push(f.marks.noarrows ? K(true, "No chasing arrows or resin code.", "RCW 70A.455.050(4)") : K(false, "A D6400 film bag may not display a chasing-arrows or resin identification symbol.", "RCW 70A.455.050(4)"));
+  if (f.claim === "home") r.checks.push(f.home ? K(true, "Home claim backed by OK compost HOME, alongside industrial certification.", "RCW 70A.455.130") : K(null, "A home claim needs valid, reproducible scientific evidence in addition to industrial certification.", "RCW 70A.455.130(5)", "S"));
+  r.notes.push("File a declaration of compliance with Ecology before first sale and after any material change (Ecology Pub. 23-07-022).");
+  r.notes.push("Washington defines the standard as ASTM D6400 as it existed January 1, 2019 (RCW 70A.455.020). If the color comes from the film’s natural tone, confirm with Ecology that it reads as beige.");
+  return r;
+}
+function evalCO(f){
+  var r = {checks:[], notes:[]};
+  if (f.claim === "biodeg"){ r.checks.push(K(false, "Colorado bars plastic products from being marketed as “biodegradable,” “degradable,” “decomposable,” “oxo-degradable” or “natural,” or with anything implying they break down in a landfill or other environment.", "SB23-253; CDPHE guidance")); return r; }
+  if (f.d6400) r.checks.push(K(true, "Certified compostable to ASTM D6400 / D6868 by a recognized third party.", "C.R.S. 25-17-802, -803 (SB23-253)"));
+  else if (f.enOnly) r.checks.push(K(false, "Colorado names ASTM D6400 / D6868; an EN 13432–only certificate doesn’t satisfy the text.", "C.R.S. 25-17-802 (SB23-253)"));
+  else r.checks.push(K(false, "No industrial compostability certification selected; Colorado requires certification.", "SB23-253"));
+  if (f.claim === "homeonly") r.checks.push(K(null, "Colorado doesn’t address home-only wording; the industrial certification and markings still apply, and the FTC expects qualification.", "SB23-253; 16 CFR 260.7", "S"));
+  if (f.claim === "home" && !f.home) r.checks.push(K(null, "Substantiate the home claim (OK compost HOME or equivalent evidence).", "16 CFR 260.7", "S"));
+  r.checks.push(f.marks.logo ? K(true, "Certification logo on pack.", "SB23-253; CDPHE guidance") : K(false, "A logo indicating certified compostable is required.", "SB23-253; CDPHE guidance"));
+  r.checks.push(f.marks.word ? K(true, "“Compostable” appears on pack.", "SB23-253") : K(false, "The word “compostable” must appear where possible.", "SB23-253"));
+  r.checks.push(f.marks.color ? K(true, "Green cue present; Colorado accepts only green symbols, colors, tinting, marks or patterns.", "SB23-253; CDPHE guidance") : f.marks.earth ? K(false, "Beige or brown doesn’t satisfy Colorado; the cue must be green.", "SB23-253; CDPHE guidance") : K(false, "Green symbols, colors, tinting, marks or design patterns are required so the item is distinguishable on quick inspection.", "SB23-253; CDPHE guidance"));
+  r.checks.push(f.marks.noarrows ? K(true, "No chasing arrows or resin code.", "SB23-253; CDPHE guidance") : K(false, "A compostable product must not display a chasing-arrows resin code or recycling symbol.", "SB23-253; CDPHE guidance"));
+  r.notes.push("Don’t use “natural” on a plastic-containing product in Colorado; it’s on CDPHE’s list of barred marketing terms.");
+  r.notes.push("For the lower EPR dues category, the certificate must reference ASTM D6400-23 (film and rigid), D6868-21 or D8410-22 (CAA 2027 Colorado dues schedule).");
+  r.notes.push("Items with half an inch or less of printable width need only one of the cues.");
+  return r;
+}
+function evalMN(f){
+  var r = {checks:[], notes:[]};
+  if (f.claim === "biodeg"){ r.checks.push(K(false, "“Biodegradable” is barred unless an ASTM standard for the term is adopted and approved by the legislature.", "Minn. Stat. 325E.046 subd. 1")); return r; }
+  if (f.claim === "homeonly"){ r.checks.push(K(false, "A compostable label must say it’s intended for an industrial or commercial compost facility, which a home-only claim contradicts.", "Minn. Stat. 325E.046 subd. 2(b)", "S")); return r; }
+  if (f.d6400) r.checks.push(K(true, "Meets ASTM D6400 / D6868.", "325E.046 subd. 2(a)"));
+  else if (f.enOnly) r.checks.push(K(false, "Minnesota names ASTM D6400 / D6868 or successors; EN 13432 alone doesn’t satisfy the text.", "325E.046 subd. 2(a)"));
+  else r.checks.push(K(false, "No industrial compostability certification selected.", "325E.046 subd. 2(a)"));
+  if (f.certs.bpi) r.checks.push(K(true, "Certified by BPI, a nonprofit focused on compostable materials.", "325E.046 subd. 2a"));
+  else if (f.certs.tuvastm || f.certs.tuven) r.checks.push(K(false, "Since January 1, 2026, certification must come from a qualifying nonprofit. TÜV Austria is a commercial certifier, so in practice this points to BPI.", "325E.046 subd. 2a", "S"));
+  else r.checks.push(K(false, "Certification from a qualifying nonprofit is required since January 1, 2026.", "325E.046 subd. 2a"));
+  r.checks.push(f.marks.industrial ? K(true, "Label states it’s for an industrial or commercial compost facility.", "325E.046 subd. 2(b)") : K(false, "Label must state it’s intended for an industrial or commercial compost facility, in legible text.", "325E.046 subd. 2(b)"));
+  if (f.claim === "home") r.checks.push(K(null, "A home claim alongside the required industrial statement isn’t addressed in the statute; substantiate it under the FTC Green Guides.", "16 CFR 260.7", "S"));
+  r.notes.push("HF 3649 / SF 3838 (introduced February 2026) would amend the certification subdivision; no enactment located.");
+  return r;
+}
+function evalMD(f){
+  var r = {checks:[], notes:[]};
+  if (f.claim === "biodeg"){ r.checks.push(K(false, "Maryland bars “degradable” and “biodegradable” claims on plastic products.", "Md. Env’t § 9-2102")); return r; }
+  if (f.d6400) r.checks.push(K(true, "Meets ASTM D6400 / D6868.", "Md. Env’t § 9-2102"));
+  else if (f.enOnly) r.checks.push(K(false, "Maryland names ASTM D6400 / D6868; EN 13432 alone doesn’t satisfy the text.", "Md. Env’t § 9-2102"));
+  else r.checks.push(K(false, "No industrial compostability certification selected.", "Md. Env’t § 9-2102"));
+  if (f.claim === "home" || f.claim === "homeonly") r.checks.push(K(null, "Home claims aren’t separately addressed; substantiate and qualify under the FTC Green Guides.", "16 CFR 260.7", "S"));
+  r.checks.push(f.marks.industrial ? K(true, "Claim qualified for industrial facilities, consistent with the FTC Green Guides.", "Md. Env’t § 9-2102; 16 CFR 260.7") : K(null, "Maryland incorporates the FTC Green Guides; qualify the claim where industrial facilities aren’t available to a substantial majority.", "16 CFR 260.7", "S"));
+  r.notes.push("Summarized from statute review; re-read § 9-2102 before relying on it externally.");
+  return r;
+}
+function evalFTC(f, oregon){
+  var r = {checks:[], notes:[]};
+  if (f.claim === "biodeg"){ r.checks.push(K(false, "No state ban located, but the FTC treats unqualified degradable claims on items customarily landfilled or incinerated as deceptive. Treat as not defensible.", "16 CFR 260.8", "S")); }
+  else {
+    r.checks.push(f.anyInd ? K(true, "Competent and reliable evidence of compostability (industrial certification).", "16 CFR 260.7(b)") : K(false, "The FTC expects competent and reliable scientific evidence that the item composts in a timely way.", "16 CFR 260.7(b)"));
+    r.checks.push(f.marks.industrial ? K(true, "Claim qualified for industrial facilities.", "16 CFR 260.7") : K(null, "Qualify the claim. An unqualified “compostable” implies the item composts in a home pile, and industrial composting isn’t available to a substantial majority of consumers in most places.", "16 CFR 260.7", "S"));
+    if (f.claim === "home" || f.claim === "homeonly") r.checks.push(f.home ? K(true, "Home claim backed by OK compost HOME.", "16 CFR 260.7") : K(null, "Substantiate the home claim separately; industrial certification doesn’t prove home compostability.", "16 CFR 260.7", "S"));
+  }
+  if (oregon){
+    r.notes.push("No Oregon compostable-labeling statute located. At least nine Oregon compost facilities have said they don’t want compostable packaging, and Truth in Composting (ORS 459A.965) stops programs and composters promoting acceptance of material that isn’t “effectively composted.” A lawful claim may still have no disposal route.");
+  } else {
+    r.notes.push("Other states may have rules not covered here; New Jersey, New York and Illinois haven’t been verified.");
+  }
+  r.notes.push("The Green Guides date from 2012; a revision has been pending for years and they don’t preempt state law.");
+  return r;
+}
+var EVAL = {CA:evalCA, WA:evalWA, CO:evalCO, MN:evalMN, MD:evalMD, OR:function(f){return evalFTC(f,true);}, XX:function(f){return evalFTC(f,false);}};
+var STATE_LAW = {CA:"AB 1201 · SB 1046 · SB 54", WA:"RCW 70A.455", CO:"SB23-253", MN:"Minn. Stat. 325E.046", MD:"Md. Env’t § 9-2102", OR:"FTC Green Guides · ORS 459A.965", XX:"FTC Green Guides (16 CFR Part 260)"};
+var STATE_NAME = {}; STATE_OPTS.forEach(function(s){ STATE_NAME[s[0]] = s[1]; });
+var VLABEL = {allowed:"Allowed", conditional:"Conditional", not:"Not allowed"};
+
+function runScreener(){
+  var f = readForm();
+  var out = document.getElementById("results");
+  if (!f.states.length){ out.innerHTML = '<div class="empty">Select at least one state to see a verdict.</div>'; return; }
+  var html = "";
+  f.states.forEach(function(code){
+    var r = EVAL[code](f);
+    var v = verdictOf(r.checks);
+    var lis = r.checks.map(function(c){
+      var m = c.ok === true ? '<span class="m ok" aria-label="passes">✓</span>' : c.ok === false ? '<span class="m no" aria-label="fails">✗</span>' : '<span class="m mid" aria-label="open">?</span>';
+      return '<li>'+m+'<span>'+esc(c.text)+'<span class="c">'+esc(c.cite)+' '+(c.ev && c.ev !== "C" ? ev(c.ev) : "")+'</span></span></li>';
+    }).join("");
+    var notes = r.notes.map(function(n){ return "<p>"+esc(n)+"</p>"; }).join("");
+    html += '<article class="vcard '+v+'"><div class="edge" aria-hidden="true"></div><div class="body"><div class="vhead"><h3>'+STATE_NAME[code]+'</h3><span class="vd '+v+'">'+VLABEL[v]+'</span><span class="law">'+STATE_LAW[code]+'</span></div><ul class="checks">'+lis+'</ul>'+(notes?'<div class="vnotes">'+notes+'</div>':'')+'</div></article>';
+  });
+  html += '<p class="note warn">The verdict covers the finished item. Labels, inks, adhesives, valves and laminate layers must qualify too, and food-contact items still need FDA clearance under 21 CFR.</p>';
+  out.innerHTML = html;
+}
+document.getElementById("scrForm").addEventListener("change", runScreener);
+
+/* ---------- labeling render ---------- */
+var LAB_COLS = [["std","Standard named"],["cert","Certification"],["mark","Marking"],["home","Home compostable"],["biod","“Biodegradable”"],["extra","Extra tests"]];
+var LAB_ELSE = {name:"Everywhere else", law:"FTC Green Guides, 16 CFR 260.7–260.8", ev:"C", std:"None named; “competent and reliable scientific evidence”", cert:"Not required by rule", mark:"Qualify for limited facility availability", home:"Qualify and substantiate separately", biod:"Unqualified claims on landfilled items are deceptive", extra:"Guidance, not binding; doesn’t preempt state law"};
+var cmpKey = "all";
+function renderLab(){
+  var cols = cmpKey === "all" ? LAB_COLS : LAB_COLS.filter(function(c){ return c[0] === cmpKey; });
+  var t = document.getElementById("labTable");
+  t.querySelector("thead").innerHTML = "<tr><th>State and law</th>"+cols.map(function(c){ return "<th>"+c[1]+"</th>"; }).join("")+"</tr>";
+  t.querySelector("tbody").innerHTML = LAB.concat([LAB_ELSE]).map(function(s){
+    return '<tr><td style="min-width:11rem"><strong>'+s.name+'</strong><span class="cite">'+esc(s.law)+'</span>'+ev(s.ev)+'</td>'+cols.map(function(c){ return '<td>'+esc(s[c[0]])+'</td>'; }).join("")+'</tr>';
+  }).join("");
+  document.querySelectorAll("#cmpPick button").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.k === cmpKey ? "true" : "false"); });
+}
+(function(){
+  var pick = document.getElementById("cmpPick");
+  [["all","All rules"]].concat(LAB_COLS).forEach(function(c){ var b = document.createElement("button"); b.type = "button"; b.dataset.k = c[0]; b.textContent = c[1].replace(/[“”]/g,""); b.addEventListener("click", function(){ cmpKey = c[0]; renderLab(); }); pick.appendChild(b); });
+  renderLab();
+  var d = document.getElementById("labDetail");
+  d.innerHTML = LAB.map(function(s){
+    var rows = s.detail.map(function(x){ return "<dt>"+esc(x[0])+"</dt><dd>"+x[1]+"</dd>"; }).join("");
+    var srcs = s.src.map(function(k){ return link(esc(SRC[k].t), SRC[k].u); }).join("; ");
+    return '<details class="st" id="st-'+s.code+'"><summary><h3>'+s.name+'</h3><span class="law">'+esc(s.law)+'</span></summary><div class="inner"><dl class="dl"><dt>Enforced by</dt><dd>'+esc(s.agency)+'</dd>'+rows+'<dt>Sources</dt><dd>'+srcs+'</dd></dl></div></details>';
+  }).join("");
+})();
+
+
+/* ---------- PFAS ---------- */
+var PFAS = [
+  ["New York","Dec 31, 2022","Plant-fiber food packaging","ECL Art. 37, Title 2"],
+  ["California","Jan 1, 2023","Plant-fiber food packaging (AB 1200)","Separate from AB 1201’s 100 ppm TOF limit for compostable claims"],
+  ["Washington","Feb 1, 2023 (initial categories)","Phased by packaging type","Ecology adds categories by determination"],
+  ["Vermont","Jul 1, 2023","Food packaging, any material","Reaches film"],
+  ["Connecticut","Dec 31, 2023","Food packaging, any material","Reaches film"],
+  ["Colorado","Jan 1, 2024","Plant-fiber food packaging","Broader consumer-product phases through 2027"],
+  ["Maryland","Jan 1, 2024","Plant-fiber food packaging",""],
+  ["Minnesota","Jan 1, 2024","Food packaging, any material (Minn. Stat. 325F.075)","Reaches film"],
+  ["Hawaii","Dec 31, 2024","Food packaging",""],
+  ["Oregon","Jan 1, 2025","Foodware containers",""],
+  ["Rhode Island","Jan 1, 2025","Food packaging","Sources differ on scope and start date"],
+  ["Maine","In force","Food packaging","Dates vary by source; broader product ban later"],
+  ["New Hampshire","Jan 2027","Food packaging, any material","Reported; not verified against statute"],
+  ["New Jersey","2028","Food packaging","Enacted Jan 2026 per one source; not verified"]
+];
+(function(){
+  var tb = document.querySelector("#pfasTable tbody");
+  if (tb) tb.innerHTML = PFAS.map(function(r){ return "<tr><td><strong>"+esc(r[0])+"</strong></td><td class=\"nowrap num\">"+esc(r[1])+"</td><td>"+esc(r[2])+"</td><td>"+esc(r[3])+"</td></tr>"; }).join("");
+})();
+
+/* ---------- EPR ---------- */
+var EPR = [
+  {st:"California", cat:"25_P45P Plastics and polymers designed for compostability, flexible and film (rigid: 25_P44P)", rate:"$0.24/lb base, plus plastic add-ons: $0.03 reuse, $0.26 PPMF, $0.001 per component", conv:"LDPE other film (25_P16P) $0.24/lb; clear LDPE film $0.25; PP film $0.27; laminates $0.24–0.25; same add-ons", ratio:"1.0× (parity)", bonus:"Statutory bonus for certified compostables without toxic additives (PRC 42053(e)(8)) deferred to a 2029 decision. 5% passive malus for non-recyclable, non-compostable categories from 2027. Compostable plastic still counts as plastic for SB 54 source reduction (plan p. 363), so switching to it earns no reduction credit; whether CAA’s planned virgin-plastic malus reaches compostable plastics is unverified.", bags:"Store-provided bags and compostable liners sold for food-waste collection are excluded from covered material (plan p. 187).", ev:"S", src:"CAA plan Table 5, pp. 335–346; Ch. 10 pp. 357–365"},
+  {st:"Colorado", cat:"Certified compostable packaging and food service ware: flexible plastic certified to ASTM D6400-23 (also D6868-21 coated, D8410-22 paper, D6400-23 rigid)", rate:"$0.27/lb final ($0.10 base + $0.17 not-on-list malus)", conv:"HDPE/LDPE film $0.62/lb; PP film $0.69; laminates and other flexible $0.78", ratio:"0.44×", bonus:"CDPHE active bonus for certified compostability set at 1% in rule (6 CCR 1007-2 Part 1 s18.9.2); CAA offers composters a per-ton or per-cubic-yard processing incentive. Flat dues of $900–$4,100 for 10 tons or less.", bags:"Not yet verified.", ev:"C", src:"CAA 2027 Colorado dues schedule, Oct 1, 2026"},
+  {st:"Oregon", cat:"PLA, PHA, PHB flexible and film items (rigid items separate)", rate:"$0.56/lb final ($0.97 base, −$0.41 reserve return)", conv:"HDPE/LDPE flexible $0.12/lb (2027, reserve-depressed); about $0.43 in 2026", ratio:"4.7× (2027); about 2.4× (2026)", bonus:"No compostability bonus. LCA bonuses A–C only (10% of base fees on a SKU’s primary packaging, capped at $20,000 per SKU).", bags:"Not yet verified. Which category a blend of compostable polymer and natural material reports under is an open question.", ev:"C", src:"CAA 2027 Oregon fee schedule, Oct 1, 2026"},
+  {st:"Washington", cat:"Compostable materials (early fees)", rate:"1.7¢/lb (2027 early fees, “Compostable Materials” category)", conv:"Flexible plastic about 2.5¢/lb (unconfirmed; the eight early-fee rates run 0.2¢ to 3.0¢/lb)", ratio:"About 0.7×", bonus:"Not set. Program plan due Oct 1, 2028.", bags:"Business-to-business packaging is excluded by definition; bags and liners not yet verified.", ev:"S", src:"CAA 2027 Washington early fees schedule (Oct 1, 2026); compostable rate confirmed via EPR Group Consulting (Oct 2026). The category doesn’t mean compostables will be collected."},
+  {st:"Minnesota", cat:"Not set", rate:"No fee schedule", conv:"–", ratio:"–", bonus:"Not set. Plan due Oct 1, 2028.", bags:"Not yet verified.", ev:"C", src:"Minn. Stat. 115A.1440–.1463"},
+  {st:"Maryland", cat:"Not set", rate:"No fee schedule", conv:"–", ratio:"–", bonus:"Not set. Statewide curbside recyclable-or-compostable list due July 1, 2027.", bags:"Not yet verified.", ev:"C", src:"SB 901; COMAR 26.04.14"},
+  {st:"Maine", cat:"Not set", rate:"Program not operating", conv:"–", ratio:"–", bonus:"No stewardship organization selected.", bags:"–", ev:"C", src:"Maine DEP"}
+];
+(function(){
+  document.querySelector("#eprTable tbody").innerHTML = EPR.map(function(r){
+    return '<tr><td><strong>'+r.st+'</strong></td><td>'+esc(r.cat)+'</td><td class="num">'+esc(r.rate)+'</td><td class="num">'+esc(r.conv)+'</td><td class="num" style="min-width:7rem"><strong>'+esc(r.ratio)+'</strong></td><td>'+esc(r.bonus)+'</td><td>'+esc(r.bags)+'</td><td>'+ev(r.ev)+'<span class="cite">'+esc(r.src)+'</span></td></tr>';
+  }).join("");
+  document.getElementById("caMalusNote").innerHTML = '<strong>California inconsistency to raise.</strong> The plan lists the compostable-film and compostable-rigid categories as deemed compostable (Table 3, p. 185) but also includes them in the list of categories eligible for the 2027 non-recyclability and non-compostability malus (Table 5, pp. 358–359). Until CAA resolves it, assume compostable film may carry the 5% malus. '+ev("S");
+  var STATUS = [
+    ["California","Deemed compostable on CalRecycle’s Dec 31, 2025 list; CAA plans a phase-in exemption for compostable plastics, and a phase-out if the organic-input extension lapses. About 10% of compostable plastic arriving at organics facilities is estimated to enter composting. Compostable plastic gets no source-reduction credit.","CalRecycle decision on CAA’s plan (≈ Dec 27, 2026); CMC list update (Dec 31, 2026); June 30, 2027 extension expiry. "+ev("S")],
+    ["Colorado","A distinct dues category for certified compostables, priced below conventional film, plus composter processing incentives.","CDPHE bonus benchmarks guidance; 2028 dues schedule (expected Oct 2027). "+ev("S")],
+    ["Oregon","No compostable-specific treatment; compostable film sits in a high-fee category. DEQ’s compostability report may recommend changes.","DEQ legislative report (Dec 15, 2026); 2028–2032 plan cycle including eco-modulation. "+ev("C")],
+    ["Washington","Early fees price compostables below flexible plastic; full program from 2030.","Program plan (Oct 1, 2028). "+ev("C")]
+  ];
+  document.querySelector("#eprStatus tbody").innerHTML = STATUS.map(function(r){ return "<tr><td><strong>"+r[0]+"</strong></td><td>"+esc(r[1])+"</td><td>"+r[2]+"</td></tr>"; }).join("");
+})();
+
+/* ---------- certification ---------- */
+var CERT_COLS = ["CA “compostable”","CA “home compostable”","WA film","WA other products","CO","MN","MD","CO lower EPR rate"];
+var CERT = [
+  {mark:"BPI", basis:"ASTM D6400 / D6868 / D8410; no intentionally added fluorinated chemicals, TOF under 100 ppm", cells:["ok","no","ok","ok","ok","ok","ok","mid"], note:"The only mark that clearly satisfies Minnesota’s nonprofit-certifier test. For Colorado’s lower dues, confirm the certificate cites the 2023 edition of D6400."},
+  {mark:"TÜV OK compost INDUSTRIAL, listing ASTM D6400 / D6868", basis:"EN 13432, with ASTM listed on the certificate", cells:["ok","no","ok","ok","ok","no","ok","mid"], note:"TÜV often lists ASTM D6400 from the same test data. Fails Minnesota only on the certifier’s status (our reading). Check the ASTM edition for Colorado’s dues."},
+  {mark:"Industrial certificate to EN 13432 only (TÜV, DIN CERTCO Seedling)", basis:"EN 13432", cells:["mid","no","no","ok","no","no","no","no"], note:"Strong science, wrong name for most US statutes. California’s text asks that the item meet D6400; whether EN 13432 data shows that is an interpretation."},
+  {mark:"TÜV OK compost HOME", basis:"TÜV home-composting scheme (ambient temperature)", cells:["na","ok","na","na","na","na","na","na"], note:"Required by name for a California home claim, together with every industrial test. In Washington a home claim needs industrial certification too, and “home compostable only” is barred everywhere it’s addressed."},
+  {mark:"CMA field-test approval", basis:"Disintegration in working commercial facilities", cells:["na","na","na","na","na","na","na","na"], note:"Not a statutory standard anywhere. Its value is operational: composters and CAA’s California plan look to field-test results when deciding what to accept and reimburse."}
+];
+(function(){
+  var SYM = {ok:'<span class="cell-ok" title="Satisfies">✓</span>', no:'<span class="cell-no" title="Doesn’t satisfy">✗</span>', mid:'<span class="cell-mid" title="Depends">◐</span>', na:'<span class="cell-na" title="Not applicable">–</span>'};
+  var t = document.getElementById("certTable");
+  t.querySelector("thead").innerHTML = "<tr><th>Mark</th>"+CERT_COLS.map(function(c){ return "<th>"+c+"</th>"; }).join("")+"</tr>";
+  t.querySelector("tbody").innerHTML = CERT.map(function(r){ return '<tr><td><strong>'+esc(r.mark)+'</strong><span class="cite">'+esc(r.basis)+'</span></td>'+r.cells.map(function(c){ return '<td style="text-align:center">'+SYM[c]+'</td>'; }).join("")+'</tr>'; }).join("");
+  document.getElementById("certNotes").innerHTML = '<div class="tw"><table><thead><tr><th>Mark</th><th>What to know</th><th>Evidence</th></tr></thead><tbody>'+CERT.map(function(r,i){ return '<tr><td><strong>'+esc(r.mark)+'</strong></td><td>'+esc(r.note)+'</td><td>'+ev(i===2?"S":(i===1?"S":"C"))+'</td></tr>'; }).join("")+'</tbody></table></div><p class="note">Certification proves performance under defined conditions. Washington, Colorado and Minnesota name ASTM in statute, so a TÜV certificate that doesn’t list ASTM can fail on paper even where the underlying test is as demanding or more so.</p>';
+})();
+
+/* ---------- composters ---------- */
+var COMP = [
+  {f:"City of Modesto, municipal organics program and windrow facility", st:"CA", acc:"Certified compostable packaging with food scraps and yard trimmings (since April 2026)", cond:"New cart labels with icons; staff remove lookalikes; regular finished-compost testing. Supported by the Composting Consortium grant program with BPI and USCC guidance.", src:"CAA plan p. 197, citing BioCycle", ev:"C"},
+  {f:"Republic Services Otay composting facility (San Diego)", st:"CA", acc:"Compostable packaging from Petco Park", cond:"Venue partnership only: items pre-tested in the operator’s process and a dedicated sorting team at the stadium. Static aerated piles, about 300 tons per day. Not open acceptance.", src:"CAA plan p. 196", ev:"C"},
+  {f:"ReGen Monterey (Monterey Regional Waste Management District)", st:"CA", acc:"Certain certified compostables in the commercial food-scrap stream only", cond:"Bifurcated: residential compost stays certified organic and excludes compostables; commercial compost isn’t certified organic.", src:"CAA plan p. 196", ev:"C"},
+  {f:"Oregon compost facilities (at least nine)", st:"OR", acc:"Declined compostable packaging and food serviceware", cond:"2019 joint statement; facilities want packaging-free organic feedstocks. Wet anaerobic digesters remove and dispose of compostables.", src:"Oregon DEQ / Cascadia pre-read; DEQ rulemaking materials", ev:"C"},
+  {f:"Colorado facilities that accept and process compostables", st:"CO", acc:"Covered compostable packaging", cond:"CAA Colorado offers a per-ton or per-cubic-yard processing incentive. Named facilities not yet compiled.", src:"CAA webinar 301, Feb 2025", ev:"C"}
+];
+(function(){
+  document.querySelector("#compTable tbody").innerHTML = COMP.map(function(r){ return '<tr><td><strong>'+esc(r.f)+'</strong></td><td>'+r.st+'</td><td>'+esc(r.acc)+'</td><td>'+esc(r.cond)+'</td><td><span class="cite" style="margin:0">'+esc(r.src)+'</span></td><td>'+ev(r.ev)+'</td></tr>'; }).join("");
+  var CS = [
+    {st:"California", ev:"C", items:["Acceptance is low: most local programs exclude compostable plastics, and most organics facilities screen them out. Fiber and food-soiled paper are generally accepted.","Only about 10% of compostable plastic arriving at organics facilities is estimated to enter composting; the rest is screened out and landfilled (needs assessment, via plan p. 195).","Organic certification of finished compost is the main reason facilities refuse compostable plastics, even when they don’t sell to organic farms.","CAA budgets $10M for compost capital and operating in 2027 and $76–199M over five years, supporting 6 to 25 facilities (plan p. 306).","To be reimbursed, a compost facility must attest it accepts covered compostables and doesn’t intentionally screen them out, or commit to accepting them on a timeline.","Jurisdictions can seek a two-year renewable exemption from collecting compostables where no responsible end market exists (14 CCR 18980.11); CAA expects many to."]},
+    {st:"Oregon", ev:"C", items:["Truth in Composting (ORS 459A.965) bars programs and composters from promoting acceptance of material that isn’t “effectively composted.”","DEQ’s compostability report to the Legislature is due December 15, 2026, and is meant to move beyond lab-based definitions.","Facilities that accept compostables report higher contamination, mostly conventional plastic."]},
+    {st:"Colorado", ev:"S", items:["CAA pays composters a processing incentive for accepted compostable packaging; rates and participating facilities not yet compiled here.","Next step: request CAA Colorado’s list of incentive recipients."]},
+    {st:"Field testing", ev:"C", items:["A Closed Loop Partners study of more than 23,000 certified food-contact compostable items found they broke down at facilities meeting reasonable operating parameters (cited in CAA plan p. 192).","CAA will work with the Compost Manufacturing Alliance and the Compostable Field Testing Program to find design elements that perform poorly in the field.","Washington, Minnesota and Maryland facility data: not yet compiled."]}
+  ];
+  document.getElementById("compStates").innerHTML = CS.map(function(c){ return '<div class="card cbox"><h3>'+c.st+' '+ev(c.ev)+'</h3><ul>'+c.items.map(function(i){ return "<li>"+esc(i)+"</li>"; }).join("")+'</ul></div>'; }).join("");
+})();
+
+/* ---------- dates ---------- */
+var DATES = [
+  {d:"2025-06-11", w:"California", t:"CalRecycle grants the AB 1201 organic-input extension to June 30, 2027 for products containing synthetics.", k:"deadline", ev:"C"},
+  {d:"2026-01-01", w:"Minnesota", t:"Nonprofit certification required for products labeled compostable (325E.046 subd. 2a).", k:"deadline", ev:"C"},
+  {d:"2026-01-13", w:"Federal", t:"NOSB votes unanimously against listing broad classes of synthetic compostable materials as compost feedstocks; case-by-case review left open.", k:"signpost", ev:"C"},
+  {d:"2026-04-15", w:"California", t:"Modesto adds certified compostable packaging to its municipal organics program (April 2026).", k:"signpost", ev:"C", approx:true},
+  {d:"2026-07-07", w:"Federal", t:"USDA announces it will consult on updating organic regulations for compost; consultation expected early 2027 (CAA plan p. 186 n. 2).", k:"signpost", ev:"S"},
+  {d:"2026-07-14", w:"California", t:"Preliminary injunction blocks Attorney General enforcement of SB 343 (recyclability labels).", k:"court", ev:"C"},
+  {d:"2026-08-13", w:"California", t:"AB 1812, which would have barred “compostable” on products containing plastic from 2027, is held in Senate Appropriations.", k:"signpost", ev:"S"},
+  {d:"2026-08-06", w:"Federal", t:"Truth in Labeling Act introduced (H.R. 10048 / S. 5302): national labeling standards without preempting state law.", k:"signpost", ev:"C"},
+  {d:"2026-08-13", w:"California", t:"SB 1031, tightening compostable labeling and ordering a health study of degraded compostable plastics, is held at the fiscal deadline alongside AB 1812.", k:"signpost", ev:"C"},
+  {d:"2026-09-16", w:"Federal", t:"PACK Act passes House Energy and Commerce 25–18. As written it would preempt AB 1201 and other state compostable-claim rules.", k:"signpost", ev:"C", it:"If it reaches a floor vote, every state rule in this Atlas becomes provisional. If it stalls, the state patchwork stands."},
+  {d:"2026-08-27", w:"Oregon", t:"Federal court upholds Oregon’s Recycling Modernization Act; NAW appeals to the Ninth Circuit.", k:"court", ev:"C"},
+  {d:"2026-10-01", w:"CO · OR · CA · WA", t:"CAA publishes 2027 fee and dues schedules (California preliminary; Washington early fees).", k:"deadline", ev:"C"},
+  {d:"2026-10-13", w:"California", t:"CAA submits the final draft program plan to CalRecycle.", k:"deadline", ev:"C"},
+  {d:"2026-10-29", w:"Federal", t:"NOSB recommends removing carrageenan, reclassified as synthetic because of alkali and acid extraction; agar-agar reclassification discussed.", k:"signpost", ev:"C"},
+  {d:"2026-11-13", w:"California", t:"Comment closes on CAA’s program plan at CalRecycle (packaging@calrecycle.ca.gov, subject “PRO Plan Comments”).", k:"comment", ev:"C", it:"Last chance to raise the compostable-malus inconsistency and the compostability bonus timing."},
+  {d:"2026-12-15", w:"Oregon", t:"DEQ compostability report and recommendations due to the Legislature.", k:"signpost", ev:"C", it:"If it recommends a compostable pathway, Oregon’s 2028–2032 fee cycle is the place to argue for it. If it endorses facility refusals, plan Oregon claim-free."},
+  {d:"2026-12-17", w:"Oregon", t:"NAW opening brief due at the Ninth Circuit (No. 26-6404).", k:"court", ev:"C"},
+  {d:"2026-12-27", w:"California", t:"CalRecycle decision on CAA’s plan, 75 days after submission (14 CCR 18980.6.1(b)(2)).", k:"signpost", ev:"S", approx:true, it:"If approved with the compostables phase-in, a positive signal for renewal. If the phase-in is dropped, negative."},
+  {d:"2026-12-31", w:"California", t:"CalRecycle annual update to the covered material category list, including compostability determinations.", k:"signpost", ev:"S", it:"If compostable film keeps its status, positive. If removed, strongly negative for the 2032 pathway."},
+  {d:"2027-01-01", w:"California", t:"SB 54 program start; 2027 fees become binding only on plan approval.", k:"deadline", ev:"S"},
+  {d:"2027-01-15", w:"California", t:"Hearing on the motion to enjoin all of SB 54 (Nebraska et al. and NAW v. Heller, E.D. Cal., 1:30 p.m., Judge Coggins).", k:"court", ev:"C", it:"If granted, fees and SB 54 obligations pause; AB 1201 labeling rules don’t. If denied, invoices proceed."},
+  {d:"2027-01-18", w:"Oregon", t:"Oregon’s answering brief due at the Ninth Circuit.", k:"court", ev:"C"},
+  {d:"2027-03-15", w:"Federal", t:"USDA consultation on compost regulations expected to open (early 2027).", k:"signpost", ev:"S", approx:true, it:"An open consultation is what CalRecycle needs to see to renew the extension (“regulations under consideration”)."},
+  {d:"2027-04-30", w:"Federal", t:"NOSB spring meeting; a proposal on reclassifying alkali-extracted agar is expected.", k:"signpost", ev:"P", approx:true},
+  {d:"2027-05-31", w:"All six CAA states", t:"CY2026 supply reports due to CAA.", k:"deadline", ev:"S"},
+  {d:"2027-06-30", w:"California", t:"AB 1201 organic-input extension expires.", k:"deadline", ev:"C", it:"Without a CalRecycle renewal, items with synthetic content can’t be labeled compostable or home compostable in California from July 1."},
+  {d:"2027-07-01", w:"Maryland", t:"Statewide list of covered materials recyclable or compostable through curbside programs due.", k:"deadline", ev:"C"},
+  {d:"2027-10-01", w:"CO · OR · CA · WA", t:"CAA 2028 fee schedules expected, following the annual October 1 pattern.", k:"signpost", ev:"P", approx:true},
+  {d:"2028-10-01", w:"Washington · Minnesota", t:"CAA program plans due.", k:"deadline", ev:"C"},
+  {d:"2029-01-01", w:"Minnesota", t:"Sales restriction for producers not in a stewardship plan.", k:"deadline", ev:"C"},
+  {d:"2029-03-01", w:"Washington", t:"Sales by producers that aren’t PRO members prohibited.", k:"deadline", ev:"C"},
+  {d:"2031-01-01", w:"California", t:"Latest date CalRecycle can extend the organic-input requirement.", k:"deadline", ev:"C"},
+  {d:"2032-01-01", w:"California", t:"All covered material must be recyclable or compostable (PRC 42050(b)).", k:"deadline", ev:"C"}
+];
+DATES.sort(function(a,b){ return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
+var KLABEL = {deadline:"Deadline", signpost:"Signpost", court:"Court", comment:"Comment window"};
+function actionPill(x, n){
+  if (x.k === "deadline" || x.k === "comment"){ if (n <= 21) return '<span class="act now">Act now</span>'; if (n <= 60) return '<span class="act prep">Prepare</span>'; return '<span class="act mon">Monitor</span>'; }
+  return '<span class="act watch">Watch</span>';
+}
+function renderDates(){
+  var up90 = [], later = [], past = [];
+  DATES.forEach(function(x){ var n = daysTo(x.d); if (n < 0) past.push(x); else if (n <= 90) up90.push(x); else later.push(x); });
+  function row(x, showDays, showAct){
+    var n = daysTo(x.d);
+    return '<tr><td class="nowrap num">'+fmtDate(x.d, x.approx)+'</td><td>'+esc(x.w)+'</td><td>'+esc(x.t)+(x.it?'<span class="ifthen">'+esc(x.it)+'</span>':'')+'</td>'+(showDays?'<td class="daycount r">'+(n===0?"Today":n)+'</td>':'')+(showAct?'<td>'+actionPill(x,n)+'</td>':'')+'<td><span class="type '+x.k+'">'+KLABEL[x.k]+'</span></td><td>'+ev(x.ev)+'</td></tr>';
+  }
+  document.querySelector("#d90 tbody").innerHTML = up90.length ? up90.map(function(x){ return row(x,true,true); }).join("") : '<tr><td colspan="7">Nothing in the next 90 days.</td></tr>';
+  document.querySelector("#dLater tbody").innerHTML = later.map(function(x){ return row(x,true); }).join("");
+  document.querySelector("#dPast tbody").innerHTML = past.reverse().map(function(x){ return row(x,false); }).join("");
+  document.getElementById("d90label").textContent = "Counted from today; data as of " + UPDATED;
+  var n = daysTo("2027-06-30");
+  var el = document.getElementById("daysNop");
+  if (n > 0){ el.textContent = n; }
+  else { el.textContent = "0"; document.getElementById("daysNopText").textContent = "Days left: California’s organic-input extension was set to end June 30, 2027. Check whether CalRecycle renewed it."; }
+  document.getElementById("strips").innerHTML = up90.slice(0,2).map(function(x){ var d = daysTo(x.d); return '<div class="strip"><span class="ic" data-i="calendar" aria-hidden="true"></span><div><strong>'+(d===0?"Today":d===1?"Tomorrow":d+" days away")+'. '+fmtDate(x.d, x.approx)+', '+esc(x.w)+':</strong> '+esc(x.t)+(x.it?' <span class="ifthen">'+esc(x.it)+'</span>':'')+'</div></div>'; }).join("");
+}
+
+/* ---------- litigation ---------- */
+var LIT = [
+  {c:"Nebraska et al. and NAW v. Heller (17 states and NAW v. CalRecycle and CAA)", s:"California", w:"SB 54 itself: dormant Commerce Clause, First Amendment, due process, Import-Export Clause, private delegation. Seeks to enjoin the whole program.", x:"Nothing today. If granted, SB 54 fees, reporting and the 2032 recyclable-or-compostable mandate pause. AB 1201’s labeling rules and the June 30, 2027 date are a separate statute and unaffected.", st:"PI hearing Jan 15, 2027; no injunction", ev:"C"},
+  {c:"SB 343 labeling challenge (No. 3:26-cv-01675)", s:"California", w:"California’s recyclability-label law and the chasing-arrows restriction; plaintiffs moved Oct 8, 2026 to add SB 54 claims.", x:"Indirect. Compostable items shouldn’t carry recyclability claims anyway. The vagueness and speech reasoning could be tested against other labeling laws.", st:"AG enforcement enjoined July 14, 2026", ev:"C", spec:"Extension of its reasoning to AB 1201 is speculative."},
+  {c:"Oceana, NRDC and Californians Against Waste v. CalRecycle", s:"California", w:"Whether SB 54 regulations are too weak, including exemptions and compliance pathways.", x:"Low. Doesn’t seek to stop the program; could tighten how categories qualify.", st:"Pending, S.F. Superior Court", ev:"C"},
+  {c:"NAW v. Feldon", s:"Oregon", w:"Recycling Modernization Act, dormant Commerce Clause and due process.", x:"Oregon’s compostable fee treatment stands; the 2027 schedule applies.", st:"RMA upheld Aug 27, 2026; Ninth Circuit appeal No. 26-6404", ev:"C"},
+  {c:"Lollicup USA v. Feldon", s:"Oregon", w:"Same law, putative class for producers outside the NAW injunction.", x:"None.", st:"Stayed Oct 13, 2026 pending the NAW appeal", ev:"C"},
+  {c:"ILMA v. CDPHE; NAW v. Ryan", s:"Colorado", w:"Colorado’s program on statutory, private-delegation, commerce and speech grounds.", x:"None yet. Colorado’s compostable dues category and composter incentives continue.", st:"PIs sought; none granted", ev:"C"}
+];
+var POL = [
+  {m:"PACK Act (H.R. 6832, Weber)", w:"Federal", d:"Federal requirements for “recyclable,” “compostable” and “reusable” claims, each certified by an accredited third party; preempts different state and local requirements, including AB 1201 and SB 343. FTC guidance within 18 months of enactment.", s:"Passed House Energy and Commerce 25–18, Sept 16, 2026; no floor vote scheduled", ev:"C"},
+  {m:"Truth in Labeling Act (H.R. 10048 / S. 5302)", w:"Federal", d:"National standards for recyclable, compostable, reusable and refillable claims, enforced under the FTC Act; explicitly doesn’t preempt state law, apart from a narrow resin-code carve-out.", s:"Introduced Aug 6, 2026; not marked up", ev:"C"},
+  {m:"SB 1031 (Blakespear)", w:"California", d:"Standardized labeling so compostable plastics are distinguishable from conventional plastics; an OEHHA study of degraded compostable plastics and additives. A “compostable except in California” provision was dropped.", s:"Held in Assembly Appropriations, Aug 13, 2026; could return in 2027", ev:"C"},
+  {m:"CalRecycle renewal of the AB 1201 extension", w:"California", d:"Extend the organic-input date again, up to Jan 1, 2031, while USDA rules are under consideration.", s:"BPI request pending as of Aug 2026; no decision", ev:"S"},
+  {m:"USDA compost rulemaking (petition to redefine compost; RIN 0581-AE57)", w:"Federal", d:"Update the organic rules for compost, the fix BPI favors over listing products one by one.", s:"Consultation expected early 2027", ev:"S"},
+  {m:"AB 1812 (Aguiar-Curry)", w:"California", d:"Would have barred “compostable” on products made wholly or partly of plastic from Jan 1, 2027.", s:"Held in Senate Appropriations, Aug 13, 2026; could return in 2027", ev:"C"},
+  {m:"HF 3649 / SF 3838", w:"Minnesota", d:"Amend the certification subdivision of 325E.046.", s:"Introduced Feb 2026; no enactment located", ev:"S"},
+  {m:"FTC Green Guides revision", w:"Federal", d:"Update the 2012 guidance on compostable and degradable claims.", s:"Pending; no final revision", ev:"C"}
+];
+(function(){
+  document.querySelector("#litTable tbody").innerHTML = LIT.map(function(r){ return '<tr><td><strong>'+esc(r.c)+'</strong></td><td>'+r.s+'</td><td>'+esc(r.w)+'</td><td>'+esc(r.x)+(r.spec?' <span class="cite">'+esc(r.spec)+' '+ev("P")+'</span>':'')+'</td><td>'+esc(r.st)+'</td><td>'+ev(r.ev)+'</td></tr>'; }).join("");
+  document.querySelector("#polTable tbody").innerHTML = POL.map(function(r){ return '<tr><td><strong>'+esc(r.m)+'</strong></td><td>'+r.w+'</td><td>'+esc(r.d)+'</td><td>'+esc(r.s)+'</td><td>'+ev(r.ev)+'</td></tr>'; }).join("");
+})();
+
+/* ---------- overview: stages + faq ---------- */
+var STAGES = [
+  {k:"ca", l:"Labeling a SKU for California", s:["Run the screener with California and both sale windows. Anything with synthetic content passes through June 30, 2027 and fails after unless CalRecycle renews.","Check the food or yard-waste association. Non-food formats such as apparel polybags and mailers are the open question; don’t promise a California claim on them yet.","Set artwork timing now: print and converting lead times mean a claim-free California version may be needed by about March 2027 for stock that sells past June 30."]},
+  {k:"nat", l:"One label for every state", s:["Confirm the certificate lists ASTM D6400 / D6868, not just EN 13432. Washington film, Colorado, Minnesota and Maryland name ASTM.","Add BPI if the SKU sells in Minnesota, and print “for industrial or commercial composting facilities.”","Use a green, beige or brown cue, the certifier logo and the word “compostable”; drop chasing arrows; file Washington’s declaration before first sale."]},
+  {k:"epr", l:"Pricing EPR for a brand", s:["Map the item to each state’s reporting category: California 25_P45P, Colorado’s certified-compostable categories, Oregon’s PLA/PHA/PHB line.","Price per unit, not per pound: a thicker or denser film can erase Colorado’s 0.44× advantage or worsen Oregon’s 4.7×.","Add California’s plastic add-ons ($0.29/lb plus $0.001 per component), which apply to compostable plastics too."]},
+  {k:"cert", l:"Choosing a certification", s:["Start from the states the SKU sells in; the certification matrix shows which marks satisfy which text.","For a California home claim, hold OK compost HOME as well as industrial certification.","Book field testing (CMA) for formats you want composters to accept; it’s the evidence CAA and operators look for."]}
+];
+var FAQ = [
+  ["Is there a federal rule for “compostable”?","No statute. The FTC Green Guides (16 CFR 260.7) explain how the FTC applies its deception authority: a compostable claim needs competent and reliable evidence and should be qualified where industrial facilities aren’t available to a substantial majority. They date from 2012, a revision is pending, and they don’t preempt state law."],
+  ["Could a federal law override these state rules?","Possibly. The PACK Act (H.R. 6832), which passed House Energy and Commerce on September 16, 2026, would set federal requirements for compostable claims, require third-party certification, and preempt different state rules, including California’s AB 1201. It hasn’t had a floor vote. A rival bill, the Truth in Labeling Act, would leave state law in place. Until either passes, the state rules here govern."],
+  ["Which states regulate the word itself?","California, Washington, Colorado, Minnesota and Maryland, as located for this edition. Oregon has no labeling statute but restricts what programs and composters may promote. Other states haven’t been fully checked."],
+  ["What happens in California on June 30, 2027?","CalRecycle’s extension of AB 1201’s organic-input test expires. From July 1, an item with synthetic content can be labeled compostable or home compostable only if it’s an allowed input under USDA organic rules, which synthetic compostable polymers aren’t. CalRecycle can renew, but not past January 1, 2031."],
+  ["Does a TÜV certificate work in the US?","For science, yes; for statutes, it depends on what the certificate lists. Washington film, Colorado, Minnesota and Maryland name ASTM D6400 / D6868, and Minnesota requires a nonprofit certifier. A TÜV certificate that also lists ASTM D6400 covers most of this; Minnesota still points to BPI."],
+  ["Can a pack say “home compostable”?","California requires OK compost HOME plus every industrial test. Washington allows it only alongside industrial certification and bars “home compostable only.” Minnesota requires an industrial-facility statement. Elsewhere, substantiate it under the FTC Green Guides."],
+  ["Can a pack say “biodegradable”?","Treat it as off-limits. California (plastic products), Washington, Minnesota and Maryland bar it; Colorado restricts it; the FTC treats unqualified claims on landfilled items as deceptive."],
+  ["Do compostables get lower EPR fees?","In Colorado, yes: $0.27/lb against $0.62 for conventional film in 2027, if certified to the 2023 edition of D6400. Washington’s early fees are lower too. California charges the same base rate, and Oregon charges more."],
+  ["Does certification mean a composter will take it?","No. Most California programs and facilities exclude compostable plastics today, and many Oregon facilities refuse compostable packaging outright. Acceptance is local and earned through field testing and contamination control."],
+  ["Is a seaweed-based material “non-synthetic” under organic rules?","It’s an open question that turns on processing. Under 7 CFR 205.2, a substance chemically changed during extraction is synthetic; the NOSB reclassified carrageenan on that basis in October 2026 and is examining alkali-extracted agar. Don’t assume either answer; it needs organic-regulatory counsel."]
+];
+(function(){
+  var sEl = document.getElementById("stages"), stepsEl = document.getElementById("stageSteps");
+  function pick(k){
+    STAGES.forEach(function(s){ var b = document.getElementById("stg-"+s.k); b.setAttribute("aria-pressed", s.k===k ? "true" : "false"); if (s.k===k) stepsEl.innerHTML = s.s.map(function(x){ return "<li>"+esc(x)+"</li>"; }).join(""); });
+  }
+  STAGES.forEach(function(s){ var b = document.createElement("button"); b.type="button"; b.id="stg-"+s.k; b.textContent = s.l; b.addEventListener("click", function(){ pick(s.k); }); sEl.appendChild(b); });
+  pick("ca");
+  document.getElementById("qaList").innerHTML = FAQ.slice(0,2).map(function(q){ return "<details><summary>"+esc(q[0])+"</summary><div class=\"a\">"+esc(q[1])+"</div></details>"; }).join("");
+  document.getElementById("qaAll").textContent = "See all " + FAQ.length + " questions";
+  document.getElementById("qaAll").addEventListener("click", function(e){ e.preventDefault(); var c = document.getElementById("faq-card"); if (c && c.scrollIntoView) c.scrollIntoView({block:"start"}); });
+  document.getElementById("faq").innerHTML = FAQ.map(function(q){ return "<details><summary>"+esc(q[0])+"</summary><div class=\"a\">"+esc(q[1])+"</div></details>"; }).join("");
+})();
+
+/* ---------- method lists ---------- */
+(function(){
+  var REVIEW = [
+    "How California’s food or yard-waste requirement applies to non-food formats such as apparel polybags and e-commerce mailers.",
+    "Whether EN 13432 test data substantiates “meets ASTM D6400” under AB 1201 while CalRecycle names no certifiers.",
+    "Whether any seaweed-derived component is non-synthetic under 7 CFR 205.2 for the post–June 30, 2027 organic-input test.",
+    "Whether a naturally cream film satisfies Washington’s “beige” color cue (ask Ecology)."
+  ];
+  var GAPS = [
+    "Compostable-labeling rules in states other than CA, WA, CO, MN, MD (New Jersey, New York, Illinois not verified).",
+    "How Colorado, Oregon, Minnesota, Maryland and Washington treat compostable liners and store-provided bags under EPR.",
+    "Named Colorado facilities receiving CAA’s compost processing incentive, and Washington, Minnesota and Maryland acceptance data.",
+    "Washington’s early-fee rate for flexible plastic (2.5¢/lb) is unconfirmed; the compostable rate is confirmed.",
+    "The exact PRC 42357.5 bag color specifications and the text of Maryland Env’t § 9-2102.",
+    "Oregon’s 2026 rate for PLA/PHA/PHB flexible film (the “about 2.4×” comparison).",
+    "City and county foodware ordinances that require or restrict compostables (for example, municipal takeout-container rules).",
+    "PFAS statute text for each state, and whether a seaweed-based film counts as “plant-based” or “plant fiber” under each definition."
+  ];
+  document.getElementById("reviewList").innerHTML = REVIEW.map(function(x){ return "<li>"+esc(x)+" "+ev("R")+"</li>"; }).join("");
+  document.getElementById("gapList").innerHTML = GAPS.map(function(x){ return "<li>"+esc(x)+"</li>"; }).join("");
+  document.getElementById("srcList").innerHTML = Object.keys(SRC).map(function(k){ return "<li>"+link(esc(SRC[k].t), SRC[k].u)+"</li>"; }).join("");
+})();
+
+/* ---------- routing ---------- */
+var VIEWS = ["overview","screener","labeling","epr","certification","composters","dates","litigation","ask","method"];
+function route(){
+  var h = (location.hash || "").replace("#","");
+  if (VIEWS.indexOf(h) < 0) h = "overview";
+  VIEWS.forEach(function(v){ document.getElementById("v-"+v).classList.toggle("on", v===h); });
+  document.querySelectorAll("#tabs a").forEach(function(a){ if (a.getAttribute("href") === "#"+h) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+  var active = document.querySelector('#tabs a[aria-current="page"]');
+  if (active && active.scrollIntoView) { try { active.scrollIntoView({block:"nearest", inline:"nearest"}); } catch(e){} }
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", route);
+
+/* ---------- reference text for Ask + brief ---------- */
+function referenceText(){
+  var L = [];
+  L.push("COMPOSTABLE PACKAGING ATLAS — data as of " + UPDATED + ". Evidence labels: Confirmed, Signaled, Speculative, Under counsel review.");
+  L.push("\nLABELING RULES");
+  LAB.forEach(function(s){
+    L.push("- " + s.name + " (" + s.law + "; " + EVN[s.ev] + "): standard " + s.std + "; certification " + s.cert + "; marking " + s.mark + "; home compostable " + s.home + "; biodegradable " + s.biod + "; extra " + s.extra + ".");
+    s.detail.forEach(function(x){ L.push("  · " + x[0] + ": " + x[1].replace(/<[^>]+>/g,"").trim()); });
+  });
+  L.push("- Elsewhere: FTC Green Guides 16 CFR 260.7 (compostable: competent and reliable evidence; qualify for limited facility access) and 260.8 (degradable). Guidance, not binding; 2012; revision pending; no preemption.");
+  L.push("\nEPR TREATMENT (2027)");
+  EPR.forEach(function(r){ L.push("- " + r.st + " [" + EVN[r.ev] + "; " + r.src + "]: category " + r.cat + "; compostable rate " + r.rate + "; conventional " + r.conv + "; ratio " + r.ratio + "; bonuses " + r.bonus + "; liners/bags " + r.bags); });
+  L.push("- California inconsistency: compostable film CMCs are listed as deemed compostable (plan Table 3 p.185) and also on the 2027 malus-eligible list (Table 5 pp.358-359). Signaled.");
+  L.push("\nCERTIFICATION MATRIX (columns: " + CERT_COLS.join(", ") + ")");
+  CERT.forEach(function(r){ L.push("- " + r.mark + " (" + r.basis + "): " + r.cells.map(function(c,i){ return CERT_COLS[i] + "=" + c; }).join("; ") + ". " + r.note); });
+  L.push("\nCOMPOSTER ACCEPTANCE");
+  COMP.forEach(function(r){ L.push("- " + r.f + " (" + r.st + ", " + EVN[r.ev] + "): accepts " + r.acc + ". " + r.cond + " Source: " + r.src); });
+  L.push("\nDATES");
+  DATES.forEach(function(x){ L.push("- " + fmtDate(x.d, x.approx) + " | " + x.w + " | " + x.t + (x.it ? " IF/THEN: " + x.it : "") + " [" + EVN[x.ev] + "]"); });
+  L.push("\nLITIGATION (no case located against a compostable-labeling statute)");
+  LIT.forEach(function(r){ L.push("- " + r.c + " (" + r.s + "): " + r.w + " Effect on compostables: " + r.x + " Status: " + r.st); });
+  L.push("\nPOLICY WATCH");
+  POL.forEach(function(r){ L.push("- " + r.m + " (" + r.w + "): " + r.d + " Status: " + r.s + " [" + EVN[r.ev] + "]"); });
+  L.push("\nPFAS IN FOOD PACKAGING (Signaled; secondary sources)");
+  PFAS.forEach(function(r){ L.push("- " + r[0] + ": " + r[1] + "; " + r[2] + (r[3] ? "; " + r[3] : "")); });
+  L.push("\nFAQ");
+  FAQ.forEach(function(q){ L.push("- Q: " + q[0] + " A: " + q[1]); });
+  return L.join("\n");
+}
+
+/* ---------- Ask the Atlas (sample capability) ---------- */
+(function(){
+  var CHIPS = ["Can a TÜV-certified produce bag say “compostable” in Minnesota?","What changes for a compostable liner in California after June 30, 2027?","Is compostable film cheaper than LDPE under Colorado EPR?","Which composters in California accept compostable packaging?"];
+  var chipsEl = document.getElementById("askChips"), q = document.getElementById("askQ"), btn = document.getElementById("askBtn"), stop = document.getElementById("stopBtn"), status = document.getElementById("askStatus"), out = document.getElementById("askOut");
+  CHIPS.forEach(function(c){ var b = document.createElement("button"); b.type="button"; b.textContent = c; b.addEventListener("click", function(){ q.value = c; q.focus(); }); chipsEl.appendChild(b); });
+  var sampleFn = null, ctl = null;
+  function unavailable(){ document.querySelector("#v-ask .ask").hidden = true; document.getElementById("askUnavailable").hidden = false; }
+  var COPY = {not_granted:"Ask the Atlas needs your permission to use Claude. The tabs above answer the same questions.", rate_limited:"Too many questions at once. Wait a minute, then ask again.", prompt_too_large:"That question is too long. Shorten it and ask again.", cancelled:"Stopped.", refused:"The assistant declined to answer that. Try rephrasing around the rules on this page."};
+  btn.addEventListener("click", function(){
+    var question = q.value.trim();
+    if (!question){ status.textContent = "Type a question first."; q.focus(); return; }
+    if (!sampleFn){ unavailable(); return; }
+    btn.disabled = true; stop.hidden = false; status.textContent = "Thinking…"; out.textContent = "";
+    ctl = new AbortController();
+    var prompt = "You answer questions for an internal reference called the Compostable Packaging Atlas. Use ONLY the REFERENCE below. Rules: (1) Lead with the direct answer in one sentence, then up to 4 short sentences of reasoning. (2) Cite the statute, rule or source named in the reference for each claim, and say its evidence label (Confirmed, Signaled, Speculative, Under counsel review). (3) If the reference doesn't cover the question or a rule isn't settled, say so plainly and name what to check; never estimate or invent figures, cases or citations. (4) Distinguish technical certification, legal labeling eligibility and composter acceptance. (5) End with: Not legal advice. Keep it under 170 words, plain text, no markdown headings.\n\nREFERENCE:\n" + referenceText() + "\n\nQUESTION: " + question;
+    sampleFn(prompt, {signal: ctl.signal, modelTier: "default", onText: function(e){ status.textContent = ""; out.textContent = e.text; }})
+      .then(function(res){ out.textContent = res.text; status.textContent = res.truncated ? "Answer was cut off; ask a narrower question." : ""; })
+      .catch(function(e){ var c = e && e.code; if (c === "not_granted" || c === "sampling_disabled" || c === "capability_disabled" || c === "capability_removed"){ status.textContent = COPY.not_granted; } else { status.textContent = COPY[c] || "The answer didn’t come through. Ask again, or use the tabs above."; } if (e && e.text) out.textContent = e.text; })
+      .then(function(){ btn.disabled = false; stop.hidden = true; ctl = null; });
+  });
+  stop.addEventListener("click", function(){ if (ctl) ctl.abort(); });
+  if (window.claude && typeof window.claude.use === "function"){
+    window.claude.use("sample").then(function(s){ if (s) sampleFn = s; else unavailable(); }).catch(unavailable);
+  } else { unavailable(); }
+})();
+
+/* ---------- One-page brief (downloads capability) ---------- */
+(function(){
+  var b = document.getElementById("briefBtn"), st = document.getElementById("briefStatus");
+  if (!(window.claude && typeof window.claude.use === "function")) return;
+  window.claude.use("downloads").then(function(dl){
+    if (!dl) return;
+    b.hidden = false;
+    b.addEventListener("click", function(){
+      var md = [];
+      md.push("# Compostable packaging: one-page brief");
+      md.push("_Internal. Data as of " + UPDATED + ". Not legal advice._\n");
+      md.push("## The three layers");
+      md.push("- **Technical:** ASTM D6400/D6868/D8410, EN 13432, OK compost HOME.\n- **Legal:** state labeling laws (CA, WA, CO, MN, MD); FTC Green Guides elsewhere.\n- **Operational:** composter acceptance, mostly no for compostable plastics today.\n");
+      md.push("## Labeling rules by state");
+      LAB.forEach(function(s){ md.push("- **" + s.name + "** (" + s.law + "): " + s.std + "; " + s.mark + ". Home: " + s.home + ". Biodegradable: " + s.biod + "."); });
+      md.push("\n## EPR treatment, 2027 (per lb)");
+      EPR.slice(0,4).forEach(function(r){ md.push("- **" + r.st + ":** " + r.rate + " vs " + r.conv + " (" + r.ratio + ")."); });
+      md.push("\n## Next 90 days");
+      DATES.filter(function(x){ var n = daysTo(x.d); return n >= 0 && n <= 90; }).forEach(function(x){ md.push("- **" + fmtDate(x.d, x.approx) + "**, " + x.w + ": " + x.t); });
+      md.push("\n## Key date");
+      md.push("- **June 30, 2027:** California’s AB 1201 organic-input extension expires; renewal possible up to Jan 1, 2031.");
+      md.push("\n_Verify anything consequential with the agency, certifier or counsel before acting._");
+      st.textContent = "";
+      dl.save({filename: "compostable-atlas-brief-" + UPDATED_ISO + ".md", data: md.join("\n")})
+        .then(function(){ st.textContent = "Brief saved."; })
+        .catch(function(e){ var c = e && e.code; st.textContent = c === "declined" ? "" : c === "rate_limited" ? "A save prompt is already open. Try again in a moment." : "Saving isn’t available here. The Overview tab holds the same content."; if (c === "unavailable" || c === "not_granted") b.hidden = true; });
+    });
+  }).catch(function(){});
+})();
+
+/* ---------- icons ---------- */
+var ICONS = {
+  frond:'<path d="M12 21V8"/><path d="M12 12c-3-.8-5-3-5-6.5 3 .2 5 2.2 5 5"/><path d="M12 9.5c2.4-.9 4-2.9 4-5.8-2.5.3-4 2-4 4.3"/><path d="M12 16.5c2.6-.5 4.6-2.4 5.2-5.3-2.8.1-4.7 1.9-5.2 4.3"/>',
+  compass:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+  check:'<path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>',
+  map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>',
+  coin:'<circle cx="12" cy="12" r="9"/><path d="M14.6 9.4c-.4-.9-1.4-1.4-2.6-1.4-1.5 0-2.5.8-2.5 1.9s1 1.7 2.5 2 2.5.9 2.5 2.1-1 2-2.5 2c-1.2 0-2.2-.6-2.6-1.5M12 6.5V8M12 16v1.5"/>',
+  award:'<circle cx="12" cy="9" r="6"/><path d="M8.6 14l-1.6 7 5-3 5 3-1.6-7"/>',
+  leaf:'<path d="M5 20c-.5-8.5 4.5-15 15-15 .5 10-5.5 15.5-14 15"/><path d="M5 20l8.5-8.5"/>',
+  calendar:'<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  gavel:'<path d="M13.5 4.5l6 6M10.5 7.5l6 6M12 6l-4 4 6 6 4-4"/><path d="M9.5 12.5L3.5 18.5l2 2 6-6M4 21h9"/>',
+  chat:'<path d="M20.5 12a8.5 8.5 0 0 1-12.3 7.6L3.5 20.5l1-4.4A8.5 8.5 0 1 1 20.5 12z"/>',
+  book:'<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/>',
+  layers:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  list:'<path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  alert:'<path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.5h.01"/>',
+  download:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'
+};
+function icons(root){
+  root.querySelectorAll(".ic[data-i]").forEach(function(el){
+    if (el.firstChild) return;
+    var p = ICONS[el.getAttribute("data-i")];
+    if (p) el.innerHTML = '<svg viewBox="0 0 24 24" focusable="false">'+p+'</svg>';
+  });
+}
+
+/* ---------- state tile map ---------- */
+var TILE_ROWS = [
+  [["AK",0],["ME",11]],
+  [["WI",6],["VT",10],["NH",11]],
+  [["WA",1],["ID",2],["MT",3],["ND",4],["MN",5],["IL",6],["MI",7],["NY",9],["MA",10]],
+  [["OR",1],["NV",2],["WY",3],["SD",4],["IA",5],["IN",6],["OH",7],["PA",8],["NJ",9],["CT",10],["RI",11]],
+  [["CA",1],["UT",2],["CO",3],["NE",4],["MO",5],["KY",6],["WV",7],["VA",8],["MD",9],["DE",10]],
+  [["AZ",2],["NM",3],["KS",4],["AR",5],["TN",6],["NC",7],["SC",8],["DC",9]],
+  [["OK",4],["LA",5],["MS",6],["AL",7],["GA",8]],
+  [["HI",0],["TX",4],["FL",9]]
+];
+var US = {AK:"Alaska",AL:"Alabama",AR:"Arkansas",AZ:"Arizona",CA:"California",CO:"Colorado",CT:"Connecticut",DC:"District of Columbia",DE:"Delaware",FL:"Florida",GA:"Georgia",HI:"Hawaii",IA:"Iowa",ID:"Idaho",IL:"Illinois",IN:"Indiana",KS:"Kansas",KY:"Kentucky",LA:"Louisiana",MA:"Massachusetts",MD:"Maryland",ME:"Maine",MI:"Michigan",MN:"Minnesota",MO:"Missouri",MS:"Mississippi",MT:"Montana",NC:"North Carolina",ND:"North Dakota",NE:"Nebraska",NH:"New Hampshire",NJ:"New Jersey",NM:"New Mexico",NV:"Nevada",NY:"New York",OH:"Ohio",OK:"Oklahoma",OR:"Oregon",PA:"Pennsylvania",RI:"Rhode Island",SC:"South Carolina",SD:"South Dakota",TN:"Tennessee",TX:"Texas",UT:"Utah",VA:"Virginia",VT:"Vermont",WA:"Washington",WI:"Wisconsin",WV:"West Virginia",WY:"Wyoming"};
+var REGIME = {CA:"statute", WA:"statute", CO:"statute", MN:"statute", MD:"statute", OR:"prog"};
+var REGIME_LABEL = {statute:"Labeling statute", prog:"Program rules only", ftc:"FTC Green Guides"};
+var UNVERIFIED = {NJ:1, NY:1, IL:1};
+function stateDates(code){
+  var nm = US[code];
+  var CAA6 = {CA:1, OR:1, CO:1, MN:1, MD:1, WA:1};
+  return DATES.filter(function(x){ var n = daysTo(x.d); if (n < 0 || n > 90) return false; if (x.w.indexOf(nm) >= 0) return true; if (x.w.indexOf("All six CAA states") >= 0) return !!CAA6[code]; return x.w.split(/\s*·\s*/).indexOf(code) >= 0; });
+}
+var selState = "CA";
+function renderPanel(code){
+  var p = document.getElementById("spanel"), nm = US[code], reg = REGIME[code] || "ftc";
+  var lab = LAB.filter(function(s){ return s.code === code; })[0];
+  var dates = stateDates(code);
+  var dhtml = dates.length ? dates.map(function(x){ return fmtDate(x.d, x.approx)+": "+esc(x.t); }).join("<br>") : "None in the next 90 days.";
+  var h = '<h3>'+nm+' <span class="type">'+REGIME_LABEL[reg]+'</span></h3>';
+  if (lab){
+    h += '<dl class="dl"><dt>Law</dt><dd>'+esc(lab.law)+'</dd><dt>Standard</dt><dd>'+esc(lab.std)+'</dd><dt>Marking</dt><dd>'+esc(lab.mark)+'</dd><dt>“Biodegradable”</dt><dd>'+esc(lab.biod)+'</dd><dt>Next 90 days</dt><dd>'+dhtml+'</dd><dt>Evidence</dt><dd>'+ev(lab.ev)+'</dd></dl>';
+    h += '<p style="margin:12px 0 0"><a href="#st-'+code+'" data-open="'+code+'">Open the full '+nm+' detail</a> · <a href="#screener" data-scr="'+code+'">Screen a SKU for '+nm+'</a></p>';
+  } else {
+    h += '<p>No compostable-labeling statute located for '+nm+' in this edition, so the FTC Green Guides (16 CFR 260.7) set the bar: substantiate the claim and qualify it where industrial facilities aren’t widely available. '+(UNVERIFIED[code] ? 'This state is on the known-gaps list and hasn’t been verified.' : 'Not every state has been fully checked.')+' '+ev(UNVERIFIED[code] ? "G" : "S")+'</p>';
+    h += '<p style="margin:12px 0 0"><a href="#screener" data-scr="XX">Screen a SKU under the FTC rules</a></p>';
+  }
+  p.innerHTML = h;
+  var o = p.querySelector("[data-open]");
+  if (o) o.addEventListener("click", function(e){ e.preventDefault(); var d = document.getElementById("st-"+code); if (d){ d.open = true; d.scrollIntoView({block:"start"}); } });
+  var sc = p.querySelector("[data-scr]");
+  if (sc) sc.addEventListener("click", function(){ var want = sc.getAttribute("data-scr"); document.querySelectorAll("#fStates input").forEach(function(i){ i.checked = (i.value === want); }); runScreener(); });
+}
+function renderTiles(){
+  var wrap = document.getElementById("tiles");
+  var html = "";
+  TILE_ROWS.forEach(function(row, r){
+    row.forEach(function(t){
+      var code = t[0], reg = REGIME[code] || "ftc", hasDate = stateDates(code).length > 0;
+      html += '<button type="button" class="tile '+reg+'" data-st="'+code+'" style="grid-row:'+(r+1)+';grid-column:'+(t[1]+1)+'" aria-pressed="false" aria-label="'+US[code]+', '+REGIME_LABEL[reg]+(hasDate?", date in next 90 days":"")+'">'+code+(hasDate?'<span class="dot" aria-hidden="true"></span>':'')+'</button>';
+    });
+  });
+  wrap.innerHTML = html;
+  wrap.addEventListener("click", function(e){
+    var b = e.target.closest(".tile"); if (!b) return;
+    selState = b.getAttribute("data-st");
+    wrap.querySelectorAll(".tile").forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    renderPanel(selState);
+  });
+  var first = wrap.querySelector('[data-st="'+selState+'"]'); if (first) first.setAttribute("aria-pressed","true");
+  renderPanel(selState);
+}
+
+/* ---------- glossary ---------- */
+var GLOSS = {
+  "EPR":"Extended producer responsibility: state laws that make the companies selling packaged goods pay for collecting and recycling that packaging.",
+  "CAA":"Circular Action Alliance, the producer responsibility organization that runs the packaging EPR programs in most states that have one.",
+  "PRO":"Producer responsibility organization: the nonprofit producers join to meet their EPR obligations.",
+  "NOP":"USDA National Organic Program, the federal rules for certified organic production, including which inputs compost may contain.",
+  "NOSB":"National Organic Standards Board, the federal advisory board that recommends what the National Organic Program allows.",
+  "USDA":"U.S. Department of Agriculture, which runs the National Organic Program.",
+  "TOF":"Total organic fluorine, a screening measurement used to detect PFAS.",
+  "PFAS":"Per- and polyfluoroalkyl substances, a class of fluorinated chemicals restricted in food packaging in several states.",
+  "BPI":"Biodegradable Products Institute, a nonprofit that certifies compostable products to ASTM standards in North America.",
+  "CMA":"Compost Manufacturing Alliance, which tests products in working compost facilities and approves the ones that break down.",
+  "CFTP":"Compostable Field Testing Program, which tests how compostable items break down at working compost facilities.",
+  "ASTM":"ASTM International, the standards body behind D6400 (compostable plastics) and D6868 (compostable coatings on paper and other substrates).",
+  "EN 13432":"The European standard for packaging that can be recovered through industrial composting.",
+  "FTC":"Federal Trade Commission. Its Green Guides (16 CFR Part 260) explain how it judges environmental marketing claims.",
+  "PRC":"California Public Resources Code.",
+  "RCW":"Revised Code of Washington, the state’s compiled statutes.",
+  "CDPHE":"Colorado Department of Public Health and Environment.",
+  "MPCA":"Minnesota Pollution Control Agency.",
+  "DEQ":"Oregon Department of Environmental Quality.",
+  "MDE":"Maryland Department of the Environment.",
+  "CalRecycle":"California Department of Resources Recycling and Recovery.",
+  "SB 54":"California’s 2022 packaging EPR law, the Plastic Pollution Prevention and Packaging Producer Responsibility Act.",
+  "AB 1201":"California’s 2021 law setting what a product needs before it can be labeled compostable or home compostable.",
+  "SB 343":"California’s 2021 law on when a product may carry a recyclability claim or the chasing-arrows symbol.",
+  "PLA":"Polylactic acid, a plant-derived compostable plastic.",
+  "PHA":"Polyhydroxyalkanoates, compostable polymers made by microbial fermentation.",
+  "LDPE":"Low-density polyethylene, the conventional plastic in most film and bags.",
+  "HDPE":"High-density polyethylene, a conventional plastic used in film and rigid containers.",
+  "NAW":"National Association of Wholesaler-Distributors, a plaintiff in several EPR challenges."
+};
+function glossary(){
+  var keys = Object.keys(GLOSS).sort(function(a,b){ return b.length - a.length; });
+  var re = new RegExp("(^|[^A-Za-z0-9])(" + keys.map(function(k){ return k.replace(/ /g,"\\s"); }).join("|") + ")(?![A-Za-z0-9])");
+  var SKIP = {A:1, BUTTON:1, ABBR:1, SELECT:1, OPTION:1, TEXTAREA:1, LABEL:1, SUMMARY:1, H1:1, H2:1, H3:1, TH:1, SCRIPT:1, STYLE:1};
+  document.querySelectorAll("main .card, main .stat").forEach(function(card){
+    if (card.closest("#results") || card.classList.contains("ask")) return;
+    var seen = {};
+    var walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, {acceptNode:function(n){
+      for (var p = n.parentNode; p && p !== card; p = p.parentNode){ if (SKIP[p.nodeName] || (p.classList && (p.classList.contains("ev") || p.classList.contains("tile")))) return NodeFilter.FILTER_REJECT; }
+      return re.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+    }});
+    var nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function(n){
+      var m = n.nodeValue.match(re); if (!m) return;
+      var term = m[2].replace(/\s/g," ");
+      if (seen[term] || !GLOSS[term]) return;
+      seen[term] = 1;
+      var idx = m.index + m[1].length;
+      var after = n.splitText(idx); after.splitText(m[2].length);
+      var ab = document.createElement("abbr");
+      ab.className = "g"; ab.tabIndex = 0; ab.setAttribute("data-term", term); ab.textContent = after.nodeValue;
+      after.parentNode.replaceChild(ab, after);
+    });
+  });
+  var tip = document.getElementById("tip");
+  function show(el){
+    var t = el.getAttribute("data-term");
+    tip.innerHTML = "<b>"+esc(t)+"</b>"+esc(GLOSS[t]);
+    tip.hidden = false;
+    var r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    var x = Math.max(16, Math.min(r.left, window.innerWidth - w - 16));
+    var y = r.bottom + 8; if (y + h > window.innerHeight - 8) y = r.top - h - 8;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  }
+  function hide(){ tip.hidden = true; }
+  document.addEventListener("mouseover", function(e){ var a = e.target.closest && e.target.closest("abbr.g"); if (a) show(a); });
+  document.addEventListener("mouseout", function(e){ var a = e.target.closest && e.target.closest("abbr.g"); if (a) hide(); });
+  document.addEventListener("focusin", function(e){ if (e.target.matches && e.target.matches("abbr.g")) show(e.target); });
+  document.addEventListener("focusout", function(e){ if (e.target.matches && e.target.matches("abbr.g")) hide(); });
+  document.addEventListener("click", function(e){ var a = e.target.closest && e.target.closest("abbr.g"); if (a) show(a); else hide(); });
+  window.addEventListener("scroll", hide, {passive:true});
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") hide(); });
+}
+
+/* ---------- init ---------- */
+renderDates();
+renderTiles();
+runScreener();
+icons(document);
+glossary();
+route();
+})();
+</script>
+
+</body></html>
