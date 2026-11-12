@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>EPR Cost Calculator · internal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: sticky icon tab bar over a cool ground; each section is a white card with an icon, a heading and its evidence badge. */
+:root{
+  --ground:#eef0ea; --paper:#f6f7f2; --panel:#ffffff; --ink:#17201b; --muted:#56615b; --line:#d8ddd2; --soft:#f1f3ec;
+  --deep:#1432b4; --deep-ink:#ffffff; --deep-tint:#eef1fd;
+  --kelp:#2e6b45; --kelp-bg:#e3efe6;
+  --ochre:#94570c; --ochre-bg:#f8eedc;
+  --ogo:#7c131b; --ogo-bg:#f6e0e1;
+  --spec:#5d2f80; --spec-bg:#f1e4fb;
+  --review:#1432b4; --review-bg:#e4e9fb;
+  --band1:#3f7a4a; --band2:#d9c3a0; --band3:#7a5232;
+  --t-statute:#1432b4; --t-statute-ink:#ffffff; --t-prog:#8fa3ef; --t-prog-ink:#0e1430; --t-ftc:#ffffff; --t-ftc-ink:#56615b;
+  --shadow:0 1px 2px rgba(23,32,27,.05),0 4px 14px rgba(23,32,27,.05);
+  --display:"Playfair Display",Georgia,"Times New Roman",serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0e110f; --paper:#121613; --panel:#1a201c; --ink:#e7ebe5; --muted:#a2ada5; --line:#2e3730; --soft:#202722;
+    --deep:#8fa3ff; --deep-ink:#0e1430; --deep-tint:#1c2340;
+    --kelp:#7fd19c; --kelp-bg:#1d3324;
+    --ochre:#e8ac55; --ochre-bg:#352812;
+    --ogo:#ff9a9a; --ogo-bg:#3d1c1e;
+    --spec:#d6a8f5; --spec-bg:#2f2240;
+    --review:#9fb1ff; --review-bg:#1f2747;
+    --band1:#5f9a69; --band2:#bba27d; --band3:#a77b55;
+    --t-statute:#8fa3ff; --t-statute-ink:#0e1430; --t-prog:#33407a; --t-prog-ink:#dfe5ff; --t-ftc:#1a201c; --t-ftc-ink:#a2ada5;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0e110f; --paper:#121613; --panel:#1a201c; --ink:#e7ebe5; --muted:#a2ada5; --line:#2e3730; --soft:#202722;
+  --deep:#8fa3ff; --deep-ink:#0e1430; --deep-tint:#1c2340;
+  --kelp:#7fd19c; --kelp-bg:#1d3324;
+  --ochre:#e8ac55; --ochre-bg:#352812;
+  --ogo:#ff9a9a; --ogo-bg:#3d1c1e;
+  --spec:#d6a8f5; --spec-bg:#2f2240;
+  --review:#9fb1ff; --review-bg:#1f2747;
+  --band1:#5f9a69; --band2:#bba27d; --band3:#a77b55;
+  --t-statute:#8fa3ff; --t-statute-ink:#0e1430; --t-prog:#33407a; --t-prog-ink:#dfe5ff; --t-ftc:#1a201c; --t-ftc-ink:#a2ada5;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+  color-scheme: dark;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--panel)}
+a{color:var(--deep);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,abbr:focus-visible{outline:2px solid var(--deep);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(2rem,4.4vw,3rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.35rem,2.4vw,1.7rem)}
+h3{font-size:1.15rem}
+p{margin:.4rem 0 .9rem;max-width:72ch}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+
+/* icons */
+.ic{display:inline-grid;place-items:center;width:20px;height:20px;flex:0 0 auto;color:currentColor}
+.ic svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* header */
+.stripe{height:6px;background:linear-gradient(90deg,var(--band1) 0 33.4%,var(--band2) 33.4% 66.7%,var(--band3) 66.7% 100%)}
+header.top{background:var(--panel);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:16px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.mark{width:42px;height:42px;border-radius:50%;background:var(--deep);color:var(--deep-ink);display:grid;place-items:center;flex:0 0 auto}
+.mark .ic{width:24px;height:24px}
+.brand .t{font-family:var(--display);font-size:1.3rem;font-weight:700;line-height:1.1}
+.brand .t small{font-family:var(--body);font-size:.72rem;font-weight:600;color:var(--muted);margin-left:8px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;vertical-align:middle;white-space:nowrap}
+.brand .eyebrow{margin-top:3px}
+.hactions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:.9rem;font-weight:600;background:var(--deep);color:var(--deep-ink);border:1px solid var(--deep);border-radius:8px;padding:9px 16px;text-decoration:none;cursor:pointer;line-height:1.2}
+.btn.ghost{background:transparent;color:var(--deep)}
+.btn.quiet{background:transparent;color:var(--muted);border-color:var(--line);font-weight:500}
+.btn .ic{width:17px;height:17px}
+
+/* tabs */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--panel);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs .wrap::-webkit-scrollbar{display:none}
+nav.tabs a{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--muted);font-weight:600;font-size:.82rem;padding:10px 14px 9px;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a .ic{width:20px;height:20px}
+nav.tabs a:hover{color:var(--ink)}
+nav.tabs a[aria-current="page"]{color:var(--deep);border-bottom-color:var(--deep)}
+
+main.wrap{padding-block:28px 70px}
+.view{display:none;flex-direction:column;gap:22px}
+.view.on{display:flex}
+
+/* cards */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:24px 26px;min-width:0}
+.card.tint{background:var(--deep-tint);border-color:transparent;box-shadow:none}
+.card.flat{background:var(--soft);box-shadow:none}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.ch .ic{color:var(--muted)}
+.ch h2,.ch h3{margin:0}
+.ch .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.card > p:last-child{margin-bottom:0}
+.lede{font-size:1.08rem;max-width:68ch}
+.updated{color:var(--muted);font-size:.85rem}
+.more{font-size:.78rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;text-decoration:none}
+.more:hover{text-decoration:underline}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+
+/* evidence chips */
+.ev{display:inline-block;font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;vertical-align:middle;letter-spacing:.07em;text-transform:uppercase;line-height:1.4}
+.ev.C{background:var(--kelp-bg);color:var(--kelp)}
+.ev.S{background:var(--ochre-bg);color:var(--ochre)}
+.ev.P{background:var(--spec-bg);color:var(--spec)}
+.ev.R{background:var(--review-bg);color:var(--review)}
+.ev.G{background:var(--soft);color:var(--muted)}
+
+/* verdict pills */
+.vd{display:inline-block;font-weight:700;font-size:.8rem;padding:3px 10px;border-radius:6px}
+.vd.allowed{background:var(--kelp-bg);color:var(--kelp)}
+.vd.conditional{background:var(--ochre-bg);color:var(--ochre)}
+.vd.not{background:var(--ogo-bg);color:var(--ogo)}
+
+/* hero */
+.hero h1{margin-bottom:6px}
+.asof{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.9rem;margin:6px 0 0}
+.asof .ic{width:16px;height:16px}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.qa{margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.qa details{border-bottom:1px solid var(--line)}
+.qa summary{cursor:pointer;list-style:none;padding:10px 0;font-weight:600;color:var(--deep);font-size:.95rem}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+ "}
+.qa details[open] summary::before{content:"– "}
+.qa .a{padding:0 0 12px;font-size:.94rem;max-width:76ch}
+.qa .all{display:inline-block;margin-top:10px;font-size:.9rem}
+
+/* stat cards */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.stat{display:flex;flex-direction:column;gap:8px;padding:20px 20px 18px}
+.stat .top{display:flex;justify-content:space-between;align-items:flex-start}
+.stat .top .ic{color:var(--muted)}
+.stat .n{font-family:var(--display);font-size:2.6rem;font-weight:700;line-height:1;font-variant-numeric:lining-nums tabular-nums}
+.stat .d{font-size:.92rem;flex:1}
+.strips{display:flex;flex-direction:column;gap:10px}
+.strip{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:.94rem}
+.strip .ic{color:var(--muted);margin-top:2px}
+
+/* stage chooser */
+.stages{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px}
+.stages button{font:inherit;font-size:.9rem;font-weight:500;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:8px 15px;cursor:pointer}
+.stages button[aria-pressed="true"]{background:var(--deep);color:var(--deep-ink);border-color:var(--deep)}
+.steps{counter-reset:s;list-style:none;margin:0;padding:0;max-width:80ch}
+.steps li{counter-increment:s;position:relative;padding:10px 0 10px 42px}
+.steps li + li{border-top:1px solid var(--line)}
+.steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:28px;height:28px;border-radius:50%;background:var(--panel);border:1.5px solid var(--deep);color:var(--deep);display:grid;place-items:center;font-size:.8rem;font-weight:700}
+
+/* key tiles */
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0 4px}
+.key > div{background:var(--soft);border-radius:10px;padding:14px 16px;font-size:.9rem;color:var(--ink)}
+.key .ev{margin-bottom:8px}
+
+/* tool spec rows */
+.spec{display:grid;grid-template-columns:9rem 1fr;gap:6px 16px;margin:10px 0 4px;font-size:.92rem}
+.spec dt{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.spec dd{margin:0}
+
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.card .tw{border:0;border-radius:0;background:transparent;margin:0 -6px}
+table{width:100%;border-collapse:collapse;font-size:.92rem;line-height:1.45}
+th,td{text-align:left;vertical-align:top;padding:11px 10px;border-bottom:1px solid var(--line)}
+th{font-weight:700;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+td.nowrap{white-space:nowrap}
+td.r,th.r{text-align:right}
+td .cite{display:block;color:var(--muted);font-size:.8rem;margin-top:4px}
+td .ev{margin-top:4px}
+.cell-ok{color:var(--kelp);font-weight:700}
+.cell-no{color:var(--ogo);font-weight:700}
+.cell-mid{color:var(--ochre);font-weight:700}
+.cell-na{color:var(--muted)}
+.cap{padding:10px 4px 0;font-size:.84rem;color:var(--muted);max-width:none}
+
+/* action pills */
+.act{display:inline-block;font-size:.74rem;font-weight:700;padding:2px 9px;border-radius:6px;white-space:nowrap}
+.act.now{background:var(--ogo-bg);color:var(--ogo)}
+.act.prep{background:var(--ochre-bg);color:var(--ochre)}
+.act.watch{background:var(--review-bg);color:var(--review)}
+.act.mon{background:var(--soft);color:var(--muted)}
+
+/* callouts */
+.note{color:var(--muted);font-size:.9rem;max-width:84ch;margin:12px 0 0}
+.callout{display:grid;grid-template-columns:20px 1fr;gap:10px;background:var(--ochre-bg);color:var(--ink);border-radius:10px;padding:12px 16px;font-size:.92rem;margin:14px 0 0}
+.callout .ic{color:var(--ochre);margin-top:1px}
+.callout p{margin:0}
+
+/* screener */
+.scr{display:grid;grid-template-columns:minmax(280px,380px) minmax(0,1fr);gap:22px;align-items:start}
+.form{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+fieldset{border:0;margin:0 0 16px;padding:0}
+legend{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0}
+.hint{color:var(--muted);font-size:.8rem;margin:-2px 0 6px}
+select{width:100%;font:inherit;font-size:.93rem;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.opts{display:flex;flex-direction:column;gap:5px}
+.opts.row{flex-direction:row;flex-wrap:wrap;gap:6px 14px}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-size:.9rem;cursor:pointer}
+.opts input{margin-top:4px;accent-color:var(--deep)}
+.results{display:flex;flex-direction:column;gap:14px;min-width:0}
+.vcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-columns:8px 1fr}
+.vcard .edge{background:linear-gradient(180deg,var(--band1) 0 33.4%,var(--band2) 33.4% 66.7%,var(--band3) 66.7% 100%)}
+.vcard.not .edge{background:var(--ogo)}
+.vcard.conditional .edge{background:linear-gradient(180deg,var(--band2),var(--ochre))}
+.vcard .body{padding:16px 18px;min-width:0}
+.vhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:8px}
+.vhead h3{margin:0}
+.vhead .law{color:var(--muted);font-size:.85rem}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:8px;padding:7px 0;border-top:1px dashed var(--line);font-size:.92rem}
+.checks li:first-child{border-top:0}
+.checks .m{font-weight:700;text-align:center}
+.checks .m.ok{color:var(--kelp)} .checks .m.no{color:var(--ogo)} .checks .m.mid{color:var(--ochre)}
+.checks .c{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.vnotes{margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted)}
+.vnotes p{margin:.2rem 0}
+.empty{color:var(--muted);padding:20px;border:1px dashed var(--line);border-radius:12px;background:var(--panel)}
+
+/* tile map */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.84rem;color:var(--muted);margin:6px 0 16px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:14px;height:14px;border-radius:4px;border:1px solid var(--line)}
+.sw.statute{background:var(--t-statute);border-color:var(--t-statute)}
+.sw.prog{background:var(--t-prog);border-color:var(--t-prog)}
+.sw.ftc{background:var(--t-ftc)}
+.dotk{width:9px;height:9px;border-radius:50%;background:var(--ochre)}
+.tiles{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;max-width:660px}
+.tile{position:relative;aspect-ratio:1;border-radius:7px;border:1px solid var(--line);background:var(--t-ftc);color:var(--t-ftc-ink);font:inherit;font-size:clamp(.55rem,1.6vw,.74rem);font-weight:700;letter-spacing:.03em;cursor:pointer;padding:0;display:grid;place-items:center}
+.tile.statute{background:var(--t-statute);border-color:var(--t-statute);color:var(--t-statute-ink)}
+.tile.prog{background:var(--t-prog);border-color:var(--t-prog);color:var(--t-prog-ink)}
+.tile[aria-pressed="true"]{outline:2.5px solid var(--ink);outline-offset:2px}
+.tile .dot{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--ochre);box-shadow:0 0 0 1.5px var(--panel)}
+.mapgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;align-items:start}
+.spanel{background:var(--soft);border-radius:12px;padding:18px 20px;min-height:180px;font-size:.92rem}
+.spanel h3{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.spanel .dl{margin-top:10px;grid-template-columns:8.5rem 1fr}
+.spanel h3 .type{font-family:var(--body);font-weight:600}
+
+/* state detail */
+details.st{border-top:1px solid var(--line)}
+details.st:first-child{border-top:0}
+details.st summary{cursor:pointer;padding:14px 0;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;list-style:none}
+details.st summary::-webkit-details-marker{display:none}
+details.st summary h3{margin:0}
+details.st summary .law{color:var(--muted);font-size:.88rem;flex:1 1 20rem}
+details.st summary::after{content:"+";margin-left:auto;font-weight:700;color:var(--muted)}
+details.st[open] summary::after{content:"–"}
+details.st .inner{padding:0 0 18px}
+.dl{display:grid;grid-template-columns:11rem 1fr;gap:6px 18px;margin:0;font-size:.93rem}
+.dl dt{color:var(--muted);font-weight:500}
+.dl dd{margin:0;min-width:0}
+
+/* dates */
+.daycount{font-variant-numeric:tabular-nums;white-space:nowrap}
+.type{font-size:.74rem;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.type.deadline{background:var(--ogo-bg);color:var(--ogo)}
+.type.signpost{background:var(--spec-bg);color:var(--spec)}
+.type.court{background:var(--review-bg);color:var(--review)}
+.type.comment{background:var(--kelp-bg);color:var(--kelp)}
+details.past summary,details.more summary{cursor:pointer;font-weight:600;color:var(--deep);padding:12px 0 0;list-style:none}
+details.past summary::-webkit-details-marker,details.more summary::-webkit-details-marker{display:none}
+details.past summary::before,details.more summary::before{content:"+ "}
+details.past[open] summary::before,details.more[open] summary::before{content:"– "}
+.ifthen{color:var(--muted);font-size:.84rem;display:block;margin-top:3px}
+
+/* composters */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.cbox h3{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.cbox ul{margin:6px 0 0;padding-left:18px;font-size:.92rem}
+.cbox li{margin:6px 0}
+
+/* faq */
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:last-child{border-bottom:0}
+.faq summary{cursor:pointer;font-weight:600;padding:12px 0;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"+";display:inline-block;width:1.2em;color:var(--deep)}
+.faq details[open] summary::before{content:"–"}
+.faq .a{padding:0 0 14px 1.2em;max-width:76ch;font-size:.95rem}
+
+/* ask */
+.ask textarea{width:100%;min-height:90px;font:inherit;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical}
+.ask .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.ask .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.ask .chips button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:5px 11px;cursor:pointer}
+.answer{white-space:pre-wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:.95rem;max-width:76ch}
+.answer:empty{display:none}
+.status{color:var(--muted);font-size:.88rem}
+.card ul.plain{margin:4px 0 0;padding-left:20px}
+.card ul.plain li{margin:6px 0}
+
+/* glossary */
+abbr.g{text-decoration:underline dotted;text-decoration-color:var(--muted);text-underline-offset:3px;cursor:help}
+#tip{position:fixed;z-index:50;max-width:min(320px,calc(100vw - 32px));background:var(--ink);color:var(--panel);font-size:.82rem;line-height:1.45;padding:9px 12px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);pointer-events:none}
+#tip b{display:block;margin-bottom:2px}
+
+footer{border-top:1px solid var(--line);background:var(--panel);padding-block:22px 40px;color:var(--muted);font-size:.86rem}
+footer p{max-width:90ch}
+
+@media (max-width:860px){
+  .scr,.mapgrid{grid-template-columns:minmax(0,1fr)}
+  .dl,.spec{grid-template-columns:1fr}
+  .dl dt,.spec dt{margin-top:6px}
+  .card{padding:20px 18px}
+  .ch .right{margin-left:0}
+  .tile .dot{top:2px;right:2px;width:5px;height:5px}
+  .spanel .dl{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .vcard{animation:rise .28s ease-out}
+  @keyframes rise{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+
+/* ---------- calculator components, on the Atlas tokens ---------- */
+:root{--sway:var(--deep);--swaySoft:#aab8f2;--conv:#78827b;--convSoft:#cfd4ca;--credit:var(--kelp);--line2:var(--line);--ink2:var(--muted)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--swaySoft:#3c4b92;--conv:#a3ada5;--convSoft:#3b443d}}
+:root[data-theme="dark"]{--swaySoft:#3c4b92;--conv:#a3ada5;--convSoft:#3b443d}
+.calcgrid{display:grid;grid-template-columns:minmax(290px,370px) minmax(0,1fr);gap:22px;align-items:start}
+@media (min-width:861px){.calcgrid aside.form{position:sticky;top:96px;max-height:calc(100vh - 116px);overflow:auto}}
+@media (max-width:860px){.calcgrid{grid-template-columns:minmax(0,1fr)}}
+aside.form{padding:6px 18px 16px}
+details.grp{border-bottom:1px solid var(--line);padding:4px 0}
+details.grp:last-child{border-bottom:0}
+details.grp summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:12px 0 8px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+details.grp summary::-webkit-details-marker{display:none}
+details.grp summary::after{content:"+";font-size:1rem;color:var(--muted)}
+details.grp[open] summary::after{content:"–"}
+details.grp.adv summary{color:var(--deep)}
+.f{display:flex;flex-direction:column;gap:4px;margin:8px 0;font-size:.82rem;color:var(--muted)}
+.f>span:first-child{color:var(--ink);font-weight:600;font-size:.86rem}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input[type=number],input[type=text]{font:inherit;font-size:.93rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+input[disabled]{opacity:.5}
+.chk{display:flex;flex-direction:column;gap:6px;margin:10px 0;font-size:.88rem}
+.chk label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.chk input{margin-top:4px;accent-color:var(--deep)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.seg label{display:inline-flex}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{font-size:.84rem;font-weight:500;padding:6px 12px;border:1px solid var(--line);border-radius:999px;cursor:pointer;color:var(--ink);background:var(--panel)}
+.seg input:checked+span{background:var(--deep);border-color:var(--deep);color:var(--deep-ink)}
+.seg input:focus-visible+span{outline:2px solid var(--deep);outline-offset:2px}
+.savebar{display:grid;grid-template-columns:1fr auto;gap:8px;padding:14px 0 12px;border-bottom:1px solid var(--line)}
+.savebar .btns{display:flex;gap:6px;flex-wrap:wrap;grid-column:1/-1}
+.savebar .btn{padding:7px 12px;font-size:.84rem}
+.warnline{font-size:.84rem;color:var(--ogo);background:var(--ogo-bg);border-radius:8px;padding:7px 10px;margin:8px 0 0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem;max-width:80ch}
+.verdict{font-family:var(--display);font-size:clamp(1.15rem,2.1vw,1.5rem);line-height:1.35;margin:4px 0 14px;max-width:64ch}
+.verdict b{font-weight:700;color:var(--deep)}
+.toolbar{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0;border-top:1px solid var(--line);margin:12px 0 0}
+.facts div{padding:11px 12px 11px 0;border-bottom:1px solid var(--line)}
+.facts dt{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:3px 0 0;font-weight:600;font-variant-numeric:tabular-nums}
+.ledger{margin-top:14px}
+.lrow{display:grid;grid-template-columns:160px minmax(0,1fr) 96px;gap:12px;align-items:center;margin:12px 0}
+@media (max-width:560px){.lrow{grid-template-columns:1fr;gap:4px}}
+.lname{font-weight:700;font-size:.92rem}
+.lname small{display:block;font-weight:400;color:var(--muted);font-size:.78rem}
+.bar{display:flex;height:30px;border-radius:7px;overflow:hidden;background:var(--soft);border:1px solid var(--line)}
+.bar i{display:block;height:100%}
+.ltot{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
+.credit{height:10px;margin-top:4px;border-radius:4px;background:repeating-linear-gradient(45deg,var(--credit) 0 4px,transparent 4px 8px);border:1px solid var(--credit)}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:2px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.sel td{background:var(--deep-tint)}
+.pos{color:var(--ogo);font-weight:600}.neg{color:var(--kelp);font-weight:600}
+.flag{display:block;font-size:.8rem;color:var(--muted);margin-top:2px}
+.jur{margin:18px 0 4px;font-size:1.05rem}
+.jur:first-child{margin-top:4px}
+.check{display:grid;grid-template-columns:88px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.check b{font-weight:600}
+.check p{margin:2px 0 0;font-size:.88rem;color:var(--muted);max-width:none}
+.pill{display:inline-flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:999px;padding:3px 9px;height:fit-content;white-space:nowrap}
+.pill.pass{background:var(--kelp-bg);color:var(--kelp)}
+.pill.fail{background:var(--ogo-bg);color:var(--ogo)}
+.pill.warn{background:var(--ochre-bg);color:var(--ochre)}
+.pill.info{background:var(--review-bg);color:var(--review)}
+#chart svg{width:100%;height:auto;display:block}
+#talkText{width:100%;min-height:360px;font:inherit;font-size:.93rem;line-height:1.55;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px}
+.rates td input{width:96px;text-align:right;padding:6px 8px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.callout.internal{background:var(--review-bg)}
+.callout.internal .ic{color:var(--review)}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"></div>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark"><span class="ic" data-i="coin" aria-hidden="true"></span></div>
+      <div>
+        <div class="t">EPR Cost Calculator <small>Internal · v2</small></div>
+        <div class="eyebrow">Sway film vs conventional film · fees per unit by state</div>
+      </div>
+    </div>
+    <div class="hactions">
+      <a class="btn ghost" id="atlasLink" href="../"><span class="ic" data-i="frond" aria-hidden="true"></span>Compostable Atlas</a>
+      <a class="btn ghost" href="https://epratlas.com/" target="_blank" rel="noopener">EPR Atlas</a>
+      <button class="btn quiet" id="themeBtn" type="button">Theme</button>
+    </div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Calculator sections">
+  <div class="wrap" id="tabs">
+    <a href="#compare"><span class="ic" data-i="coin" aria-hidden="true"></span>Compare</a>
+    <a href="#states"><span class="ic" data-i="map" aria-hidden="true"></span>By state</a>
+    <a href="#rules"><span class="ic" data-i="check" aria-hidden="true"></span>SB 54 and fees</a>
+    <a href="#thickness"><span class="ic" data-i="trend" aria-hidden="true"></span>Thickness</a>
+    <a href="#scenarios"><span class="ic" data-i="layers" aria-hidden="true"></span>Scenarios</a>
+    <a href="#summary"><span class="ic" data-i="file" aria-hidden="true"></span>Customer summary</a>
+    <a href="#rates"><span class="ic" data-i="book" aria-hidden="true"></span>Rates and sources</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="callout internal" style="margin:0 0 18px"><span class="ic" data-i="info" aria-hidden="true"></span><p><b>Internal tool.</b> It includes Sway formulation inputs, so share the customer summary, not the tool. Rates as of <strong data-updated>November 12, 2026</strong>; California rates are preliminary until CalRecycle approves CAA’s plan. Estimates only, not legal advice.</p></div>
+  <div class="calcgrid">
+  <aside class="form" aria-label="Inputs">
+    <div class="savebar">
+      <input type="text" id="scName" placeholder="Name this scenario (e.g. Brand X polybag)" aria-label="Scenario name">
+      <button class="btn" id="btnSave" type="button">Save</button>
+      <div class="btns">
+        <select id="scList" aria-label="Saved scenarios"><option value="">Load a saved scenario…</option></select>
+        <button class="btn quiet" id="btnDel" type="button">Delete</button>
+        <button class="btn quiet" id="btnReset" type="button">Reset</button>
+      </div>
+      <span class="status" id="saveStatus" aria-live="polite"></span>
+    </div>
+
+    <details class="grp" open><summary>Package</summary>
+      <label class="f"><span>Format</span>
+        <select data-k="format">
+          <option value="polybag">Apparel polybag</option>
+          <option value="mailer">E-commerce mailer</option>
+          <option value="food">Food bag or pouch</option>
+          <option value="produce">Store produce bag (pre-checkout)</option>
+          <option value="liner">Food-scrap liner sold as a product</option>
+          <option value="checkout">Boutique checkout bag</option>
+          <option value="custom">Custom</option>
+        </select></label>
+      <div class="row2">
+        <label class="f"><span>Width (in)</span><input type="number" data-k="W" step="0.5" min="1"></label>
+        <label class="f"><span>Length (in)</span><input type="number" data-k="L" step="0.5" min="1"></label>
+      </div>
+      <div class="row2">
+        <label class="f"><span>Film layers</span><select data-k="sides"><option value="2">2 (bag)</option><option value="1">1 (single sheet)</option></select></label>
+        <label class="f"><span>Extra film for flap or gusset (%)</span><input type="number" data-k="extra" step="1" min="0"></label>
+      </div>
+      <div class="row2">
+        <label class="f"><span>Units per year</span><input type="number" data-k="units" step="10000" min="0"></label>
+        <label class="f"><span>Plastic components per unit</span><input type="number" data-k="comps" step="1" min="1"></label>
+      </div>
+      <div class="chk">
+        <label><input type="checkbox" data-k="covered"> Covered by California SB 54</label>
+        <label><input type="checkbox" data-k="food"> Used with food or yard waste</label>
+      </div>
+      <p class="hint" id="fmtNote"></p>
+    </details>
+
+    <details class="grp" open><summary>Conventional film</summary>
+      <label class="f"><span>Material</span>
+        <select data-k="base">
+          <option value="ldpe">LDPE film or bag</option>
+          <option value="ldpec">LDPE clear non-bag film</option>
+          <option value="hdpe">HDPE film</option>
+          <option value="pp">PP film</option>
+          <option value="lam">Multi-material laminate pouch</option>
+          <option value="pla">Other certified compostable film (PLA/PBAT)</option>
+        </select></label>
+      <div class="row2">
+        <label class="f"><span>Thickness (mil)</span><input type="number" data-k="bT" step="0.1" min="0.1"></label>
+        <label class="f"><span>Density (g/cm³)</span><input type="number" data-k="bD" step="0.01" min="0.5"></label>
+      </div>
+      <div class="row2">
+        <label class="f"><span>Recycled content (%)</span><input type="number" data-k="bPCR" step="5" min="0" max="100"></label>
+        <label class="f"><span>Price per unit ($)</span><input type="number" data-k="bPrice" step="0.005" min="0"></label>
+      </div>
+      <label class="f"><span>Measured weight per unit (g, optional)</span><input type="number" data-k="bG" step="0.1" min="0" placeholder="Leave blank to calculate"></label>
+    </details>
+
+    <details class="grp" open><summary>Sway film</summary>
+      <div class="f"><span>Product</span>
+        <div class="seg" role="radiogroup" aria-label="Sway product">
+          <label><input type="radio" name="gen" value="blend"><span>Current blend</span></label>
+          <label><input type="radio" name="gen" value="all"><span>All-seaweed (next generation)</span></label>
+        </div></div>
+      <div class="row2">
+        <label class="f"><span>Thickness (mil)</span><input type="number" data-k="sT" step="0.1" min="0.1"></label>
+        <label class="f"><span>Density (g/cm³)</span><input type="number" data-k="sD" step="0.01" min="0.5"></label>
+      </div>
+      <p class="hint">Measured 1.30 g/cm³ (ASTM D792, TPSea Flex data sheet). The film yield on the data sheet implies about 1.25–1.29. Available gauges: 1.5–4 mil.</p>
+      <div class="row2">
+        <label class="f"><span>Compostable polymer (%)</span><input type="number" data-k="pPoly" step="1" min="0" max="100"></label>
+        <label class="f"><span>Seaweed polysaccharides (%)</span><input type="number" data-k="pSea" step="1" min="0" max="100"></label>
+      </div>
+      <div class="row2">
+        <label class="f"><span>Plasticizer and other (%)</span><input type="number" data-k="pPlast" step="1" min="0" max="100"></label>
+        <label class="f"><span>Price per unit ($)</span><input type="number" data-k="sPrice" step="0.005" min="0"></label>
+      </div>
+      <p class="hint" id="compNote"></p>
+      <label class="f"><span>Measured weight per unit (g, optional)</span><input type="number" data-k="sG" step="0.1" min="0" placeholder="Leave blank to calculate"></label>
+    </details>
+
+    <details class="grp" open><summary>Where it’s sold</summary>
+      <div class="row2">
+        <label class="f"><span>California (%)</span><input type="number" data-k="mCA" step="5" min="0" max="100"></label>
+        <label class="f"><span>Colorado (%)</span><input type="number" data-k="mCO" step="5" min="0" max="100"></label>
+      </div>
+      <div class="row2">
+        <label class="f"><span>Oregon (%)</span><input type="number" data-k="mOR" step="5" min="0" max="100"></label>
+        <label class="f"><span>Washington (%)</span><input type="number" data-k="mWA" step="5" min="0" max="100"></label>
+      </div>
+      <div class="f"><span>Other states (%)</span><output id="mOther" style="padding:4px 0;font-weight:600;color:var(--ink)"></output></div>
+      <div class="chk">
+        <label><input type="checkbox" data-k="small"> Customer has under $1M in California sales (SB 54 small-producer exemption)</label>
+        <label><input type="checkbox" data-k="small5"> Brand has under $5M in global revenue (exempt in Colorado, Oregon and Washington)</label>
+      </div>
+      <p class="hint">Exemptions also turn on tonnage, and Colorado offers flat dues for 10 tons or less. Check scope with the <a href="https://epratlas.com/" target="_blank" rel="noopener">EPR Atlas</a> screener before quoting fees. Minnesota and Maryland have no fee schedules yet.</p>
+    </details>
+
+    <details class="grp" open><summary>Certificate (affects Colorado’s rate)</summary>
+      <label class="f"><span>Certificate covers ASTM D6400</span>
+        <select data-k="d6400"><option value="unknown">TÜV Home + Industrial held; D6400 not yet listed</option><option value="yes">Yes, D6400 listed on the certificate</option><option value="no">No D6400 testing at all</option></select></label>
+      <div class="chk"><label><input type="checkbox" data-k="ed23"> Certificate cites ASTM D6400-23 (Colorado’s lower rate)</label></div>
+      <p class="hint">For whether a pack can say “compostable,” use the <a id="atlasScr" href="../#screener">Atlas screener</a>.</p>
+    </details>
+
+    <details class="grp adv"><summary>Advanced: Sway view</summary>
+      <label class="f"><span>Program year for incentives</span>
+        <select data-k="year"><option value="2027">2027 (proposed)</option><option value="2028">2028 (forecast)</option><option value="2029">2029 (forecast)</option></select></label>
+      <div class="f"><span>California surcharges charged on</span>
+        <div class="seg" role="radiogroup" aria-label="Surcharge basis">
+          <label><input type="radio" name="basis" value="whole"><span>Whole film (literal reading)</span></label>
+          <label><input type="radio" name="basis" value="share"><span>Plastic share only</span></label>
+        </div></div>
+      <div class="f"><span>Seaweed fraction treated as</span>
+        <div class="seg" role="radiogroup" aria-label="Seaweed classification">
+          <label><input type="radio" name="seaPlastic" value="no"><span>Not plastic (naturally occurring)</span></label>
+          <label><input type="radio" name="seaPlastic" value="yes"><span>Plastic (semisynthetic)</span></label>
+        </div></div>
+      <label class="f"><span>Plastic weight for source reduction</span>
+        <select data-k="srBasis"><option value="share">Plastic share only (14 CCR § 18980.1)</option><option value="whole">Whole film</option></select></label>
+      <label class="f"><span>Brand’s source-reduction bonus</span>
+        <select data-k="tier"><option value="none">None</option><option value="t1">Tier 1: cut vs the brand’s 2026 supply</option><option value="t2">Tier 2: cut below the brand’s 2023 baseline</option></select></label>
+      <div class="f"><span>Rules in effect</span>
+        <div class="seg" role="radiogroup" aria-label="Timing">
+          <label><input type="radio" name="when" value="before"><span>Now to June 30, 2027</span></label>
+          <label><input type="radio" name="when" value="after"><span>After June 30, 2027</span></label>
+        </div></div>
+      <div class="f"><span>If after June 30, 2027, the organic-input pathway</span>
+        <div class="seg" role="radiogroup" aria-label="Pathway outcome">
+          <label><input type="radio" name="path" value="survives"><span>Survives (renewed or fixed)</span></label>
+          <label><input type="radio" name="path" value="dies"><span>Lapses</span></label>
+        </div></div>
+      <div class="chk">
+        <label><input type="checkbox" data-k="marked"> Unit is marked compostable</label>
+        <label><input type="checkbox" data-k="nonsyn"> All-seaweed: every input nonsynthetic under USDA rules</label>
+      </div>
+      <label class="f"><span>California category</span>
+        <select data-k="cat">
+          <option value="auto">Automatic (by dominant material)</option>
+          <option value="P45P">P45P Compostable plastic film</option>
+          <option value="P36P">P36P Other/mixed plastic film</option>
+          <option value="WO4P">WO4P Organic with plastic component</option>
+          <option value="WO4N">WO4N Organic, no plastic</option>
+        </select></label>
+      <label class="f"><span>Ton used in CAA’s $/ton incentives</span>
+        <select data-k="ton"><option value="short">Short ton (2,000 lb)</option><option value="metric">Metric tonne (2,204.6 lb)</option></select></label>
+    </details>
+  </aside>
+
+  <div class="results">
+    <section class="view" id="v-compare" aria-labelledby="h-compare">
+      <div class="card">
+        <div class="ch"><span class="ic" data-i="coin" aria-hidden="true"></span><h2 id="h-compare">Cost comparison</h2></div>
+        <p class="sub" id="resSub"></p>
+        <p class="verdict" id="verdict"></p>
+        <div class="toolbar">
+          <div class="seg" role="radiogroup" aria-label="Ledger view">
+            <label><input type="radio" name="view" value="epr" checked><span>EPR fees only</span></label>
+            <label><input type="radio" name="view" value="landed"><span>Include unit price</span></label>
+          </div>
+          <span class="status">Weighted across your state mix, per 1,000 units</span>
+        </div>
+        <div class="ledger" id="ledger"></div>
+        <div class="legend" id="legend"></div>
+        <dl class="facts" id="facts"></dl>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ic" data-i="layers" aria-hidden="true"></span><h3>Both readings of California’s plastic surcharges</h3><span class="right"><span class="ev S">Signaled</span></span></div>
+        <p class="sub">CAA hasn’t said whether the reuse and pollution-mitigation fees apply to a blended film’s whole weight or only its plastic share. Sway’s November 2026 comment asks. The highlighted row is the reading used above. Per 1,000 units, weighted.</p>
+        <div class="tw"><table id="readings"></table></div>
+      </div>
+    </section>
+
+    <section class="view" id="v-states" aria-labelledby="h-states">
+      <div class="card">
+        <div class="ch"><span class="ic" data-i="map" aria-hidden="true"></span><h2 id="h-states">By state</h2></div>
+        <p class="sub">Per 1,000 units, before weighting by your state mix. A state with no verified rate for a material is left out of both sides rather than counted as zero.</p>
+        <div class="tw"><table id="stateTbl"></table></div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="ic" data-i="list" aria-hidden="true"></span><h3>California fee detail</h3><span class="right"><span class="ev S">Preliminary</span></span></div>
+        <div class="tw"><table id="caTbl"></table></div>
+      </div>
+    </section>
+
+    <section class="view" id="v-rules" aria-labelledby="h-rules">
+      <div class="card">
+        <div class="ch"><span class="ic" data-i="check" aria-hidden="true"></span><h2 id="h-rules">SB 54 treatment and fee notes</h2></div>
+        <p class="sub">How California’s EPR program treats the film, and what drives each state’s rate, under the settings on the left. Labeling lives in the Compostable Atlas so the two tools can’t disagree.</p>
+        <div id="checks"></div>
+      </div>
+    </section>
+
+    <section class="view" id="v-thickness" aria-labelledby="h-thick">
+      <div class="card">
+        <div class="ch"><span class="ic" data-i="trend" aria-hidden="true"></span><h2 id="h-thick">Thickness and fees</h2></div>
+        <p class="sub" id="sensSub"></p>
+        <div id="chart"></div>
+      </div>
+    </section>
+
+    <section class="view" id="v-scenarios" aria-labelledby="h-scn">
+      <div class="card">
+        <div class="ch"><span class="ic" data-i="layers" aria-hidden="true"></span><h2 id="h-scn">Rule scenarios side by side</h2></div>
+        <p class="sub">The same package and state mix under the four outcomes that matter most. Every other setting stays as entered.</p>
+        <div class="tw"><table id="scTbl"></table></div>
+      </div>
+    </section>
+
+    <section class="view" id="v-summary" aria-labelledby="h-sum">
+      <div class="card">
+        <div class="ch"><span class="ic" data-i="file" aria-hidden="true"></span><h2 id="h-sum">Customer summary</h2></div>
+        <p class="sub">Plain-language summary for a brand conversation. It contains no formulation detail. Review before sending: figures are estimates and California rates are preliminary.</p>
+        <div class="toolbar"><button class="btn" type="button" id="btnCopy">Copy summary</button><span class="status" id="copyStatus" aria-live="polite"></span></div>
+        <textarea id="talkText" readonly aria-label="Customer summary"></textarea>
+      </div>
+    </section>
+
+    <section class="view" id="v-rates" aria-labelledby="h-rates">
+      <div class="card rates">
+        <div class="ch"><span class="ic" data-i="book" aria-hidden="true"></span><h2 id="h-rates">Rates and sources</h2></div>
+        <p class="sub">Every rate the calculator uses, with the same evidence labels as the Atlas. You can edit a value to test an update; edits last until you reload. Published rates change only through the weekly Atlas review.</p>
+        <p class="status" id="rateStatus" role="status"></p>
+        <div class="tw"><table id="rateTbl"></table></div>
+      </div>
+      <div class="card flat">
+        <div class="ch"><span class="ic" data-i="info" aria-hidden="true"></span><h3>How this fits with the Atlases</h3></div>
+        <p><b>EPR Atlas</b> answers whether a brand is in scope and what the general rates are. <b>The Compostable Atlas</b> answers whether a pack can be labeled compostable and how each state treats compostables. <b>This calculator</b> answers one question: what switching a SKU to Sway film changes per unit, state by state.</p>
+        <p>Open questions that change results: whether California’s surcharges apply to the whole film or its plastic share; whether seaweed polysaccharides count as plastic; how the organic-input pathway resolves after June 30, 2027; and which Oregon category fits a blended film. Not legal advice. Confirm with counsel and the relevant agency or PRO before relying on any figure externally.</p>
+      </div>
+    </section>
+  </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap"><p>EPR Cost Calculator, internal edition maintained by Sway Innovation Co. Built on CAA’s preliminary 2027 California rates, final 2027 Colorado and Oregon schedules and Washington’s 2027 early fees. Rates as of <span data-updated>November 12, 2026</span>.</p></div>
+</footer>
+
+<script>
+var ATLAS="../";
+var ICONS={
+  frond:'<path d="M12 21V8"/><path d="M12 12c-3-.8-5-3-5-6.5 3 .2 5 2.2 5 5"/><path d="M12 9.5c2.4-.9 4-2.9 4-5.8-2.5.3-4 2-4 4.3"/><path d="M12 16.5c2.6-.5 4.6-2.4 5.2-5.3-2.8.1-4.7 1.9-5.2 4.3"/>',
+  coin:'<circle cx="12" cy="12" r="9"/><path d="M14.6 9.4c-.4-.9-1.4-1.4-2.6-1.4-1.5 0-2.5.8-2.5 1.9s1 1.7 2.5 2 2.5.9 2.5 2.1-1 2-2.5 2c-1.2 0-2.2-.6-2.6-1.5M12 6.5V8M12 16v1.5"/>',
+  map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>',
+  check:'<path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>',
+  trend:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  layers:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+  file:'<path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5M8.5 13h7M8.5 17h5"/>',
+  book:'<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/>',
+  list:'<path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'
+};
+document.querySelectorAll(".ic[data-i]").forEach(function(el){var p=ICONS[el.getAttribute("data-i")];if(p&&!el.firstChild)el.innerHTML='<svg viewBox="0 0 24 24" focusable="false">'+p+'</svg>';});
+(function(){
+  var btn=document.getElementById("themeBtn");
+  function cur(){var t=document.documentElement.getAttribute("data-theme");if(t)return t;return (window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";}
+  function label(){btn.textContent=cur()==="dark"?"Light theme":"Dark theme";}
+  try{var s=localStorage.getItem("ca-theme");if(s)document.documentElement.setAttribute("data-theme",s);}catch(e){}
+  label();try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",label);}catch(e){}
+  btn.addEventListener("click",function(){var n=cur()==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",n);try{localStorage.setItem("ca-theme",n);}catch(e){}label();});
+  var VIEWS=["compare","states","rules","thickness","scenarios","summary","rates"];
+  function route(){var h=(location.hash||"").replace("#","");if(VIEWS.indexOf(h)<0)h="compare";
+    VIEWS.forEach(function(v){document.getElementById("v-"+v).classList.toggle("on",v===h);});
+    document.querySelectorAll("#tabs a").forEach(function(a){if(a.getAttribute("href")==="#"+h)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});}
+  window.addEventListener("hashchange",route);route();
+})();
+</script>
+<script>
+
+(function(){
+"use strict";
+const LB=453.592;
+const FORMATS={
+  polybag:{n:"Apparel polybag",W:12,L:15,sides:2,extra:8,comps:1,covered:true,food:false,store:false,checkout:false,note:"Non-food packaging: covered by SB 54, and it can’t be labeled compostable in California."},
+  mailer:{n:"E-commerce mailer",W:14.5,L:19,sides:2,extra:12,comps:2,covered:true,food:false,store:false,checkout:false,note:"Shipping packaging: covered by SB 54; the brand that ships is the producer. Count the adhesive strip and liner as components if plastic."},
+  food:{n:"Food bag or pouch",W:8,L:10,sides:2,extra:5,comps:1,covered:true,food:true,store:false,checkout:false,note:"Food-associated: covered by SB 54, and it can carry a California compostable claim if every test is met."},
+  produce:{n:"Store produce bag",W:12,L:16,sides:2,extra:0,comps:1,covered:false,food:true,store:true,checkout:false,note:"Store-provided pre-checkout bags are outside SB 54 (confirmed in CAA’s final plan). SB 1046 requires them to be compostable or recycled paper."},
+  liner:{n:"Food-scrap liner sold as a product",W:17,L:17,sides:2,extra:0,comps:1,covered:false,food:true,store:false,checkout:false,note:"Compostable food-scrap liners sold as products are outside SB 54. AB 1201 labeling still applies."},
+  checkout:{n:"Boutique checkout bag",W:15,L:18,sides:2,extra:10,comps:1,covered:false,food:false,store:true,checkout:true,note:"Store-provided carryout bags are outside SB 54. Compostable checkout bags are barred in covered stores (grocery, pharmacy, convenience, liquor); boutiques generally aren’t covered stores."},
+  custom:{n:"Custom package",note:"Set the SB 54 and food-use boxes to match the package."}
+};
+const BASES={
+  ldpe:{n:"LDPE film",ca:"P16P",co:"pe",or:"pe",wa:"flex",d:0.92},
+  ldpec:{n:"LDPE clear non-bag film",ca:"P15P",co:"pe",or:"pe",wa:"flex",d:0.92},
+  hdpe:{n:"HDPE film",ca:"P10P",co:"pe",or:"pe",wa:"flex",d:0.95},
+  pp:{n:"PP film",ca:"P22P",co:"pp",or:"pp",wa:"flex",d:0.90},
+  lam:{n:"multi-material laminate",ca:"P46P",co:"flex",or:"lam",wa:"flex",d:1.0},
+  pla:{n:"certified compostable film (PLA/PBAT)",ca:"P45P",co:"cert",or:"pla",wa:"comp",d:1.25}
+};
+const CATN={P16P:"LDPE other flexible and film",P15P:"LDPE clear non-bag film",P10P:"HDPE flexible and film",P22P:"PP other flexible and film",P46P:"Multi-material laminate pouches",P45P:"Compostable plastic film",P36P:"Other/mixed plastic film",WO4P:"Organic with plastic component",WO4N:"Organic, no plastic"};
+const COCN={pe:"HDPE/LDPE flexible",cert:"Flexible plastic certified to ASTM D6400-23",flex:"Plastic laminates and other flexible",org:"Wood and other organic materials",pp:"PP flexible"};
+const WACN={flex:"Flexible plastic (early fee)",comp:"Compostable materials (early fee)",org:"Not set"};
+const ORCN={pe:"HDPE/LDPE flexible",pla:"PLA, PHA, PHB flexible and film",lam:"Plastic laminates and other flexible",pp:"PP flexible",org:"Other organic materials"};
+const R0={
+  ca:{reuse:0.03,ppmfW:0.26,ppmfC:0.001,cats:{P16P:0.24,P15P:0.25,P10P:0.26,P22P:0.27,P46P:0.25,P45P:0.24,P36P:0.24,WO4P:0.18,WO4N:0.03}},
+  sr:{malus:{2027:100,2028:150,2029:200},t1:{2027:500,2028:750,2029:1000},t2:{2027:1500,2028:2000,2029:2500}},
+  co:{pe:0.62,cert:0.27,flex:0.78,org:0.88,pp:0.69},
+  or:{pe:0.12,pla:0.56,lam:0.56,pp:0.56,org:null},
+  wa:{flex:0.025,comp:0.017,org:null}
+};
+const S0={format:"polybag",W:12,L:15,sides:2,extra:8,units:1000000,comps:1,covered:true,food:false,store:false,checkout:false,
+  base:"ldpe",bT:1.5,bD:0.92,bPCR:0,bPrice:0.04,bG:"",
+  gen:"blend",sT:2.0,sD:1.30,pPoly:50,pSea:42,pPlast:8,sPrice:0.10,sG:"",
+  mCA:50,mCO:10,mOR:10,mWA:0,small:false,small5:false,
+  year:"2027",basis:"whole",seaPlastic:"no",srBasis:"share",tier:"t1",when:"before",path:"survives",marked:true,cat:"auto",ton:"short",
+  d6400:"unknown",ed23:false,bpi:false,home:true,green:true,nonsyn:false};
+const clone=o=>JSON.parse(JSON.stringify(o));
+let S=clone(S0), R=clone(R0);
+try{const last=localStorage.getItem("swayEprLast");if(last){const d=JSON.parse(last);if(d&&d.S){S=Object.assign(clone(S0),d.S);} }}catch(e){}
+function mergeR(r){const x=clone(R0);try{for(const k of ["reuse","ppmfW","ppmfC"]) if(r.ca&&r.ca[k]!=null) x.ca[k]=r.ca[k];
+  if(r.ca&&r.ca.cats) for(const k in x.ca.cats) if(r.ca.cats[k]!=null) x.ca.cats[k]=r.ca.cats[k];
+  for(const g of ["malus","t1","t2"]) for(const y of ["2027","2028","2029"]) if(r.sr&&r.sr[g]&&r.sr[g][y]!=null) x.sr[g][y]=r.sr[g][y];
+  for(const s of ["co","or","wa"]) if(r[s]) for(const k in x[s]) if(k in r[s]) x[s][k]=r[s][k];}catch(e){} return x;}
+
+/* ---------- formatting ---------- */
+const $=s=>document.querySelector(s);
+const fm=(v,d=2)=>(v<0?"−":"")+"$"+Math.abs(v).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const fs=(v,d=2)=>(v>0?"+":v<0?"−":"")+"$"+Math.abs(v).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const fn=(v,d=1)=>v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const fc=v=>(v<0?"−":"")+fn(Math.abs(v)*100,2)+"¢";
+const num=v=>{const x=parseFloat(v);return isFinite(x)?x:0;};
+
+/* ---------- model ---------- */
+function comp(st){
+  const pl=Math.max(0,num(st.pPlast));
+  const poly=st.gen==="all"?0:Math.max(0,num(st.pPoly));
+  const sea=st.gen==="all"?Math.max(0,100-pl):Math.max(0,num(st.pSea));
+  const tot=poly+sea+pl||1;
+  return {poly:poly/tot,sea:sea/tot,pl:pl/tot,raw:poly+sea+pl};
+}
+function plasticShare(st){const c=comp(st);return c.poly+(st.seaPlastic==="yes"?c.sea:0);}
+function area(st){return num(st.W)*num(st.L)*num(st.sides)*(1+num(st.extra)/100)*6.4516;}
+function gBase(st){return num(st.bG)>0?num(st.bG):area(st)*num(st.bT)*0.00254*num(st.bD);}
+function gSway(st,t){const tt=t==null?num(st.sT):t;if(num(st.sG)>0)return num(st.sG)*(tt/(num(st.sT)||1));return area(st)*tt*0.00254*num(st.sD);}
+function autoCat(st,ps){if(ps<=1e-9)return "WO4N";if(ps>=1-ps)return st.marked?"P45P":"P36P";return "WO4P";}
+function desig(cat,st){
+  if(cat==="P45P")return (st.when==="after"&&st.path==="dies")?"Phase out":"Phase in";
+  if(cat==="WO4P")return "Phase out";
+  if(cat==="WO4N")return "Maintain and strengthen";
+  return "Phase in";
+}
+function tonLb(st){return st.ton==="metric"?2204.62:2000;}
+
+function compute(st,tOverride){
+  const ps=plasticShare(st);
+  const gB=gBase(st), gS=gSway(st,tOverride);
+  const lbB=gB/LB, lbS=gS/LB;
+  const cat=st.cat==="auto"?autoCat(st,ps):st.cat;
+  const dS=desig(cat,st);
+  const base=BASES[st.base];
+  const yr=st.year, tl=tonLb(st);
+  const caExempt=!st.covered?"Outside SB 54":(st.small?"Small-producer exemption":null);
+  const flags=[];
+  // California baseline
+  let caB={base:0,surch:0,comp:0,malus:0,bonus:0,total:0,srLb:lbB*(1-num(st.bPCR)/100),cat:base.ca};
+  // California Sway
+  let caS={base:0,surch:0,comp:0,malus:0,bonus:0,total:0,srLb:ps<=0?0:(st.srBasis==="share"?lbS*ps:lbS),cat:cat,plasticFeeLb:0};
+  if(!caExempt){
+    caB.base=R.ca.cats[base.ca]*lbB;
+    caB.surch=(R.ca.reuse+R.ca.ppmfW)*lbB;
+    caB.comp=R.ca.ppmfC*num(st.comps);
+    caB.malus=R.sr.malus[yr]/tl*caB.srLb;
+    caB.total=caB.base+caB.surch+caB.comp+caB.malus;
+    const pfl=(cat==="WO4N"||ps<=0)?0:(st.basis==="whole"?lbS:lbS*ps);
+    caS.plasticFeeLb=pfl;
+    caS.base=R.ca.cats[cat]*lbS;
+    caS.surch=(R.ca.reuse+R.ca.ppmfW)*pfl;
+    caS.comp=pfl>0?R.ca.ppmfC*num(st.comps):0;
+    caS.malus=R.sr.malus[yr]/tl*caS.srLb;
+    const red=caB.srLb-caS.srLb;
+    const elig=dS!=="Phase out";
+    const rate=st.tier==="none"?0:R.sr[st.tier][yr];
+    caS.bonus=(red>0&&elig)?rate/tl*red:0;
+    caS.total=caS.base+caS.surch+caS.comp+caS.malus-caS.bonus;
+  }
+  if(cat==="WO4N"&&ps>0)flags.push("WO4N selected but the film contains plastic; fees assume no plastic.");
+  const sm5=!!st.small5;
+  const stateCalc=(rateB,rateS,keyB,keyS)=>{const miss=rateB==null||rateS==null;const off=miss||sm5;return {b:off?0:rateB*lbB,s:off?0:rateS*lbS,keyB,keyS,miss,exempt:sm5&&!miss};};
+  // Colorado
+  const coKeyS=ps<=0?"org":((st.d6400==="yes"&&st.ed23)?"cert":"flex");
+  const co=stateCalc(R.co[base.co],R.co[coKeyS],base.co,coKeyS);
+  // Oregon
+  const orKeyS=ps<=0?"org":"pla";
+  const or=stateCalc(R.or[base.or],R.or[orKeyS],base.or,orKeyS);
+  // Washington (early fees)
+  const waKeyS=ps<=0?"org":"comp";
+  const wa=stateCalc(R.wa[base.wa],R.wa[waKeyS],base.wa,waKeyS);
+  // mix
+  let mCA=num(st.mCA)/100,mCO=num(st.mCO)/100,mOR=num(st.mOR)/100,mWA=num(st.mWA)/100;
+  let sum=mCA+mCO+mOR+mWA; if(sum>1){mCA/=sum;mCO/=sum;mOR/=sum;mWA/=sum;flags.push("State shares added to more than 100%; scaled down proportionally.");sum=1;}
+  if(co.miss&&mCO>0)flags.push("Colorado is left out of the comparison: no verified rate for this material.");
+  if(or.miss&&mOR>0)flags.push("Oregon is left out of the comparison: no verified rate for this material.");
+  if(wa.miss&&mWA>0)flags.push("Washington is left out of the comparison: no early-fee category for this material.");
+  const wB=mCA*caB.total+mCO*co.b+mOR*or.b+mWA*wa.b;
+  const wS=mCA*caS.total+mCO*co.s+mOR*or.s+mWA*wa.s;
+  return {ps,gB,gS,lbB,lbS,cat,dS,caExempt,caB,caS,co,or,wa,mix:{ca:mCA,co:mCO,or:mOR,wa:mWA,other:Math.max(0,1-sum)},wB,wS,
+    landedB:num(st.bPrice)+wB,landedS:num(st.sPrice)+wS,srElig:dS!=="Phase out",red:caB.srLb-caS.srLb,flags};
+}
+function breakEven(st){
+  const wB=compute(st).wB;
+  const f=t=>compute(st,t).wS-wB;
+  let lo=0.3,hi=6;
+  if(f(lo)>0)return {type:"none"};
+  if(f(hi)<0)return {type:"all"};
+  for(let i=0;i<50;i++){const m=(lo+hi)/2;if(f(m)>0)hi=m;else lo=m;}
+  return {type:"t",t:(lo+hi)/2};
+}
+
+/* ---------- compliance ---------- */
+const P=(t,d)=>({s:"pass",t,d}),F=(t,d)=>({s:"fail",t,d}),W=(t,d)=>({s:"warn",t,d}),I=(t,d)=>({s:"info",t,d});
+function caLabel(st){
+  const items=[];
+  if(st.d6400==="yes")items.push(P("Certified to ASTM D6400","CalRecycle hasn’t published a list of approved certifiers; keep the certificate on file."));
+  else if(st.d6400==="no")items.push(F("Not certified to ASTM D6400","California’s bag rule requires a D6400 certification logo. An EN 13432-only certificate doesn’t qualify."));
+  else items.push(W("ASTM D6400 not listed on the certificate","TÜV OK compost HOME and INDUSTRIAL are held, but California requires certification to ASTM D6400. Ask TÜV to list D6400 (2023 edition or later) on the industrial certificate."));
+  items.push(st.d6400==="yes"?P("Organic fluorine at or below 100 ppm","Covered by certification testing; keep results in the 90-day documentation file."):W("Organic fluorine at or below 100 ppm","Confirm test results are on file."));
+  items.push(st.green?P("Label distinguishes it from non-compostables","Green marking and the word “compostable.”"):F("Label doesn’t distinguish it from non-compostables","Add green, brown or beige marking with the word “compostable.”"));
+  items.push(st.food?P("Associated with food or yard-waste recovery",""):F("Not associated with food or yard waste","Non-food formats such as apparel polybags and mailers can’t be labeled compostable in California."));
+  if(st.when==="before")items.push(P("Allowable organic input (extension to June 30, 2027)","Covered by CalRecycle’s extension for products containing synthetic substances."));
+  else if(st.gen==="all"&&st.nonsyn&&st.seaPlastic!=="yes")items.push(W("Allowable organic input after June 30, 2027","Arguable when every input is nonsynthetic under USDA rules; not confirmed by USDA or CalRecycle."));
+  else if(st.path==="survives")items.push(P("Allowable organic input after June 30, 2027","Assumes CalRecycle renews the extension, the legislature decouples, or USDA changes its rules."));
+  else items.push(F("Not an allowable organic input after June 30, 2027","Products containing synthetic substances can’t be labeled compostable once the extension lapses."));
+  const anyF=items.some(i=>i.s==="fail"),anyW=items.some(i=>i.s==="warn");
+  const overall=anyF?"fail":anyW?"warn":"pass";
+  return {items,overall};
+}
+function checks(st,r){
+  const out=[];
+  out.push({j:"Labeling",items:[I("Check labeling in the Compostable Packaging Atlas","Whether a pack can say “compostable” depends on the state, format, certificate and marking. Run the <a href=\""+ATLAS+"#screener\" target=\"_blank\" rel=\"noopener\">Atlas screener</a> for every state the SKU ships to. This calculator covers fees and SB 54 treatment only.")]});
+  const sb=[];
+  if(!st.covered)sb.push(I("Outside SB 54","Store-provided bags and compostable food-scrap liners sold as products aren’t covered material; no California EPR fees."));
+  else if(st.small)sb.push(P("Customer exempt from SB 54 fees and reporting","Under $1M in California sales. The 2032 recyclable-or-compostable requirement still applies."));
+  else{
+    const why=st.cat==="auto"?(r.cat==="WO4N"?"No plastic in the film.":r.cat==="WO4P"?"Seaweed and other non-plastic content outweigh the plastic.":(st.marked?"Plastic is the largest material and the unit is marked compostable.":"Plastic is the largest material and the unit isn’t marked compostable.")):"Set manually.";
+    sb.push(I("Reported as "+r.cat+": "+CATN[r.cat],why));
+    if(r.dS==="Phase out")sb.push(F("CAA designation: phase out",r.cat==="WO4P"?"CAA plans to phase this category out; it won’t count toward source reduction.":"CAA would file a phase-out exemption for compostable plastics once the pathway lapses."));
+    else if(r.cat==="P45P")sb.push(W("CAA designation: phase in, conditional","Compostable film stays in CAA’s phase-in plan only while the organic-input pathway survives."));
+    else if(r.cat==="P36P")sb.push(W("CAA designation: phase in (film recycling plan)","CAA plans to make this category recyclable. Reporting a certified compostable film here could be challenged; get counsel’s view."));
+    else if(r.cat==="WO4N")sb.push(W("CAA designation: maintain and strengthen","The category covers “nonsynthetic material.” "+(st.nonsyn?"Inputs set as nonsynthetic; still unconfirmed by CalRecycle.":"Alginate and alkali-extracted agar are synthetic under USDA rules, so this category may not fit.")));
+    if(!r.srElig)sb.push(F("Doesn’t count toward the brand’s source reduction","Phase-out categories are excluded."));
+    else if(r.red>0)sb.push(P("Counts toward the brand’s source reduction",fn(r.red*LB,2)+" g less plastic per unit than the conventional version, on the measurement basis selected."));
+    else sb.push(F("Adds plastic weight per unit",fn(-r.red*LB,2)+" g more plastic per unit than the conventional version, on the measurement basis selected. The brand earns no bonus and pays more virgin-plastic charge."));
+    if(r.cat==="P45P")sb.push(r.dS==="Phase out"?F("No compliant path by 2032 for this format","The 2032 rule requires every covered item to be recyclable or eligible to be labeled compostable."):!st.food?W("2032: depends on California’s food-waste requirement","Non-food formats don’t meet the food or yard-waste test in CAA’s reading. How it applies, including dual-use designs, is under counsel review; see the Atlas."):W("2032: compliant only if the pathway survives","The item must also meet every California label test."));
+    else if(r.cat==="WO4N")sb.push(W("2032: compostable category","The item still needs a compliant California label path."));
+    else sb.push(F("2032: not recyclable or compostable today","This category needs a recycling or composting pathway by 2032."));
+  }
+  out.push({j:"California SB 54 (EPR)",items:sb});
+  const co=[];
+  if(st.small5)co.push(I("Brand may be exempt","Producers under $5M in global revenue are exempt in Colorado, Oregon and Washington; confirm with the EPR Atlas scope screener. Colorado also offers flat dues for 10 tons or less."));
+  if(r.ps>0)co.push((st.d6400==="yes"&&st.ed23)?P("Qualifies for the certified compostable film rate","$"+R.co.cert.toFixed(2)+"/lb versus $"+R.co.pe.toFixed(2)+"/lb for PE film. The certificate must cite ASTM D6400-23 (or D6868-21, D8410-22)."):W("Assumed to pay the plastic laminates and other flexible rate","$"+R.co.flex.toFixed(2)+"/lb. The lower certified rate ($"+R.co.cert.toFixed(2)+"/lb) requires a certificate citing ASTM D6400-23; ask CAA Colorado whether later editions qualify."));
+  else co.push(I("All-seaweed film pays the wood and other organic rate","$"+R.co.org.toFixed(2)+"/lb on the 2027 schedule."));
+  out.push({j:"Colorado EPR",items:co});
+  out.push({j:"Oregon EPR",items:[r.ps>0?W("Category fit not confirmed","Modeled at the PLA/PHA/PHB film rate ($"+R.or.pla.toFixed(2)+"/lb in 2027, the same as PP film and laminates). Confirm with CAA Oregon how a blended film reports."):W("Organic-material rate not verified","All-seaweed film is left out of the Oregon comparison until a rate is confirmed.")]});
+  out.push({j:"Washington EPR",items:[I("Early fees, no invoice date yet","CAA’s 2027 early fees price compostable materials at "+fn(R.wa.comp*100,1)+"¢/lb (confirmed) against about "+fn(R.wa.flex*100,1)+"¢/lb for flexible plastic (not yet confirmed). Program plan due October 1, 2028.")]});
+  return out;
+}
+
+/* ---------- inputs ---------- */
+function bindInputs(){
+  document.querySelectorAll("[data-k]").forEach(el=>{
+    const k=el.dataset.k;
+    if(el.type==="checkbox")el.checked=!!S[k];else el.value=S[k];
+    if(el._b)return;el._b=1;
+    el.addEventListener(el.tagName==="SELECT"?"change":"input",()=>{
+      if(el.type==="checkbox")S[k]=el.checked;
+      else if(el.type==="number"){S[k]=el.value===""?"":num(el.value);}
+      else S[k]=el.value;
+      if(k==="format")applyFormat();
+      if(k==="base"){S.bD=BASES[S.base].d;$('[data-k="bD"]').value=S.bD;}
+      update();
+    });
+  });
+  ["gen","basis","seaPlastic","when","path"].forEach(name=>{
+    document.querySelectorAll('input[name="'+name+'"]').forEach(el=>{
+      el.checked=(S[name]===el.value);
+      if(el._b)return;el._b=1;
+      el.addEventListener("change",()=>{if(el.checked){S[name]=el.value;update();}});
+    });
+  });
+}
+function applyFormat(){
+  const f=FORMATS[S.format];if(!f||S.format==="custom")return;
+  ["W","L","sides","extra","comps","covered","food","store","checkout"].forEach(k=>{S[k]=f[k];});
+  bindInputs();
+}
+
+/* ---------- render ---------- */
+function update(){
+  const r=compute(S);
+  try{localStorage.setItem("swayEprLast",JSON.stringify({S}));}catch(e){}
+  $("#fmtNote").textContent=(FORMATS[S.format]||{}).note||"";
+  const c=comp(S);
+  $('[data-k="pPoly"]').disabled=S.gen==="all";
+  $('[data-k="pSea"]').disabled=S.gen==="all";
+  $("#compNote").textContent=S.gen==="all"?"All-seaweed: no compostable polymer; seaweed fills the share not taken by plasticizer.":(Math.abs(c.raw-100)>0.5?"Shares add to "+fn(c.raw,0)+"%; the calculator scales them to 100%.":"Plastic share used in the fee math: "+fn(r.ps*100,0)+"%.");
+  $("#mOther").textContent=fn(r.mix.other*100,0)+"%";
+  renderResults(r);renderStates(r);renderChecks(r);renderChart(r);renderScenarios();renderTalk(r);
+}
+function renderResults(r){
+  const k=1000, dE=(r.wS-r.wB)*k, ratio=r.wB>0?r.wS/r.wB:0;
+  const fname=(FORMATS[S.format]||{}).n||"package";
+  $("#resSub").textContent=fname+", "+S.W+" × "+S.L+" in. Sway "+S.sT+" mil vs "+BASES[S.base].n+" at "+S.bT+" mil.";
+  let v;
+  if(Math.abs(dE)<0.005)v="EPR fees come out about even with "+BASES[S.base].n+" across your state mix.";
+  else if(dE>0)v="Sway film adds about <b>"+fm(dE)+" per 1,000 units</b> in EPR fees across your state mix"+(ratio>0?" ("+fn(ratio,2)+"× the conventional film).":".");
+  else v="Sway film saves about <b>"+fm(-dE)+" per 1,000 units</b> in EPR fees across your state mix"+(r.wS>=0&&ratio>0?" ("+fn(ratio,2)+"× the conventional film).":", including the brand’s source-reduction bonus.");
+  const be=breakEven(S);
+  if(be.type==="t")v+=" Fees break even at about "+fn(be.t,2)+" mil"+(be.t<1.5?", below the thinnest gauge Sway makes today (1.5 mil).":".");
+  else if(be.type==="all")v+=" Sway stays cheaper on fees at any thickness up to 6 mil.";
+  $("#verdict").innerHTML=v;
+  const view=document.querySelector('input[name="view"]:checked').value;
+  const segB=[],segS=[];
+  const m=r.mix;
+  const caB=r.caB,caS=r.caS;
+  if(view==="landed"){segB.push(["price",num(S.bPrice)]);segS.push(["price",num(S.sPrice)]);}
+  segB.push(["base",m.ca*caB.base+m.co*r.co.b+m.or*r.or.b+m.wa*r.wa.b],["surch",m.ca*(caB.surch+caB.comp)],["malus",m.ca*caB.malus]);
+  segS.push(["base",m.ca*caS.base+m.co*r.co.s+m.or*r.or.s+m.wa*r.wa.s],["surch",m.ca*(caS.surch+caS.comp)],["malus",m.ca*caS.malus]);
+  const bonus=m.ca*caS.bonus;
+  const tot=a=>a.reduce((s,x)=>s+Math.max(0,x[1]),0);
+  const max=Math.max(tot(segB),tot(segS),bonus,1e-9);
+  const col={price:"var(--line2)",base:null,surch:null,malus:null};
+  const shade=(who,key)=>{const base=who==="s"?"var(--sway)":"var(--conv)",soft=who==="s"?"var(--swaySoft)":"var(--convSoft)";
+    return key==="price"?"var(--line2)":key==="base"?base:key==="surch"?soft:"repeating-linear-gradient(90deg,"+base+" 0 3px,"+soft+" 3px 6px)";};
+  const bar=(segs,who)=>segs.map(([key,v])=>v>0?'<i title="'+key+'" style="width:'+(v/max*100)+'%;background:'+shade(who,key)+'"></i>':"").join("");
+  const totB=view==="landed"?r.landedB:r.wB, totS=view==="landed"?r.landedS:r.wS;
+  $("#ledger").innerHTML=
+    '<div class="lrow"><div class="lname">'+cap(BASES[S.base].n)+'<small>'+S.bT+' mil · '+fn(r.gB,1)+' g per unit</small></div><div class="bar" role="img" aria-label="Conventional film cost bar">'+bar(segB,"b")+'</div><div class="ltot">'+fm(totB*1000)+'</div></div>'+
+    '<div class="lrow"><div class="lname">Sway '+(S.gen==="all"?"all-seaweed":"film")+'<small>'+S.sT+' mil · '+fn(r.gS,1)+' g per unit</small></div><div><div class="bar" role="img" aria-label="Sway film cost bar">'+bar(segS,"s")+'</div>'+(bonus>0?'<div class="credit" style="width:'+(bonus/max*100)+'%" title="Source-reduction bonus"></div>':"")+'</div><div class="ltot">'+fm(totS*1000)+'</div></div>';
+  $("#legend").innerHTML=(view==="landed"?'<span><i style="background:var(--line2)"></i>Unit price</span>':"")+
+    '<span><i style="background:var(--sway)"></i><i style="background:var(--conv)"></i>Base fees (all states)</span>'+
+    '<span><i style="background:var(--swaySoft)"></i><i style="background:var(--convSoft)"></i>California plastic surcharges and component fee</span>'+
+    '<span><i style="background:repeating-linear-gradient(90deg,var(--sway) 0 3px,var(--swaySoft) 3px 6px)"></i>California virgin-plastic charge</span>'+
+    (bonus>0?'<span><i style="background:repeating-linear-gradient(45deg,var(--credit) 0 3px,transparent 3px 6px);border:1px solid var(--credit)"></i>Brand’s source-reduction bonus (subtracted from Sway’s total)</span>':"");
+  const rw=compute(Object.assign({},S,{basis:"whole"})), rs=compute(Object.assign({},S,{basis:"share"}));
+  $("#readings").innerHTML='<thead><tr><th>California plastic surcharges charged on</th><th class="n">Conventional</th><th class="n">Sway</th><th class="n">Difference</th></tr></thead><tbody>'+
+    [["Whole film (literal reading of CAA’s plan)",rw],["Plastic share only (open question in Sway’s comment)",rs]].map(x=>'<tr'+(S.basis===(x[1]===rw?"whole":"share")?' class="sel"':'')+'><td>'+x[0]+'</td><td class="n">'+fm(x[1].wB*1000)+'</td><td class="n">'+fm(x[1].wS*1000)+'</td><td class="n '+((x[1].wS-x[1].wB)>0.000004?"pos":"neg")+'">'+fs((x[1].wS-x[1].wB)*1000)+'</td></tr>').join("")+'</tbody>';
+  const units=num(S.units);
+  const facts=[
+    ["Weight per unit",fn(r.gS,1)+" g vs "+fn(r.gB,1)+" g ("+fn(r.gS/(r.gB||1),2)+"×)"],
+    ["Plastic per unit",fn(r.caS.srLb*LB,1)+" g vs "+fn(r.caB.srLb*LB,1)+" g"],
+    ["California category",r.caExempt?r.caExempt:r.cat+" · "+r.dS],
+    ["EPR fees per year",fm(r.wS*units,0)+" vs "+fm(r.wB*units,0)],
+    ["Annual EPR difference",fs((r.wS-r.wB)*units,0)],
+    ["Price plus EPR per unit",fc(r.landedS)+" vs "+fc(r.landedB)],
+    ["EPR effect on price gap",(r.wS-r.wB>=0?"Widens":"Narrows")+" by "+fc(Math.abs(r.wS-r.wB))+" per unit"],
+  ];
+  $("#facts").innerHTML=facts.map(f=>'<div><dt>'+f[0]+'</dt><dd>'+f[1]+'</dd></div>').join("")+(r.flags.length?'<div style="grid-column:1/-1"><p class="warnline">'+r.flags.join(" ")+'</p></div>':"");
+}
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function renderStates(r){
+  const k=1000,m=r.mix;
+  const note=(x,N)=>x.miss?" (not modeled: no verified rate, left out of both sides)":x.exempt?" (brand exempt under $5M revenue)":"";
+  const rows=[
+    ["California",m.ca,r.caB.total,r.caS.total,r.caExempt?r.caExempt+": no California EPR fees.":"Conventional: "+r.caB.cat+". Sway: "+r.cat+" ("+r.dS.toLowerCase()+")."],
+    ["Colorado",m.co,r.co.b,r.co.s,"Conventional: "+COCN[r.co.keyB]+". Sway: "+COCN[r.co.keyS]+note(r.co)+"."],
+    ["Oregon",m.or,r.or.b,r.or.s,"Conventional: "+ORCN[r.or.keyB]+". Sway: "+ORCN[r.or.keyS]+note(r.or)+"."],
+    ["Washington",m.wa,r.wa.b,r.wa.s,"Conventional: "+WACN[r.wa.keyB]+". Sway: "+WACN[r.wa.keyS]+note(r.wa)+". No invoice date yet."],
+    ["Other states",m.other,0,0,"No EPR fees modeled. Minnesota and Maryland have no fee schedules yet."]
+  ];
+  let h='<thead><tr><th>Market</th><th class="n">Share</th><th class="n">Conventional</th><th class="n">Sway</th><th class="n">Difference</th><th>Categories and notes</th></tr></thead><tbody>';
+  rows.forEach(x=>{const d=(x[3]-x[2])*k;h+='<tr><td>'+x[0]+'</td><td class="n">'+fn(x[1]*100,0)+'%</td><td class="n">'+fm(x[2]*k)+'</td><td class="n">'+fm(x[3]*k)+'</td><td class="n '+(d>0.004?"pos":d<-0.004?"neg":"")+'">'+fs(d)+'</td><td><span class="flag">'+x[4]+'</span></td></tr>';});
+  h+='<tr><th>Weighted</th><th class="n">100%</th><th class="n">'+fm(r.wB*k)+'</th><th class="n">'+fm(r.wS*k)+'</th><th class="n">'+fs((r.wS-r.wB)*k)+'</th><th></th></tr></tbody>';
+  $("#stateTbl").innerHTML=h;
+  const b=r.caB,s=r.caS;
+  const lines=[["Base fee",b.base,s.base],["Reuse investment and plastic-pollution weight fees",b.surch,s.surch],["Plastic-pollution component fee",b.comp,s.comp],["Virgin-plastic charge (incentive mechanism)",b.malus,s.malus],["Source-reduction bonus to the brand",0,-s.bonus],["Total",b.total,s.total]];
+  let t='<thead><tr><th>Per 1,000 units in California</th><th class="n">Conventional</th><th class="n">Sway</th></tr></thead><tbody>';
+  lines.forEach((l,i)=>{const tag=i===lines.length-1?"th":"td";t+='<tr><'+tag+'>'+l[0]+'</'+tag+'><'+tag+' class="n">'+fm(l[1]*k)+'</'+tag+'><'+tag+' class="n">'+fm(l[2]*k)+'</'+tag+'></tr>';});
+  t+='</tbody>';
+  $("#caTbl").innerHTML=t+'<caption class="sr-only">California fee detail</caption>';
+  if(r.caExempt)$("#caTbl").insertAdjacentHTML("afterend","");
+}
+function pill(s){const m={pass:["pass","✓ Yes"],fail:["fail","✕ No"],warn:["warn","! Check"],info:["info","i Info"]}[s];return '<span class="pill '+m[0]+'">'+m[1]+'</span>';}
+function renderChecks(r){
+  $("#checks").innerHTML=checks(S,r).map(g=>'<h3 class="jur">'+g.j+'</h3>'+g.items.map(i=>'<div class="check">'+pill(i.s)+'<div><b>'+i.t+'</b>'+(i.d?'<p>'+i.d+'</p>':"")+'</div></div>').join("")).join("");
+}
+function renderChart(){
+  const tMin=1.0,tMax=Math.max(3.0,num(S.sT)+0.6);
+  const pts=[];for(let i=0;i<=40;i++){const t=tMin+(tMax-tMin)*i/40;pts.push([t,compute(S,t).wS*1000]);}
+  const base=compute(S).wB*1000;
+  const ys=pts.map(p=>p[1]).concat([base,0]);
+  let yMin=Math.min(...ys),yMax=Math.max(...ys);if(yMax-yMin<1){yMax+=1;}
+  const pad=(yMax-yMin)*0.08;yMin-=pad;yMax+=pad;
+  const Wd=680,Ht=300,ml=56,mr=16,mt=16,mb=40;
+  const X=t=>ml+(t-tMin)/(tMax-tMin)*(Wd-ml-mr);
+  const Y=v=>mt+(1-(v-yMin)/(yMax-yMin))*(Ht-mt-mb);
+  let s='<svg viewBox="0 0 '+Wd+' '+Ht+'" role="img" aria-label="Sway EPR fees per 1,000 units across film thickness compared with the conventional film"><title>Sway fees vs thickness</title>';
+  const ticks=5;for(let i=0;i<=ticks;i++){const v=yMin+(yMax-yMin)*i/ticks;s+='<line x1="'+ml+'" x2="'+(Wd-mr)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="var(--line)"/><text x="'+(ml-6)+'" y="'+(Y(v)+4)+'" font-size="11" text-anchor="end" fill="var(--ink2)">'+fm(v,0)+'</text>';}
+  for(let t=Math.ceil(tMin*2)/2;t<=tMax+1e-9;t+=0.5){s+='<text x="'+X(t)+'" y="'+(Ht-mb+16)+'" font-size="11" text-anchor="middle" fill="var(--ink2)">'+fn(t,1)+'</text>';}
+  s+='<text x="'+((ml+Wd-mr)/2)+'" y="'+(Ht-6)+'" font-size="12" text-anchor="middle" fill="var(--ink2)">Sway film thickness (mil)</text>';
+  if(yMin<0&&yMax>0)s+='<line x1="'+ml+'" x2="'+(Wd-mr)+'" y1="'+Y(0)+'" y2="'+Y(0)+'" stroke="var(--ink2)" stroke-width="1"/>';
+  s+='<line x1="'+ml+'" x2="'+(Wd-mr)+'" y1="'+Y(base)+'" y2="'+Y(base)+'" stroke="var(--conv)" stroke-width="2" stroke-dasharray="6 4"/>';
+  s+='<text x="'+(Wd-mr-4)+'" y="'+(Y(base)-6)+'" font-size="12" text-anchor="end" fill="var(--conv)">'+cap(BASES[S.base].n)+' at '+S.bT+' mil: '+fm(base)+'</text>';
+  s+='<polyline fill="none" stroke="var(--sway)" stroke-width="2.5" points="'+pts.map(p=>X(p[0])+","+Y(p[1])).join(" ")+'"/>';
+  const cur=compute(S).wS*1000;s+='<circle cx="'+X(num(S.sT))+'" cy="'+Y(cur)+'" r="5" fill="var(--sway)"/><text x="'+(X(num(S.sT))+8)+'" y="'+(Y(cur)+16)+'" font-size="12" fill="var(--sway)">Now: '+fm(cur)+'</text>';
+  const be=breakEven(S);
+  if(be.type==="t"&&be.t>=tMin&&be.t<=tMax){s+='<line x1="'+X(be.t)+'" x2="'+X(be.t)+'" y1="'+mt+'" y2="'+(Ht-mb)+'" stroke="var(--ink2)" stroke-dasharray="2 3"/><text x="'+(X(be.t)+4)+'" y="'+(mt+12)+'" font-size="12" fill="var(--ink)">Break-even '+fn(be.t,2)+' mil</text>';}
+  s+='</svg>';
+  $("#chart").innerHTML=s;
+  const per01=(compute(S,num(S.sT)).wS-compute(S,Math.max(0.1,num(S.sT)-0.1)).wS)*1000;
+  $("#sensSub").textContent="Weighted EPR fees per 1,000 units as Sway film thickness changes; everything else stays fixed. Each 0.1 mil changes Sway’s fees by about "+fm(Math.abs(per01))+" per 1,000 units."+(be.type==="t"?" Fees match the conventional film at about "+fn(be.t,2)+" mil.":be.type==="none"?" Sway doesn’t reach fee parity at any practical thickness under these settings.":"");
+}
+const SCN=[
+  {n:"Current blend, plastic share charged",m:{gen:"blend",basis:"share",seaPlastic:"no",marked:true,cat:"auto",when:"before",path:"survives"}},
+  {n:"Current blend, whole film charged",m:{gen:"blend",basis:"whole",seaPlastic:"no",marked:true,cat:"auto",when:"before",path:"survives"}},
+  {n:"After June 30, 2027, pathway lapses, sold unmarked",m:{gen:"blend",basis:"whole",seaPlastic:"no",marked:false,cat:"auto",when:"after",path:"dies"}},
+  {n:"All-seaweed film, non-plastic",m:{gen:"all",seaPlastic:"no",cat:"auto",nonsyn:true}}
+];
+function renderScenarios(){
+  const k=1000;
+  const res=SCN.map(sc=>{const st=Object.assign({},S,sc.m);const r=compute(st);return {st,r,L:caLabel(st)};});
+  const row=(label,f)=>'<tr><td>'+label+'</td>'+res.map(x=>'<td class="n">'+f(x)+'</td>').join("")+'</tr>';
+  let h='<thead><tr><th></th>'+SCN.map(s=>'<th class="n">'+s.n+'</th>').join("")+'</tr></thead><tbody>';
+  h+=row("California category",x=>x.r.caExempt?x.r.caExempt:x.r.cat+" ("+x.r.dS.toLowerCase()+")");
+  h+=row("California fees, Sway",x=>fm(x.r.caS.total*k));
+  h+=row("California fees, conventional",x=>fm(x.r.caB.total*k));
+  h+=row("Weighted fees, Sway",x=>fm(x.r.wS*k));
+  h+=row("Difference vs conventional",x=>'<span class="'+((x.r.wS-x.r.wB)>0.000004?"pos":"neg")+'">'+fs((x.r.wS-x.r.wB)*k)+'</span>');
+  h+=row("Annual difference",x=>fs((x.r.wS-x.r.wB)*num(S.units),0));
+  h+=row("Counts toward brand source reduction",x=>!x.st.covered||x.st.small?"N/A":(x.r.srElig?(x.r.red>0?"Yes":"No, adds plastic"):"No"));
+  h+='</tbody>';
+  $("#scTbl").innerHTML=h+'<caption class="sr-only">Per 1,000 units unless stated</caption>';
+}
+function renderTalk(r){
+  const k=1000,units=num(S.units),m=r.mix;
+  const conv=BASES[S.base].n, fname=((FORMATS[S.format]||{}).n||"package").toLowerCase();
+  const L=caLabel(S);
+  const lines=[];
+  lines.push("EPR fee comparison: Sway film vs "+conv+" ("+fname+", "+S.W+" × "+S.L+" in)");
+  lines.push("");
+  lines.push("Weight: Sway’s "+S.sT+" mil film weighs about "+fn(r.gS,1)+" g per unit, versus "+fn(r.gB,1)+" g for "+S.bT+" mil "+conv+" ("+fn(r.gS/(r.gB||1),2)+"×). Most EPR fees are charged by weight, so this ratio drives the comparison.");
+  if(m.ca>0){
+    if(r.caExempt)lines.push("California: "+(S.covered?"your California sales fall under SB 54’s small-producer exemption, so no fees apply (the 2032 recyclable-or-compostable requirement still does).":"these are store-provided bags or liners sold as products, which sit outside SB 54, so no California EPR fees apply. California labeling law still does."));
+    else lines.push("California (CAA’s preliminary 2027 rates): about "+fm(r.caS.total*k)+" per 1,000 units for Sway versus "+fm(r.caB.total*k)+" for "+conv+". Sway film reports in "+r.cat+" ("+CATN[r.cat].toLowerCase()+"), which CAA currently designates “"+r.dS.toLowerCase()+".” "+(S.basis==="whole"?"This assumes California’s plastic surcharges apply to the whole film, the literal reading of CAA’s plan.":"This assumes California’s plastic surcharges apply only to the film’s plastic share, which CAA hasn’t confirmed.")+(r.caS.bonus>0?" It includes an estimated source-reduction bonus of "+fm(r.caS.bonus*k)+" per 1,000 units, credited on your invoice two years after the reduction.":""));
+  }
+  if(m.co>0)lines.push("Colorado (final 2027 dues): about "+fm(r.co.s*k)+" per 1,000 units for Sway versus "+fm(r.co.b*k)+". "+(r.co.keyS==="cert"?"Film certified to ASTM D6400-23 pays a lower rate than PE film.":r.co.keyS==="flex"?"This assumes the film doesn’t yet qualify for Colorado’s certified compostable rate.":""));
+  if(m.or>0)lines.push("Oregon (final 2027 fees): about "+fm(r.or.s*k)+" per 1,000 units for Sway versus "+fm(r.or.b*k)+". Oregon charges compostable film at a much higher rate than PE film"+(r.or.missS||r.or.missB?"; one Oregon rate isn’t verified and is counted as zero.":"."));
+  if(m.wa>0)lines.push("Washington (2027 early fees, no invoice date yet): about "+fm(r.wa.s*k)+" per 1,000 units for Sway versus "+fm(r.wa.b*k)+". "+(r.wa.s>r.wa.b?"Washington’s early fees price compostable materials below flexible plastic per pound, but the heavier film still costs slightly more per unit.":"Washington’s early fees price compostable materials below flexible plastic.")+"");
+  if(S.small5)lines.push("If your brand has under $5 million in global revenue, Colorado, Oregon and Washington fees likely don’t apply; the figures above already reflect that.");
+  lines.push("");
+  const d=(r.wS-r.wB);
+  lines.push("Across your mix ("+fn(m.ca*100,0)+"% California, "+fn(m.co*100,0)+"% Colorado, "+fn(m.or*100,0)+"% Oregon, "+fn(m.wa*100,0)+"% Washington, "+fn(m.other*100,0)+"% elsewhere), EPR fees come to about "+fm(r.wS*units,0)+" a year for Sway versus "+fm(r.wB*units,0)+" for "+conv+" at "+units.toLocaleString("en-US")+" units, a difference of "+fs(d*units,0)+" ("+fs(d*k)+" per 1,000 units).");
+  lines.push("");
+  const alt=compute(Object.assign({},S,{basis:S.basis==="whole"?"share":"whole"}));
+  lines.push("If California’s plastic surcharges apply "+(S.basis==="whole"?"only to the film’s plastic share":"to the whole film")+", Sway’s fees come to about "+fm(alt.wS*k)+" per 1,000 units instead. CAA hasn’t settled this yet.");
+  lines.push("");
+  lines.push("Plastic counted toward California’s reduction target: about "+fn(r.caS.srLb*LB,1)+" g per unit for Sway versus "+fn(r.caB.srLb*LB,1)+" g for "+conv+". California counts only the plastic share of a blended material for source reduction (14 CCR § 18980.1).");
+  lines.push("");
+  lines.push("Labeling: whether the pack can say “compostable” depends on the state, certificate and marking. We’ll confirm that separately for each state you sell in.");
+  lines.push("");
+  lines.push("Still open, and could change these numbers:");
+  lines.push("• California rates are preliminary until CalRecycle approves CAA’s plan, expected around late December 2026.");
+  lines.push("• CAA hasn’t said whether plastic surcharges apply to a blended film’s whole weight or only its plastic share.");
+  lines.push("• Compostable plastic film keeps its California status after June 30, 2027 only if CalRecycle renews the organic-input extension, the legislature changes the law, or USDA changes its rules.");
+  lines.push("");
+  lines.push("These are estimates for planning, not legal advice. Please confirm with your EPR advisor before relying on them.");
+  $("#talkText").value=lines.join("\n");
+}
+function renderRates(){
+  const row=(label,path,val,tag,src)=>'<tr><td>'+label+'</td><td class="n"><input type="number" step="0.001" data-r="'+path+'" value="'+(val==null?"":val)+'" placeholder="Not set" aria-label="'+label+'"></td><td>'+tag+'</td><td><span class="flag">'+src+'</span></td></tr>';
+  const pre='<span class="ev S">Preliminary</span>',fin='<span class="ev C">Confirmed</span>',est='<span class="ev S">Plan estimate</span>',unv='<span class="ev G">Not verified</span>',sig='<span class="ev S">Signaled</span>';
+  const caSrc="CAA 2027 California fee schedule (Oct 1, 2026); CAA plan Table 5 (Oct 13, 2026). Preliminary until CalRecycle approves the plan. Includes the 2027 5% passive penalty where applicable.";
+  let h='<thead><tr><th>Rate</th><th class="n">Value</th><th>Status</th><th>Source</th></tr></thead><tbody>';
+  h+='<tr><th colspan="4">California, $/lb unless noted</th></tr>';
+  Object.keys(R.ca.cats).forEach(c=>{h+=row(c+" "+CATN[c]+" base fee","ca.cats."+c,R.ca.cats[c],pre,caSrc);});
+  h+=row("Reuse investment fee ($/lb plastic components)","ca.reuse",R.ca.reuse,pre,caSrc);
+  h+=row("Plastic-pollution fund weight fee ($/lb plastic components)","ca.ppmfW",R.ca.ppmfW,pre,caSrc+" Fund allocation weighted 80% by plastic weight, 20% by components.");
+  h+=row("Plastic-pollution fund component fee ($/component)","ca.ppmfC",R.ca.ppmfC,pre,caSrc);
+  h+='<tr><th colspan="4">California source-reduction incentives, $/ton</th></tr>';
+  ["2027","2028","2029"].forEach(y=>{
+    h+=row("Virgin-plastic charge "+y,"sr.malus."+y,R.sr.malus[y],est,"CAA plan Table 8, p. 244. Applies to all virgin plastic; revenue-neutral; set each October.");
+    h+=row("Tier 1 bonus "+y+" (cut vs 2026 supply)","sr.t1."+y,R.sr.t1[y],est,"CAA plan Table 8. Paid on the invoice two years after the reduction.");
+    h+=row("Tier 2 bonus "+y+" (cut below 2023 baseline)","sr.t2."+y,R.sr.t2[y],est,"CAA plan Table 8.");
+  });
+  const coSrc="CAA 2027 Colorado Producer Dues Schedule (Oct 1, 2026).";
+  h+='<tr><th colspan="4">Colorado, $/lb</th></tr>';
+  h+=row("HDPE/LDPE flexible","co.pe",R.co.pe,fin,coSrc);
+  h+=row("Flexible plastic certified to ASTM D6400-23","co.cert",R.co.cert,fin,coSrc+" Base $0.10 plus $0.17 not-recyclable malus.");
+  h+=row("Plastic laminates and other flexible","co.flex",R.co.flex,fin,coSrc);
+  h+=row("Wood and other organic materials","co.org",R.co.org,fin,coSrc);
+  h+=row("PP flexible","co.pp",R.co.pp,fin,coSrc);
+  const orSrc="CAA 2027 Oregon fee schedule (Oct 1, 2026), after reserve credits.";
+  h+='<tr><th colspan="4">Oregon, $/lb</th></tr>';
+  h+=row("HDPE/LDPE flexible","or.pe",R.or.pe,fin,orSrc);
+  h+=row("PLA, PHA, PHB flexible and film","or.pla",R.or.pla,fin,orSrc+" Fit for a PBAT/seaweed blend not confirmed.");
+  h+=row("Plastic laminates and other flexible","or.lam",R.or.lam,fin,orSrc);
+  h+=row("PP flexible","or.pp",R.or.pp,fin,orSrc);
+  h+=row("Organic materials (all-seaweed film)","or.org",R.or.org,unv,"Category and rate not verified. Left out of the comparison until set.");
+  h+='<tr><th colspan="4">Washington 2027 early fees, $/lb (no invoice date yet)</th></tr>';
+  h+=row("Compostable materials","wa.comp",R.wa.comp,fin,"CAA 2027 Washington Early Fees Schedule (Oct 1, 2026), via EPR Group Consulting.");
+  h+=row("Flexible plastic","wa.flex",R.wa.flex,sig,"Sway’s November 2026 read of the same schedule; not re-verified. Published range across eight categories: 0.2¢–3.0¢/lb.");
+  h+='</tbody>';
+  $("#rateTbl").innerHTML=h;
+  document.querySelectorAll("[data-r]").forEach(el=>el.addEventListener("input",()=>{
+    const p=el.dataset.r.split(".");let o=R;for(let i=0;i<p.length-1;i++)o=o[p[i]];
+    o[p[p.length-1]]=el.value===""?null:num(el.value);
+    if(p[0]==="ca"&&o[p[p.length-1]]==null)o[p[p.length-1]]=0;
+    $("#rateStatus").textContent="Edited for this session only. Reload to restore the published rates.";
+    if(p[0]==="sr"&&o[p[p.length-1]]==null)o[p[p.length-1]]=0;
+    update();
+  }));
+}
+
+/* ---------- saved scenarios ---------- */
+function loadAll(){try{return JSON.parse(localStorage.getItem("swayEprScenarios")||"{}")||{};}catch(e){return {};}}
+function saveAll(o){try{localStorage.setItem("swayEprScenarios",JSON.stringify(o));return true;}catch(e){return false;}}
+function refreshList(){const o=loadAll();const sel=$("#scList");sel.innerHTML='<option value="">Load a saved scenario…</option>'+Object.keys(o).sort().map(n=>'<option>'+n.replace(/</g,"&lt;")+'</option>').join("");}
+$("#btnSave").addEventListener("click",()=>{const n=$("#scName").value.trim();if(!n){$("#saveStatus").textContent="Name the scenario to save it.";return;}
+  const o=loadAll();o[n]={S:clone(S)};$("#saveStatus").textContent=saveAll(o)?"Saved “"+n+"” in this browser.":"Couldn’t save: browser storage is unavailable.";refreshList();});
+$("#scList").addEventListener("change",e=>{const n=e.target.value;if(!n)return;const d=loadAll()[n];if(!d)return;S=Object.assign(clone(S0),d.S);$("#scName").value=n;bindInputs();renderRates();update();$("#saveStatus").textContent="Loaded “"+n+"”.";});
+$("#btnDel").addEventListener("click",()=>{const n=$("#scList").value;if(!n){$("#saveStatus").textContent="Pick a saved scenario to delete.";return;}const o=loadAll();delete o[n];saveAll(o);refreshList();$("#saveStatus").textContent="Deleted “"+n+"”.";});
+$("#btnReset").addEventListener("click",()=>{S=clone(S0);R=clone(R0);bindInputs();renderRates();update();$("#saveStatus").textContent="Reset to defaults.";});
+$("#btnCopy").addEventListener("click",async()=>{const ta=$("#talkText");try{await navigator.clipboard.writeText(ta.value);$("#copyStatus").textContent="Copied.";}catch(e){ta.focus();ta.select();$("#copyStatus").textContent="Selected. Press Ctrl+C or ⌘C to copy.";}});
+document.querySelectorAll('input[name="view"]').forEach(el=>el.addEventListener("change",()=>update()));
+
+bindInputs();renderRates();refreshList();update();
+})();
+
+</script>
+</body>
+</html>
