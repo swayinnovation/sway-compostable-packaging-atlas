@@ -1,48 +1,63 @@
-// Pre-deploy checks for the Compostable Packaging Atlas.
+// Pre-deploy checks for the Compostable Packaging Atlas and the EPR Cost Calculator.
 // Netlify runs this before every deploy; a failure blocks the deploy and keeps the last good version live.
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import vm from "node:vm";
 
-const html = readFileSync(new URL("../site/index.html", import.meta.url), "utf8");
 const errors = [];
 const fail = (m) => errors.push(m);
+const read = (p) => readFileSync(new URL(p, import.meta.url), "utf8");
+const inlineScripts = (html) => [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
+function compiles(html, label) {
+  const s = inlineScripts(html);
+  if (!s.length) fail(`${label}: no inline script found.`);
+  s.forEach((code, i) => { try { new vm.Script(code, { filename: `${label}-script-${i}.js` }); } catch (e) { fail(`${label}: script ${i} does not compile: ${e.message}`); } });
+  return s.join("\n");
+}
 
-// 1. Every inline script must compile.
-const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
-if (!scripts.length) fail("No inline script found.");
-scripts.forEach((code, i) => {
-  try { new vm.Script(code, { filename: `inline-script-${i}.js` }); }
-  catch (e) { fail(`Script ${i} does not compile: ${e.message}`); }
-});
-const js = scripts.join("\n");
-
-// 2. Last-updated fields exist, agree, and are real dates.
+// ---------- Atlas ----------
+const atlas = read("../site/index.html");
+const js = compiles(atlas, "Atlas");
 const iso = js.match(/var UPDATED_ISO = "(\d{4}-\d{2}-\d{2})";/);
 const human = js.match(/var UPDATED = "([A-Z][a-z]+ \d{1,2}, \d{4})";/);
-if (!iso || !human) fail("UPDATED_ISO or UPDATED is missing or malformed.");
+if (!iso || !human) fail("Atlas: UPDATED_ISO or UPDATED is missing or malformed.");
 else {
-  const a = new Date(iso[1] + "T00:00:00Z");
-  const b = new Date(human[1] + " 00:00:00 UTC");
-  if (isNaN(a) || isNaN(b) || a.getTime() !== b.getTime()) fail(`UPDATED_ISO (${iso[1]}) and UPDATED (${human[1]}) disagree.`);
-  if (a.getTime() > Date.now() + 2 * 86400000) fail(`UPDATED_ISO (${iso[1]}) is in the future.`);
+  const a = new Date(iso[1] + "T00:00:00Z"), b = new Date(human[1] + " 00:00:00 UTC");
+  if (isNaN(a) || isNaN(b) || a.getTime() !== b.getTime()) fail(`Atlas: UPDATED_ISO (${iso[1]}) and UPDATED (${human[1]}) disagree.`);
+  if (a.getTime() > Date.now() + 2 * 86400000) fail(`Atlas: UPDATED_ISO (${iso[1]}) is in the future.`);
 }
-
-// 3. Every dated entry uses a valid ISO date.
-for (const m of js.matchAll(/\{d:"([^"]*)"/g)) {
-  const d = m[1];
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || isNaN(new Date(d + "T00:00:00Z"))) fail(`Invalid date in DATES: "${d}"`);
-}
-
-// 4. Evidence labels are from the allowed set.
+for (const m of js.matchAll(/\{d:"([^"]*)"/g)) if (!/^\d{4}-\d{2}-\d{2}$/.test(m[1]) || isNaN(new Date(m[1] + "T00:00:00Z"))) fail(`Atlas: invalid date in DATES: "${m[1]}"`);
 const allowed = new Set(["C", "S", "P", "R", "G"]);
-for (const m of js.matchAll(/\bev:"([^"]*)"/g)) if (!allowed.has(m[1])) fail(`Unknown evidence label ev:"${m[1]}"`);
-for (const m of js.matchAll(/\bev\("([^"]*)"\)/g)) if (!allowed.has(m[1])) fail(`Unknown evidence label ev("${m[1]}")`);
+for (const m of js.matchAll(/\bev:"([^"]*)"/g)) if (!allowed.has(m[1])) fail(`Atlas: unknown evidence label ev:"${m[1]}"`);
+for (const m of js.matchAll(/\bev\("([^"]*)"\)/g)) if (!allowed.has(m[1])) fail(`Atlas: unknown evidence label ev("${m[1]}")`);
+for (const m of js.matchAll(/\bu:("([^"]*)"|null)/g)) if (m[2] !== undefined && !/^https:\/\//.test(m[2])) fail(`Atlas: source URL is not https: ${m[2]}`);
+if (!/<meta name="robots" content="noindex, nofollow">/.test(atlas)) fail("Atlas: noindex meta tag is missing.");
 
-// 5. Source links are https or null.
-for (const m of js.matchAll(/\bu:("([^"]*)"|null)/g)) if (m[2] !== undefined && !/^https:\/\//.test(m[2])) fail(`Source URL is not https: ${m[2]}`);
+// ---------- Calculator ----------
+const calcPath = "../site/calculator/index.html";
+if (!existsSync(new URL(calcPath, import.meta.url))) fail("Calculator: site/calculator/index.html is missing.");
+else {
+  const calc = read(calcPath);
+  const cjs = compiles(calc, "Calculator");
+  if (!/<meta name="robots" content="noindex, nofollow">/.test(calc)) fail("Calculator: noindex meta tag is missing.");
+  // Rates that appear in both tools must agree. Each entry: [label, regex on the calculator's R0, text the Atlas must contain].
+  const r0 = cjs.slice(cjs.indexOf("const R0="), cjs.indexOf("const S0="));
+  const pick = (re) => { const m = r0.match(re); return m ? parseFloat(m[1]) : NaN; };
+  const usd = (v) => "$" + v.toFixed(2);
+  const pairs = [
+    ["California compostable film (P45P)", /P45P:([\d.]+)/, (v) => usd(v) + "/lb base"],
+    ["Colorado certified compostable", /co:\{[^}]*cert:([\d.]+)/, (v) => usd(v) + "/lb final"],
+    ["Colorado HDPE/LDPE film", /co:\{pe:([\d.]+)/, (v) => "HDPE/LDPE film " + usd(v) + "/lb"],
+    ["Colorado PP film", /co:\{[^}]*pp:([\d.]+)/, (v) => "PP film " + usd(v)],
+    ["Oregon PLA/PHA/PHB film", /or:\{[^}]*pla:([\d.]+)/, (v) => usd(v) + "/lb final"],
+    ["Oregon HDPE/LDPE film", /or:\{pe:([\d.]+)/, (v) => "HDPE/LDPE flexible " + usd(v) + "/lb"],
+    ["Washington compostable early fee", /wa:\{[^}]*comp:([\d.]+)/, (v) => (v * 100).toFixed(1) + "¢/lb (2027 early fees"],
+  ];
+  for (const [label, re, fmt] of pairs) {
+    const v = pick(re);
+    if (isNaN(v)) { fail(`Calculator: couldn't read rate "${label}".`); continue; }
+    if (!atlas.includes(fmt(v))) fail(`Rates disagree: calculator has ${label} = ${fmt(v)}, which doesn't appear in the Atlas EPR table.`);
+  }
+}
 
-// 6. Search-engine safeguards are still in place.
-if (!/<meta name="robots" content="noindex, nofollow">/.test(html)) fail("noindex meta tag is missing.");
-
-if (errors.length) { console.error("Atlas checks FAILED:\n- " + errors.join("\n- ")); process.exit(1); }
-console.log(`Atlas checks passed (${scripts.length} script(s), updated ${human && human[1]}).`);
+if (errors.length) { console.error("Checks FAILED:\n- " + errors.join("\n- ")); process.exit(1); }
+console.log("Atlas and calculator checks passed.");

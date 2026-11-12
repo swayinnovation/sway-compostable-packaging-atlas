@@ -1,6 +1,8 @@
-# Compostable Packaging Atlas: maintenance instructions
+# Compostable Packaging Atlas and EPR Cost Calculator: maintenance instructions
 
-This repo is Sway's compostable-packaging regulatory reference. The whole site is `site/index.html`.
+This repo holds two internal tools that share one set of facts:
+- `site/index.html`: the Compostable Packaging Atlas.
+- `site/calculator/index.html`: the EPR Cost Calculator (served at `/calculator/`).
 Netlify deploys `site/` whenever `main` changes, after `node scripts/check.mjs` passes.
 
 ## Your job on a scheduled run
@@ -31,6 +33,15 @@ Check whether anything in the Atlas is out of date, fix what is, and open a pull
 
 Edit entries in place. Keep one entry per line so diffs stay readable.
 
+## EPR Cost Calculator
+
+- Its rates live in the `const R0=` block in `site/calculator/index.html`. Any rate that also appears in the Atlas EPR table must match it exactly. `scripts/check.mjs` compares seven of them and fails the deploy if they disagree, so when a CAA schedule changes, update the Atlas EPR row and the calculator rate in the same pull request.
+- When any calculator rate changes, update every `data-updated` date in the calculator page ("Rates as of …").
+- Each rate row in the calculator's Rates tab carries an evidence label (`ev C`, `ev S`, `ev G`). Use the same rules as the Atlas; a rate you couldn't recheck drops to Signaled.
+- A rate left as `null` is excluded from the comparison on both sides. Never replace a `null` with 0.
+- Don't add labeling rules to the calculator. It links to the Atlas screener so the two can't disagree.
+- Never change the Sway composition defaults in `S0` (`pPoly`, `pSea`, `pPlast`, `sD`) or the data-sheet note. Flag any reason to under "Needs a decision".
+
 ## Accuracy rules (non-negotiable)
 
 - **Never invent** a statute, section, bill number, rate, date, case, docket number, standard, or agency position. If you can't point to a real source, don't add it; add it to `GAPS` instead.
@@ -54,7 +65,7 @@ Edit entries in place. Keep one entry per line so diffs stay readable.
 
 ## Never add
 
-- Sway formulation details, supplier names, customer names, pricing or pipeline.
+- Sway formulation details beyond the calculator’s existing composition defaults, supplier names, customer names, pricing or pipeline.
 - Anything marked internal from Slack or email.
 
 ## Sources to check
@@ -66,6 +77,7 @@ Colorado: CDPHE Compostables Labeling Act page; CAA Colorado dues; CDPHE eco-mod
 Minnesota: Minn. Stat. 325E.046 and any amending bill; MPCA.
 Maryland: Env't § 9-2102; MDE packaging EPR.
 Oregon: DEQ compostability report (due Dec 15, 2026); RMA rulemaking; CAA Oregon fees.
+Fee cross-check (secondary, never the cited source): EPR Atlas's 2027 fee schedule page and state pages at epratlas.com. Cite CAA's own schedules.
 Federal: PACK Act (H.R. 6832) and Truth in Labeling Act (H.R. 10048 / S. 5302) status; FTC Green Guides.
 Courts: Nebraska et al. & NAW v. Heller (E.D. Cal.); SB 343 challenge; NAW v. Feldon (9th Cir. No. 26-6404); ILMA v. CDPHE; NAW v. Ryan.
 Composters: BioCycle, Resource Recycling, Packaging Dive, Waste Dive for facility acceptance news.
