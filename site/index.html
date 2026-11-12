@@ -772,7 +772,9 @@ var SRC = {
   pfasBclp: {t:"BCLP: PFAS in food packaging, state-by-state", u:"https://www.bclplaw.com/en-US/events-insights-news/pfas-in-food-packaging-state-by-state-regulations.html"},
   pfasPack: {t:"Packaura: PFAS food packaging bans by state, 2026 timeline", u:"https://packaura.com/pfas-food-packaging-state-bans-timeline/"},
   nop: {t:"USDA NOP: 7 CFR 205.2 (“synthetic”), 205.203 (compost feedstocks), 205.601(c)", u:null},
-  mdStat: {t:"Maryland Env’t § 9-2102 (degradable and compostable claims)", u:null}
+  mdStat: {t:"Maryland Env’t § 9-2102 (degradable and compostable claims)", u:null},
+  bennett: {t:"BPI: Bennett Compost now accepts certified compostable packaging (May 19, 2026)", u:"https://bpiworld.org/bennett-compost-now-accepts-certified-compostable-packaging-expanding-capacity-500-000-pounds"},
+  orRma: {t:"Oregon DEQ: Recycling Modernization Act 2026 rulemaking (comment closed Oct 30, 2026)", u:"https://www.oregon.gov/deq/rulemaking/Pages/rma2026.aspx"}
 };
 
 /* ---------- labeling data ---------- */
@@ -1094,7 +1096,8 @@ var COMP = [
   {f:"Republic Services Otay composting facility (San Diego)", st:"CA", acc:"Compostable packaging from Petco Park", cond:"Venue partnership only: items pre-tested in the operator’s process and a dedicated sorting team at the stadium. Static aerated piles, about 300 tons per day. Not open acceptance.", src:"CAA plan p. 196", ev:"C"},
   {f:"ReGen Monterey (Monterey Regional Waste Management District)", st:"CA", acc:"Certain certified compostables in the commercial food-scrap stream only", cond:"Bifurcated: residential compost stays certified organic and excludes compostables; commercial compost isn’t certified organic.", src:"CAA plan p. 196", ev:"C"},
   {f:"Oregon compost facilities (at least nine)", st:"OR", acc:"Declined compostable packaging and food serviceware", cond:"2019 joint statement; facilities want packaging-free organic feedstocks. Wet anaerobic digesters remove and dispose of compostables.", src:"Oregon DEQ / Cascadia pre-read; DEQ rulemaking materials", ev:"C"},
-  {f:"Colorado facilities that accept and process compostables", st:"CO", acc:"Covered compostable packaging", cond:"CAA Colorado offers a per-ton or per-cubic-yard processing incentive. Named facilities not yet compiled.", src:"CAA webinar 301, Feb 2025", ev:"C"}
+  {f:"Colorado facilities that accept and process compostables", st:"CO", acc:"Covered compostable packaging", cond:"CAA Colorado offers a per-ton or per-cubic-yard processing incentive. Named facilities not yet compiled.", src:"CAA webinar 301, Feb 2025", ev:"C"},
+  {f:"Bennett Compost, Lawncrest site (Philadelphia)", st:"PA", acc:"Certified compostable packaging, starting with event customers (announced May 19, 2026)", cond:"Site upgrades funded by a $15,500 Composting Infrastructure Grant from Closed Loop Partners’ Composting Consortium with BPI; the facility says it has set acceptance criteria. Reported added capacity of 500,000 pounds of food scraps and compostables (period not stated).", src:"BPI announcement, May 19, 2026", ev:"S"}
 ];
 (function(){
   document.querySelector("#compTable tbody").innerHTML = COMP.map(function(r){ return '<tr><td><strong>'+esc(r.f)+'</strong></td><td>'+r.st+'</td><td>'+esc(r.acc)+'</td><td>'+esc(r.cond)+'</td><td><span class="cite" style="margin:0">'+esc(r.src)+'</span></td><td>'+ev(r.ev)+'</td></tr>'; }).join("");
@@ -1131,6 +1134,7 @@ var DATES = [
   {d:"2027-01-01", w:"California", t:"SB 54 program start; 2027 fees become binding only on plan approval.", k:"deadline", ev:"S"},
   {d:"2027-01-15", w:"California", t:"Hearing on the motion to enjoin all of SB 54 (Nebraska et al. and NAW v. Heller, E.D. Cal., 1:30 p.m., Judge Coggins).", k:"court", ev:"C", it:"If granted, fees and SB 54 obligations pause; AB 1201 labeling rules don’t. If denied, invoices proceed."},
   {d:"2027-01-18", w:"Oregon", t:"Oregon’s answering brief due at the Ninth Circuit.", k:"court", ev:"C"},
+  {d:"2027-02-15", w:"Oregon", t:"DEQ plans to present proposed Recycling Modernization Act rules to the Environmental Quality Commission (January or February 2027). Topics in the rulemaking included an “effectively composted” definition under ORS 459A.965; comment closed Oct 30, 2026.", k:"signpost", ev:"S", approx:true, it:"The adopted definition will set what Oregon programs and composters may promote for acceptance under Truth in Composting; read it alongside DEQ’s Dec 15 compostability report."},
   {d:"2027-03-15", w:"Federal", t:"USDA consultation on compost regulations expected to open (early 2027).", k:"signpost", ev:"S", approx:true, it:"An open consultation is what CalRecycle needs to see to renew the extension (“regulations under consideration”)."},
   {d:"2027-04-30", w:"Federal", t:"NOSB spring meeting; a proposal on reclassifying alkali-extracted agar is expected.", k:"signpost", ev:"P", approx:true},
   {d:"2027-05-31", w:"All six CAA states", t:"CY2026 supply reports due to CAA.", k:"deadline", ev:"S"},
