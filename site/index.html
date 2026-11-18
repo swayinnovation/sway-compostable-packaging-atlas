@@ -707,8 +707,8 @@ footer p{max-width:90ch}
 <script>
 (function(){
 "use strict";
-var UPDATED_ISO = "2026-11-12";
-var UPDATED = "November 12, 2026";
+var UPDATED_ISO = "2026-11-18";
+var UPDATED = "November 18, 2026";
 document.querySelectorAll("[data-updated]").forEach(function(el){ el.textContent = UPDATED; });
 
 /* ---------- theme ---------- */
@@ -775,7 +775,10 @@ var SRC = {
   nop: {t:"USDA NOP: 7 CFR 205.2 (“synthetic”), 205.203 (compost feedstocks), 205.601(c)", u:null},
   mdStat: {t:"Maryland Env’t § 9-2102 (degradable and compostable claims)", u:null},
   bennett: {t:"BPI: Bennett Compost now accepts certified compostable packaging (May 19, 2026)", u:"https://bpiworld.org/bennett-compost-now-accepts-certified-compostable-packaging-expanding-capacity-500-000-pounds"},
-  orRma: {t:"Oregon DEQ: Recycling Modernization Act 2026 rulemaking (comment closed Oct 30, 2026)", u:"https://www.oregon.gov/deq/rulemaking/Pages/rma2026.aspx"}
+  orRma: {t:"Oregon DEQ: Recycling Modernization Act 2026 rulemaking (comment closed Oct 30, 2026)", u:"https://www.oregon.gov/deq/rulemaking/Pages/rma2026.aspx"},
+  saferSoils: {t:"Waste Dive: Safer Soils for All coalition launches against BPI’s compost petition (Nov 10, 2026)", u:"https://www.wastedive.com/news/safer-soils-coalition-bpi-compostable-products-petition-national-organics/874274/"},
+  bpiSaferSoils: {t:"Packaging Dive: BPI responds to Safer Soils for All coalition; USDA signals advance notice of proposed rulemaking (Nov 17, 2026)", u:"https://packagingdive.com/news/bpi-responds-to-safer-soils-for-all-coalition/874865"},
+  khSb54: {t:"Keller and Heckman: Attorney General Bonta does not oppose adding SB 54 claims to SB 343 challenge (Nov 3, 2026)", u:"https://www.khlaw.com/attorney-general-bonta-does-not-oppose-adding-sb-54-claims-sb-343-challenge"}
 };
 
 /* ---------- labeling data ---------- */
@@ -1128,6 +1131,8 @@ var DATES = [
   {d:"2026-10-13", w:"California", t:"CAA submits the final draft program plan to CalRecycle.", k:"deadline", ev:"C"},
   {d:"2026-10-29", w:"Federal", t:"NOSB recommends removing carrageenan, reclassified as synthetic because of alkali and acid extraction; agar-agar reclassification discussed.", k:"signpost", ev:"C"},
   {d:"2026-11-13", w:"California", t:"Comment closes on CAA’s program plan at CalRecycle (packaging@calrecycle.ca.gov, subject “PRO Plan Comments”).", k:"comment", ev:"C", it:"Last chance to raise the compostable-malus inconsistency and the compostability bonus timing."},
+  {d:"2026-11-10", w:"Federal", t:"Safer Soils for All coalition launches to oppose BPI’s petition to allow compostable products in organic compost; members include Recology, Republic Services, WM, Waste Connections and the California Compost Coalition. It asks NOSB to review synthetic substances one at a time.", k:"signpost", ev:"S", approx:true},
+  {d:"2026-11-16", w:"California", t:"Hearing on plaintiffs’ motion to add SB 54 claims to the SB 343 challenge (No. 3:26-cv-01675, S.D. Cal.); the Attorney General filed a notice of non-opposition Nov 2, 2026, reserving the right to seek dismissal later. No ruling located.", k:"court", ev:"S"},
   {d:"2026-12-15", w:"Oregon", t:"DEQ compostability report and recommendations due to the Legislature.", k:"signpost", ev:"C", it:"If it recommends a compostable pathway, Oregon’s 2028–2032 fee cycle is the place to argue for it. If it endorses facility refusals, plan Oregon claim-free."},
   {d:"2026-12-17", w:"Oregon", t:"NAW opening brief due at the Ninth Circuit (No. 26-6404).", k:"court", ev:"C"},
   {d:"2026-12-27", w:"California", t:"CalRecycle decision on CAA’s plan, 75 days after submission (14 CCR 18980.6.1(b)(2)).", k:"signpost", ev:"S", approx:true, it:"If approved with the compostables phase-in, a positive signal for renewal. If the phase-in is dropped, negative."},
@@ -1136,7 +1141,7 @@ var DATES = [
   {d:"2027-01-15", w:"California", t:"Hearing on the motion to enjoin all of SB 54 (Nebraska et al. and NAW v. Heller, E.D. Cal., 1:30 p.m., Judge Coggins).", k:"court", ev:"C", it:"If granted, fees and SB 54 obligations pause; AB 1201 labeling rules don’t. If denied, invoices proceed."},
   {d:"2027-01-18", w:"Oregon", t:"Oregon’s answering brief due at the Ninth Circuit.", k:"court", ev:"C"},
   {d:"2027-02-15", w:"Oregon", t:"DEQ plans to present proposed Recycling Modernization Act rules to the Environmental Quality Commission (January or February 2027). Topics in the rulemaking included an “effectively composted” definition under ORS 459A.965; comment closed Oct 30, 2026.", k:"signpost", ev:"S", approx:true, it:"The adopted definition will set what Oregon programs and composters may promote for acceptance under Truth in Composting; read it alongside DEQ’s Dec 15 compostability report."},
-  {d:"2027-03-15", w:"Federal", t:"USDA consultation on compost regulations expected to open (early 2027).", k:"signpost", ev:"S", approx:true, it:"An open consultation is what CalRecycle needs to see to renew the extension (“regulations under consideration”)."},
+  {d:"2027-03-15", w:"Federal", t:"USDA consultation on compost regulations expected to open (early 2027); USDA has reportedly indicated an advance notice of proposed rulemaking “early next year.”", k:"signpost", ev:"S", approx:true, it:"An open consultation is what CalRecycle needs to see to renew the extension (“regulations under consideration”)."},
   {d:"2027-04-30", w:"Federal", t:"NOSB spring meeting; a proposal on reclassifying alkali-extracted agar is expected.", k:"signpost", ev:"P", approx:true},
   {d:"2027-05-31", w:"All six CAA states", t:"CY2026 supply reports due to CAA.", k:"deadline", ev:"S"},
   {d:"2027-06-30", w:"California", t:"AB 1201 organic-input extension expires.", k:"deadline", ev:"C", it:"Without a CalRecycle renewal, items with synthetic content can’t be labeled compostable or home compostable in California from July 1."},
@@ -1186,7 +1191,7 @@ var POL = [
   {m:"Truth in Labeling Act (H.R. 10048 / S. 5302)", w:"Federal", d:"National standards for recyclable, compostable, reusable and refillable claims, enforced under the FTC Act; explicitly doesn’t preempt state law, apart from a narrow resin-code carve-out.", s:"Introduced Aug 6, 2026; not marked up", ev:"C"},
   {m:"SB 1031 (Blakespear)", w:"California", d:"Standardized labeling so compostable plastics are distinguishable from conventional plastics; an OEHHA study of degraded compostable plastics and additives. A “compostable except in California” provision was dropped.", s:"Held in Assembly Appropriations, Aug 13, 2026; could return in 2027", ev:"C"},
   {m:"CalRecycle renewal of the AB 1201 extension", w:"California", d:"Extend the organic-input date again, up to Jan 1, 2031, while USDA rules are under consideration.", s:"BPI request pending as of Aug 2026; no decision", ev:"S"},
-  {m:"USDA compost rulemaking (petition to redefine compost; RIN 0581-AE57)", w:"Federal", d:"Update the organic rules for compost, the fix BPI favors over listing products one by one.", s:"Consultation expected early 2027", ev:"S"},
+  {m:"USDA compost rulemaking (petition to redefine compost; RIN 0581-AE57)", w:"Federal", d:"Update the organic rules for compost, the fix BPI favors over listing products one by one.", s:"Consultation expected early 2027; USDA reportedly plans an advance notice of proposed rulemaking (Packaging Dive, Nov 17, 2026). Unified Agenda entry not verified.", ev:"S"},
   {m:"AB 1812 (Aguiar-Curry)", w:"California", d:"Would have barred “compostable” on products made wholly or partly of plastic from Jan 1, 2027.", s:"Held in Senate Appropriations, Aug 13, 2026; could return in 2027", ev:"C"},
   {m:"HF 3649 / SF 3838", w:"Minnesota", d:"Amend the certification subdivision of 325E.046.", s:"Introduced Feb 2026; no enactment located", ev:"S"},
   {m:"FTC Green Guides revision", w:"Federal", d:"Update the 2012 guidance on compostable and degradable claims.", s:"Pending; no final revision", ev:"C"}
@@ -1244,6 +1249,8 @@ var FAQ = [
     "The exact PRC 42357.5 bag color specifications and the text of Maryland Env’t § 9-2102.",
     "Oregon’s 2026 rate for PLA/PHA/PHB flexible film (the “about 2.4×” comparison).",
     "City and county foodware ordinances that require or restrict compostables (for example, municipal takeout-container rules).",
+    "The USDA Unified Agenda entry for the compost rulemaking (RIN 0581-AE57): its stage (advance notice vs. proposed rule) and timetable, reported only in trade press.",
+    "Outcome of the Nov 16, 2026 hearing on adding SB 54 claims to the SB 343 challenge (No. 3:26-cv-01675); check the docket.",
     "PFAS statute text for each state, and whether a seaweed-based film counts as “plant-based” or “plant fiber” under each definition."
   ];
   document.getElementById("reviewList").innerHTML = REVIEW.map(function(x){ return "<li>"+esc(x)+" "+ev("R")+"</li>"; }).join("");
