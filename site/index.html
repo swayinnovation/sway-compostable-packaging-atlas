@@ -707,8 +707,8 @@ footer p{max-width:90ch}
 <script>
 (function(){
 "use strict";
-var UPDATED_ISO = "2026-11-18";
-var UPDATED = "November 18, 2026";
+var UPDATED_ISO = "2026-11-25";
+var UPDATED = "November 25, 2026";
 document.querySelectorAll("[data-updated]").forEach(function(el){ el.textContent = UPDATED; });
 
 /* ---------- theme ---------- */
@@ -778,7 +778,12 @@ var SRC = {
   orRma: {t:"Oregon DEQ: Recycling Modernization Act 2026 rulemaking (comment closed Oct 30, 2026)", u:"https://www.oregon.gov/deq/rulemaking/Pages/rma2026.aspx"},
   saferSoils: {t:"Waste Dive: Safer Soils for All coalition launches against BPI’s compost petition (Nov 10, 2026)", u:"https://www.wastedive.com/news/safer-soils-coalition-bpi-compostable-products-petition-national-organics/874274/"},
   bpiSaferSoils: {t:"Packaging Dive: BPI responds to Safer Soils for All coalition; USDA signals advance notice of proposed rulemaking (Nov 17, 2026)", u:"https://packagingdive.com/news/bpi-responds-to-safer-soils-for-all-coalition/874865"},
-  khSb54: {t:"Keller and Heckman: Attorney General Bonta does not oppose adding SB 54 claims to SB 343 challenge (Nov 3, 2026)", u:"https://www.khlaw.com/attorney-general-bonta-does-not-oppose-adding-sb-54-claims-sb-343-challenge"}
+  khSb54: {t:"Keller and Heckman: Attorney General Bonta does not oppose adding SB 54 claims to SB 343 challenge (Nov 3, 2026)", u:"https://www.khlaw.com/attorney-general-bonta-does-not-oppose-adding-sb-54-claims-sb-343-challenge"},
+  khAmend: {t:"Keller and Heckman: Court allows plaintiffs to amend SB 343 challenge to add SB 54 claims (Nov 12, 2026)", u:"https://www.consumerprotectioncxn.com/2026/11/court-allows-plaintiffs-to-amend-sb-343-challenge-to-add-sb-54-claims/"},
+  wdSb54: {t:"Waste Dive: Trade groups ask to block SB 54 as part of existing California lawsuit (Nov 2026)", u:"https://www.wastedive.com/news/california-trade-groups-sb-54-epr-sb-343-lawsuit/875402/"},
+  npOr: {t:"Nixon Peabody: Court approves Oregon EPR injunction pending appeal, bond required (Nov 20, 2026)", u:"https://www.nixonpeabody.com/insights/alerts/2026/11/20/court-approves-oregon-epr-injunction-pending-appeal-bond-required"},
+  cpOr: {t:"Capital Press: Judge agrees to restore injunction against Oregon recycling fees (Nov 19, 2026)", u:"https://capitalpress.com/2026/11/19/judge-agrees-to-restore-injunction-against-oregon-recycling-fees/"},
+  pdxCompost: {t:"City of Portland: Food scraps requirement for businesses (what goes in business compost)", u:"https://www.portland.gov/bps/garbage-recycling/business-garbage-policies/food-scraps-requirement"}
 };
 
 /* ---------- labeling data ---------- */
@@ -1101,7 +1106,8 @@ var COMP = [
   {f:"ReGen Monterey (Monterey Regional Waste Management District)", st:"CA", acc:"Certain certified compostables in the commercial food-scrap stream only", cond:"Bifurcated: residential compost stays certified organic and excludes compostables; commercial compost isn’t certified organic.", src:"CAA plan p. 196", ev:"C"},
   {f:"Oregon compost facilities (at least nine)", st:"OR", acc:"Declined compostable packaging and food serviceware", cond:"2019 joint statement; facilities want packaging-free organic feedstocks. Wet anaerobic digesters remove and dispose of compostables.", src:"Oregon DEQ / Cascadia pre-read; DEQ rulemaking materials", ev:"C"},
   {f:"Colorado facilities that accept and process compostables", st:"CO", acc:"Covered compostable packaging", cond:"CAA Colorado offers a per-ton or per-cubic-yard processing incentive. Named facilities not yet compiled.", src:"CAA webinar 301, Feb 2025", ev:"C"},
-  {f:"Bennett Compost, Lawncrest site (Philadelphia)", st:"PA", acc:"Certified compostable packaging, starting with event customers (announced May 19, 2026)", cond:"Site upgrades funded by a $15,500 Composting Infrastructure Grant from Closed Loop Partners’ Composting Consortium with BPI; the facility says it has set acceptance criteria. Reported added capacity of 500,000 pounds of food scraps and compostables (period not stated).", src:"BPI announcement, May 19, 2026", ev:"S"}
+  {f:"Bennett Compost, Lawncrest site (Philadelphia)", st:"PA", acc:"Certified compostable packaging, starting with event customers (announced May 19, 2026)", cond:"Site upgrades funded by a $15,500 Composting Infrastructure Grant from Closed Loop Partners’ Composting Consortium with BPI; the facility says it has set acceptance criteria. Reported added capacity of 500,000 pounds of food scraps and compostables (period not stated).", src:"BPI announcement, May 19, 2026", ev:"S"},
+  {f:"City of Portland business compost program (commercial food scraps)", st:"OR", acc:"Food scraps only; packaging excluded even if labeled “compostable” or “biodegradable”", cond:"Only non-food items allowed: paper coffee filters, tea bags and BPI-certified compostable bags. City page is undated; check it before citing a date.", src:"City of Portland, food scraps requirement for businesses", ev:"C"}
 ];
 (function(){
   document.querySelector("#compTable tbody").innerHTML = COMP.map(function(r){ return '<tr><td><strong>'+esc(r.f)+'</strong></td><td>'+r.st+'</td><td>'+esc(r.acc)+'</td><td>'+esc(r.cond)+'</td><td><span class="cite" style="margin:0">'+esc(r.src)+'</span></td><td>'+ev(r.ev)+'</td></tr>'; }).join("");
@@ -1132,8 +1138,11 @@ var DATES = [
   {d:"2026-10-29", w:"Federal", t:"NOSB recommends removing carrageenan, reclassified as synthetic because of alkali and acid extraction; agar-agar reclassification discussed.", k:"signpost", ev:"C"},
   {d:"2026-11-13", w:"California", t:"Comment closes on CAA’s program plan at CalRecycle (packaging@calrecycle.ca.gov, subject “PRO Plan Comments”).", k:"comment", ev:"C", it:"Last chance to raise the compostable-malus inconsistency and the compostability bonus timing."},
   {d:"2026-11-10", w:"Federal", t:"Safer Soils for All coalition launches to oppose BPI’s petition to allow compostable products in organic compost; members include Recology, Republic Services, WM, Waste Connections and the California Compost Coalition. It asks NOSB to review synthetic substances one at a time.", k:"signpost", ev:"S", approx:true},
-  {d:"2026-11-16", w:"California", t:"Hearing on plaintiffs’ motion to add SB 54 claims to the SB 343 challenge (No. 3:26-cv-01675, S.D. Cal.); the Attorney General filed a notice of non-opposition Nov 2, 2026, reserving the right to seek dismissal later. No ruling located.", k:"court", ev:"S"},
+  {d:"2026-11-06", w:"California", t:"Court grants plaintiffs leave to file a second amended complaint in the SB 343 challenge (No. 3:26-cv-01675, S.D. Cal.), adding two defendants and ten constitutional claims against SB 54; the Attorney General had filed a notice of non-opposition. Date as reported by counsel; order not read.", k:"court", ev:"S"},
+  {d:"2026-11-16", w:"Oregon", t:"District of Oregon stays its judgment and reinstates the February 2026 preliminary injunction pending NAW’s appeal, for NAW members only and only once the court approves and receives a bond sized to members’ unpaid 2027 fees. Non-members must keep complying. No bond reported posted as of Nov 20.", k:"court", ev:"S", it:"If the bond is posted, NAW members’ Oregon fees are deferred during the appeal; everyone else pays on CAA’s 2027 schedule."},
+  {d:"2026-11-19", w:"California", t:"Second amended complaint filed in the SB 343 challenge, adding SB 54 claims and seeking to enjoin SB 54’s producer-funding obligations on the PRO.", k:"court", ev:"S"},
   {d:"2026-12-15", w:"Oregon", t:"DEQ compostability report and recommendations due to the Legislature.", k:"signpost", ev:"C", it:"If it recommends a compostable pathway, Oregon’s 2028–2032 fee cycle is the place to argue for it. If it endorses facility refusals, plan Oregon claim-free."},
+  {d:"2026-12-15", w:"California", t:"Status conference in the SB 343 / SB 54 challenge (No. 3:26-cv-01675, S.D. Cal.), as reported by EPR Atlas’s docket tracker.", k:"court", ev:"S"},
   {d:"2026-12-17", w:"Oregon", t:"NAW opening brief due at the Ninth Circuit (No. 26-6404).", k:"court", ev:"C"},
   {d:"2026-12-27", w:"California", t:"CalRecycle decision on CAA’s plan, 75 days after submission (14 CCR 18980.6.1(b)(2)).", k:"signpost", ev:"S", approx:true, it:"If approved with the compostables phase-in, a positive signal for renewal. If the phase-in is dropped, negative."},
   {d:"2026-12-31", w:"California", t:"CalRecycle annual update to the covered material category list, including compostability determinations.", k:"signpost", ev:"S", it:"If compostable film keeps its status, positive. If removed, strongly negative for the 2032 pathway."},
@@ -1180,9 +1189,9 @@ function renderDates(){
 /* ---------- litigation ---------- */
 var LIT = [
   {c:"Nebraska et al. and NAW v. Heller (17 states and NAW v. CalRecycle and CAA)", s:"California", w:"SB 54 itself: dormant Commerce Clause, First Amendment, due process, Import-Export Clause, private delegation. Seeks to enjoin the whole program.", x:"Nothing today. If granted, SB 54 fees, reporting and the 2032 recyclable-or-compostable mandate pause. AB 1201’s labeling rules and the June 30, 2027 date are a separate statute and unaffected.", st:"PI hearing Jan 15, 2027; no injunction", ev:"C"},
-  {c:"SB 343 labeling challenge (No. 3:26-cv-01675)", s:"California", w:"California’s recyclability-label law and the chasing-arrows restriction; plaintiffs moved Oct 8, 2026 to add SB 54 claims.", x:"Indirect. Compostable items shouldn’t carry recyclability claims anyway. The vagueness and speech reasoning could be tested against other labeling laws.", st:"AG enforcement enjoined July 14, 2026", ev:"C", spec:"Extension of its reasoning to AB 1201 is speculative."},
+  {c:"SB 343 labeling challenge (No. 3:26-cv-01675)", s:"California", w:"California’s recyclability-label law and the chasing-arrows restriction; a second amended complaint filed Nov 19, 2026 adds SB 54 claims and seeks to enjoin SB 54’s producer-funding obligations on the PRO.", x:"Indirect. Compostable items shouldn’t carry recyclability claims anyway. The vagueness and speech reasoning could be tested against other labeling laws.", st:"AG enforcement of SB 343 enjoined July 14, 2026; SB 54 claims added Nov 19, 2026 (reported); status conference Dec 15, 2026", ev:"S", spec:"Extension of its reasoning to AB 1201 is speculative."},
   {c:"Oceana, NRDC and Californians Against Waste v. CalRecycle", s:"California", w:"Whether SB 54 regulations are too weak, including exemptions and compliance pathways.", x:"Low. Doesn’t seek to stop the program; could tighten how categories qualify.", st:"Pending, S.F. Superior Court", ev:"C"},
-  {c:"NAW v. Feldon", s:"Oregon", w:"Recycling Modernization Act, dormant Commerce Clause and due process.", x:"Oregon’s compostable fee treatment stands; the 2027 schedule applies.", st:"RMA upheld Aug 27, 2026; Ninth Circuit appeal No. 26-6404", ev:"C"},
+  {c:"NAW v. Feldon", s:"Oregon", w:"Recycling Modernization Act, dormant Commerce Clause and due process.", x:"For producers outside NAW, Oregon’s compostable fee treatment and the 2027 schedule apply. NAW members’ fees are deferred only once a court-approved bond is posted.", st:"RMA upheld Aug 27, 2026; Ninth Circuit appeal No. 26-6404; Feb 2026 injunction reinstated pending appeal for NAW members Nov 16, 2026, effective on bond (none reported posted)", ev:"S"},
   {c:"Lollicup USA v. Feldon", s:"Oregon", w:"Same law, putative class for producers outside the NAW injunction.", x:"None.", st:"Stayed Oct 13, 2026 pending the NAW appeal", ev:"C"},
   {c:"ILMA v. CDPHE; NAW v. Ryan", s:"Colorado", w:"Colorado’s program on statutory, private-delegation, commerce and speech grounds.", x:"None yet. Colorado’s compostable dues category and composter incentives continue.", st:"PIs sought; none granted", ev:"C"}
 ];
@@ -1250,7 +1259,9 @@ var FAQ = [
     "Oregon’s 2026 rate for PLA/PHA/PHB flexible film (the “about 2.4×” comparison).",
     "City and county foodware ordinances that require or restrict compostables (for example, municipal takeout-container rules).",
     "The USDA Unified Agenda entry for the compost rulemaking (RIN 0581-AE57): its stage (advance notice vs. proposed rule) and timetable, reported only in trade press.",
-    "Outcome of the Nov 16, 2026 hearing on adding SB 54 claims to the SB 343 challenge (No. 3:26-cv-01675); check the docket.",
+    "The order granting leave to amend in the SB 343 challenge (reported Nov 6, 2026) and the second amended complaint (Nov 19), known only from counsel and trade-press summaries; check the docket (No. 3:26-cv-01675).",
+    "Whether NAW has posted the bond that activates the Oregon injunction pending appeal, and its amount; check the District of Oregon docket (No. 3:25-cv-01334).",
+    "The NOSB’s final Fall 2026 votes (agar-agar sunset and reclassification); AMS has not yet posted the voting record we could find.",
     "PFAS statute text for each state, and whether a seaweed-based film counts as “plant-based” or “plant fiber” under each definition."
   ];
   document.getElementById("reviewList").innerHTML = REVIEW.map(function(x){ return "<li>"+esc(x)+" "+ev("R")+"</li>"; }).join("");
